@@ -20,8 +20,8 @@ venue:
 #  type: Working Group
 #  mail: WG@example.com
 #  arch: https://example.com/WG
-  github: "drspangle/draft-smullen-ppd-architecture"
-  latest: "https://drspangle.github.io/draft-smullen-ppd-architecture/draft-dsmullen-ppd-architecture.html"
+  github: "drspangle/draft-dsmullen-ppd-architecture"
+  latest: "https://drspangle.github.io/draft-dsmullen-ppd-architecture/draft-dsmullen-ppd-architecture.html"
 
 author:
  -
