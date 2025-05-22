@@ -29,13 +29,13 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://drspangle.github.io/draft-smullen-ppd-architecture/draft-
+   https://drspangle.github.io/draft-dsmullen-ppd-architecture/draft-
    dsmullen-ppd-architecture.html.  Status information for this document
    may be found at https://datatracker.ietf.org/doc/draft-dsmullen-ppd-
    architecture/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/drspangle/draft-smullen-ppd-architecture.
+   https://github.com/drspangle/draft-dsmullen-ppd-architecture.
 
 Status of This Memo
 
