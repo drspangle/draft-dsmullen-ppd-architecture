@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Privacy Preference Declaration for Home Networks</title>
+<meta content="Daniel Smullen" name="author">
+<meta content="
+       This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol. As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities. The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance. 
+    " name="description">
+<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="next generation" name="keyword">
+<meta content="unicorn" name="keyword">
+<meta content="sparkling distributed ledger" name="keyword">
+<meta content="draft-dsmullen-ppd-architecture-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.28.1
+    Python 3.12.10
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.6
+    lxml 5.3.0
+    platformdirs 4.3.8
+    pycountry 24.6.1
+    PyYAML 6.0.2
+    requests 2.32.3
+    setuptools 70.3.0
+    wcwidth 0.2.13
+-->
+<link href="draft-dsmullen-ppd-architecture.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  --font-title: "Sofia Sans Semi Condensed", sans-serif;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+section {
+  clear: both;
+}
+.section-number {
+  padding-right: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 680;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+  & :is(ol, ul) {
+    margin-left: 1em;
+  }
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+  & li {
+    margin-top: 0.5em;
+  }
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  margin: 0 0 0 2em;
+  & li {
+    margin: 0;
+    & :first-child { margin-top: 0; }
+    & :last-child { margin-bottom: 0; }
+  }
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+  &.olPercent {
+    --indent: 5ch;
+    & > dt {
+      min-width: calc(var(--indent) - 2ch);
+    }
+  }
+  &.olPercent > dt {
+    float: none;
+  }
+
+  dl > dd > & {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+  }
+}
+dl:not(.dlNewline) > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+  & > :is(:first-child, .break:first-child + *) {
+    margin-top: 0;
+  }
+  & > :is(:last-child) {
+    margin-bottom: 0;
+  }
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+  caption-side: bottom;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+  &[href] {
+    color: var(--pilcrow-weak);
+    &:hover { text-decoration: none; }
+  }
+}
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+  & dt {
+    width: var(--identifier-width);
+    min-width: var(--identifier-width);
+    clear: left;
+    float: left;
+    text-align: right;
+    margin-right: 1ch;
+  }
+  & dd {
+    margin: 0;
+    margin-left: calc(1em + var(--identifier-width)) !important;
+    min-width: 5em;
+  }
+  & .authors {
+    & .author {
+      display: inline-block;
+      margin-right: 1.5em;
+    }
+    & .org {
+      font-style: italic;
+    }
+  }
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+
+  & nav {
+    & ul {
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    & li {
+      line-height: 1.3em;
+      margin: 2px 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+  & a.xref {
+    white-space: normal;
+  }
+}
+
+.references {
+  & > dt {
+    text-align: right;
+    font-weight: bold;
+    min-width: 10ch;
+    margin-right: 1.5ch;
+    &:target::before {
+      content: "⇒";
+      margin: 0 10px 0 -25px;
+    }
+  }
+  & > dd {
+    margin-left: 12ch !important;
+    overflow: visible;
+    & .refInstance {
+      margin-bottom: 0.8em;
+    }
+    & .ascii {
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  max-width: 20em;
+  margin: 1em auto 1em 0;
+
+  & .nameRole {
+    font-weight: 700;
+    margin-left: 0;
+  }
+  & .label {
+    margin: 0.5em 0;
+  }
+  & .type {
+    display: none;
+  }
+  & .alternative-contact {
+    margin: 0.5em 0 0.25em 0;
+  }
+  & .non-ascii {
+    margin: 0 0 0 2em;
+  }
+  & div.left {
+    text-align: left;
+  }
+  & div.right {
+    text-align: right;
+  }
+}
+
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+/* Comments */
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+
+@media screen {
+  #toc nav {
+    font-family: var(--font-title);
+    font-weight: 360;
+    & > ul { margin-bottom: 2em; }
+    & ul {
+      margin: 0 0 0 4px;
+      & :is(p, li) {
+        margin: 2px 0;
+      }
+    }
+  }
+  #toc a.toplink {
+    float: right;
+  }
+}
+@media not screen {
+  #toc a.toplink {
+    display: none;
+  }
+}
+
+
+/* TOC layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    &::before { /* css hamburger */
+      float: right;
+      position: relative;
+      width: 1em;
+      height: 1px;
+      left: -164px;
+      margin: 8px 0 0 0;
+      background: white none repeat scroll 0 0;
+      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+      content: "";
+    }
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active {
+    opacity: 1;
+    & nav { display: block; }
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:is(:link, :focus, :hover),
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin: 2px 0.5em 0;
+  }
+}
+
+/* TOC layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+  #toc a.toplink {
+    margin: 8px 0.5em 0;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PPDArch</td>
+<td class="right">May 2025</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Smullen</td>
+<td class="center">Expires 23 November 2025</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-dsmullen-ppd-architecture-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2025-05-22" class="published">22 May 2025</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2025-11-23">23 November 2025</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">D. Smullen</div>
+<div class="org">CableLabs</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Privacy Preference Declaration for Home Networks</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol. As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities. The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        The latest revision of this draft can be found at <span><a href="https://drspangle.github.io/draft-smullen-ppd-architecture/draft-dsmullen-ppd-architecture.html">https://drspangle.github.io/draft-smullen-ppd-architecture/draft-dsmullen-ppd-architecture.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-dsmullen-ppd-architecture/">https://datatracker.ietf.org/doc/draft-dsmullen-ppd-architecture/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/drspangle/draft-smullen-ppd-architecture">https://github.com/drspangle/draft-smullen-ppd-architecture</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 23 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2025 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-privacy" class="internal xref">Privacy</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1" class="keepWithNext"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-transparency" class="internal xref">Transparency</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-user-control" class="internal xref">User Control</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-limitations-of-existing-mec" class="internal xref">Limitations of Existing Mechanisms</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-device-specific-configurati" class="internal xref">Device-specific Configurations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-ineffective-and-unusable-us" class="internal xref">Ineffective and Unusable User Interfaces</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-dnt-and-p3p" class="internal xref">DNT and P3P</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-vision" class="internal xref">Vision</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-use-case-smart-thermostat-w" class="internal xref">Use Case: Smart Thermostat with Location Tracking</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-use-case-smart-speaker-with" class="internal xref">Use Case: Smart Speaker with Selective Voice Recording Retention</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-use-case-home-security-came" class="internal xref">Use Case: Home Security Camera with Facial Recognition</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-goals" class="internal xref">Goals</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-enhance-user-control" class="internal xref">Enhance User Control</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-promote-interoperability" class="internal xref">Promote Interoperability</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-enable-flexibility" class="internal xref">Enable Flexibility</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-facilitate-transparency" class="internal xref">Facilitate Transparency</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-scope" class="internal xref">Scope</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-architecture-overview" class="internal xref">Architecture Overview</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-assumptions" class="internal xref">Assumptions</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-key-components" class="internal xref">Key Components</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-data-flows" class="internal xref">Data Flows</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-secure-policy-dissemination" class="internal xref">Secure Policy Dissemination</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-anonymity-and-metadata-prot" class="internal xref">Anonymity and Metadata Protection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-policy-integrity" class="internal xref">Policy Integrity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-device-authentication" class="internal xref">Device Authentication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-policy-agreement-and-enforc" class="internal xref">Policy Agreement and Enforcement</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-policy-language" class="internal xref">Policy Language</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-language-requirements" class="internal xref">Language Requirements</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-proposed-approach" class="internal xref">Proposed Approach</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-future-work" class="internal xref">Future Work</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-policy-taxonomy-and-semanti" class="internal xref">Policy Taxonomy and Semantics</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-protocol-specification-and-" class="internal xref">Protocol Specification and Message Formats</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-consent-request-workflow-de" class="internal xref">Consent Request Workflow Design Specifications</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-enforcement-and-policy-comp" class="internal xref">Enforcement and Policy Compliance</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
+                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-user-interface-design-speci" class="internal xref">User Interface Design Specifications</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.6">
+                <p id="section-toc.1-1.10.2.6.1"><a href="#section-10.6" class="auto internal xref">10.6</a>.  <a href="#name-internationalization-and-id" class="internal xref">Internationalization and Identifier Comparison</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.7">
+                <p id="section-toc.1-1.10.2.7.1"><a href="#section-10.7" class="auto internal xref">10.7</a>.  <a href="#name-interoperability-testing-an" class="internal xref">Interoperability Testing and Reference Implementations</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The rapid growth of Internet-connected devices in the home has introduced new and often overwhelming challenges to personal privacy.
+While many of these devices collect sensitive data by design, the tools offered to users to understand or control that collection are fragmented, confusing, or entirely absent.
+When privacy settings do exist, they are often buried in obscure menus, expressed in legal or technical jargon, and lack the contextual clarity needed to support meaningful decision-making.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This results in a deeply flawed model: users are expected to defend their own privacy across a chaotic landscape of inconsistent, ad hoc controls—many of which are ineffective or misleading.
+At the same time, device vendors face growing pressure to meet user expectations and comply with evolving privacy regulations.
+In response, they often develop bespoke privacy mechanisms that are complex to implement, difficult to maintain, and ultimately fail to provide users with clarity or confidence.
+These mechanisms are typically built in isolation, without shared patterns or cross-device consistency, leading to privacy interfaces that are overengineered, underused, and poorly aligned with real user needs.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3"><span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> frames mass data collection as a technical threat, urging protocol designers to limit exposure through encryption and data minimization.
+While this principle is crucial in adversarial, internet-scale contexts, the model proposed in this document takes a different approach: rather than hiding data flows, it seeks to govern them.
+Privacy here is not achieved by making devices blind, but by ensuring they are accountable to user-defined preferences.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This shift benefits both users and developers.
+End users gain the ability to make contextual, informed privacy decisions without being overwhelmed by constant prompts or opaque controls.
+Developers, in turn, are provided with a clearer, more predictable way to meet privacy expectations—reducing the need to reinvent complex and often inadequate consent and configuration systems.
+What is needed is not more prompts or disclaimers, but a coherent mechanism for devices to retrieve, interpret, and respect user-directed privacy choices.<a href="#section-1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Privacy, as framed in this document, is not centered on anonymity or data minimization in the abstract, but rather on empowering users to understand and shape how their data is collected, used, and shared within their home networks.
+This framework introduces a definition of privacy grounded in two core pillars: transparency and user control.
+Transparency requires individuals to be provided with a clear and comprehensive understanding of what data is being collected by devices in their environment, how that data is processed and shared, and under what conditions.
+This understanding must be accessible and meaningful to non-expert users, ensuring that privacy decisions are made with full awareness of their implications.
+User control refers to the ability of individuals to define and enforce privacy preferences across the entire device ecosystem within their home.
+Control must be both actionable and enforceable, enabling users to express nuanced policies—such as permitting temperature data collection while prohibiting third-party sharing—and ensuring that devices are held accountable to these expectations.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">The perspective of this document stands in contrast to the approach taken in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>, which emphasizes privacy as the reduction of observability, linkability, and identifiability within protocol design.
+<span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span> recommends minimizing data collection and anonymizing information wherever possible, framing privacy primarily as a technical safeguard against unwanted inference.
+In this framework, by contrast, privacy is not defined solely by what is withheld, but by what is understood and governed by the user.
+In emphasizing user agency and data governance, this work finds conceptual alignment with <span>[<a href="#RFC8280" class="cite xref">RFC8280</a>]</span>, which frames privacy as a fundamental human right that protocol designers should consider.
+<span>[<a href="#RFC8280" class="cite xref">RFC8280</a>]</span> underscores the importance of enabling user autonomy and informed decision-making, values that resonate strongly with this document’s goals.
+However, the perspective of this document is more operationally focused: rather than advocating for abstract rights-respecting design principles, it proposes a concrete architectural approach to operationalize those rights within the home environment.
+Where <span>[<a href="#RFC8280" class="cite xref">RFC8280</a>]</span> calls for privacy-supportive capabilities in protocol design, this document seeks to instantiate those capabilities through specific, enforceable mechanisms that allow users to express, distribute, and apply their privacy preferences in practice.
+Ultimately, this framework reconceives privacy not as a static property to be preserved by systems, but as a dynamic relationship between users and their devices—one that must be actively mediated through transparency and meaningful control.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<div id="privacy">
+<section id="section-2.1">
+        <h3 id="name-privacy">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-privacy" class="section-name selfRef">Privacy</a>
+        </h3>
+<p id="section-2.1-1">Privacy is not about anonymity, but about providing end users with the ability to be aware of how their data is being collected, used, and shared.
+It aims to empower users with the knowledge and tools necessary to manage their personal information effectively.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="transparency">
+<section id="section-2.2">
+        <h3 id="name-transparency">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-transparency" class="section-name selfRef">Transparency</a>
+        </h3>
+<p id="section-2.2-1">Transparency holds that users possess a clear and comprehensive understanding of what data is collected, how it is utilized, and how it is shared by devices within their network.
+It involves making the data practices of devices visible and comprehensible to ensure users are fully informed.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="user-control">
+<section id="section-2.3">
+        <h3 id="name-user-control">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-user-control" class="section-name selfRef">User Control</a>
+        </h3>
+<p id="section-2.3-1">User control empowers users to exert meaningful influence over the data collection and dissemination practices of these devices.
+It ensures that users have the capability to define their privacy preferences and enforce policies that align with their comfort levels and expectations.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="limitations-of-existing-mechanisms">
+<section id="section-3">
+      <h2 id="name-limitations-of-existing-mec">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-limitations-of-existing-mec" class="section-name selfRef">Limitations of Existing Mechanisms</a>
+      </h2>
+<p id="section-3-1">Current mechanisms for managing data privacy within the home environment exhibit limitations.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="device-specific-configurations">
+<section id="section-3.1">
+        <h3 id="name-device-specific-configurati">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-device-specific-configurati" class="section-name selfRef">Device-specific Configurations</a>
+        </h3>
+<p id="section-3.1-1">Individual devices often employ unique privacy settings, thereby complicating user management of privacy across the entire network.
+This complexity can inadvertently lead to unintended data sharing<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ineffective-and-unusable-user-interfaces">
+<section id="section-3.2">
+        <h3 id="name-ineffective-and-unusable-us">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-ineffective-and-unusable-us" class="section-name selfRef">Ineffective and Unusable User Interfaces</a>
+        </h3>
+<p id="section-3.2-1">Navigating and configuring privacy settings on individual devices can be a time-consuming and frustrating experience for users.
+These ineffective interfaces often lead users to habitually agree to relax their privacy preferences without fully understanding the implications of their decisions.
+This fosters a general resignation towards privacy management, making it difficult for users to exert meaningful control over their personal data and ultimately compromising their privacy expectations.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dnt-and-p3p">
+<section id="section-3.3">
+        <h3 id="name-dnt-and-p3p">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-dnt-and-p3p" class="section-name selfRef">DNT and P3P</a>
+        </h3>
+<p id="section-3.3-1">Protocols like Do Not Track (DNT) and Platform for Privacy Preferences Project (P3P) have not achieved widespread adoption and have proven inadequate for addressing nuanced privacy needs.
+These protocols lack the granularity required to express fine-grained user preferences and may not effectively prevent unintended data collection or sharing.
+For instance, consider a smart security camera within a home network.
+While DNT or P3P can signal a user's general preference not to be tracked or share data, they do not enable users to specify detailed privacy settings, such as allowing the camera to record video but not audio, or restricting data sharing to only within the home network.
+Users need more precise control options to manage their privacy effectively and ensure their preferences are respected across different devices and contexts.
+These limitations, coupled with the increasing complexity of the IoT ecosystem, hinder the effective exercise of user control over their data within the home environment and pose a significant threat to user privacy.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="vision">
+<section id="section-4">
+      <h2 id="name-vision">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-vision" class="section-name selfRef">Vision</a>
+      </h2>
+<p id="section-4-1">This document proposes a framework aimed at changing how users express their privacy preferences within their home network.
+The new paradigm aspires to achieve a seamless and user-friendly experience, where privacy settings do not hinder the use of devices, reduce the burden of configuration management, and eliminate the need to navigate through long, unintelligible legal-language privacy policies.
+By simplifying the process for defining privacy preferences, this approach aims to alleviate privacy fatigue and combat the pervasive feelings of resignation that users often experience regarding their privacy choices.
+This will empower users to make informed decisions without duress, fostering greater trust and confidence in integrating internet-of-things devices into their homes.
+In essence, the vision is to provide users with intuitive mechanisms for expressing privacy preferences, thus ensuring their concerns are addressed effectively and promoting a more private home environment.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="use-case-smart-thermostat-with-location-tracking">
+<section id="section-4.1">
+        <h3 id="name-use-case-smart-thermostat-w">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-use-case-smart-thermostat-w" class="section-name selfRef">Use Case: Smart Thermostat with Location Tracking</a>
+        </h3>
+<p id="section-4.1-1">Scenario: A user purchases a smart thermostat that offers location-based temperature adjustments.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">User Preference: The user desires temperature adjustments based on their presence at home but wishes to prevent the thermostat from collecting and transmitting precise location data.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">Expected Outcome: The PPD protocol allows the user to define a policy where the thermostat can only determine presence/absence within the home without collecting precise GPS coordinates.
+The thermostat must clearly inform the user of this limitation and any potential impact on functionality (e.g., less precise temperature adjustments).
+Regulatory frameworks such as the General Data Protection Regulation (GDPR) in the EU and the California Consumer Privacy Act (CCPA) in the U.S. already require companies to obtain explicit consent before collecting and processing sensitive personal data, including precise location information.
+The PPD protocol ensures that consent is gathered in a manner that is transparent and comprehensible to the user, preventing scenarios where users might feel pressured or overwhelmed by the decision-making process.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">This protocol empowers individuals to make educated choices regarding their privacy settings by offering clear and concise information about data collection practices, potential risks, and benefits.
+It places the user in control, fostering an environment where privacy decisions are made without duress, thus promoting confidence and trust in integrating internet-of-things devices into their daily lives.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="use-case-smart-speaker-with-selective-voice-recording-retention">
+<section id="section-4.2">
+        <h3 id="name-use-case-smart-speaker-with">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-use-case-smart-speaker-with" class="section-name selfRef">Use Case: Smart Speaker with Selective Voice Recording Retention</a>
+        </h3>
+<p id="section-4.2-1">Scenario: A user gets a smart speaker that can record and store voice data.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">User Preference: The user wants to keep general conversations for service improvement but prefers sensitive information to be selectively deleted and not retained.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">Expected Outcome: The PPD protocol enables the user to configure the speaker to identify and delete recordings containing sensitive information while retaining other voice data as long as necessary.
+The speaker must inform the user about its data collection and storage practices, providing an option to manage selective deletion.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">This outcome significantly enhances the user experience by ensuring privacy preferences are respected seamlessly within the context of their own network.
+Users can manage their sensitive information without needing to reveal details to the smart speaker service, which means the user's privacy is upheld.
+The smart speaker service only sees the retention preferences, avoiding the risks associated with handling sensitive data, including the preferences themselves which may be considered sensitive.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">Moreover, this streamlined approach means that device manufacturers do not need to expend resources on developing special user interfaces for managing these preferences.
+Instead, the preferences are integrated within the home network, allowing for a cohesive and user-friendly experience.
+This integration prevents the need for users to navigate separate interfaces or endure educational prompts to manage their privacy settings, fostering a smoother and more intuitive interaction with the device.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="use-case-home-security-camera-with-facial-recognition">
+<section id="section-4.3">
+        <h3 id="name-use-case-home-security-came">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-use-case-home-security-came" class="section-name selfRef">Use Case: Home Security Camera with Facial Recognition</a>
+        </h3>
+<p id="section-4.3-1">Scenario: A user installs a home security camera with facial recognition capabilities.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">User Preference: The user desires facial recognition for security purposes but wishes to restrict the storage of captured images and the use of facial recognition data for any purpose other than security within the home.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">Expected Outcome: The PPD protocol allows the user to configure the camera to only store and process facial recognition data for security purposes within the home network and prohibits the sharing of this data with third parties.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">This approach provides numerous benefits for both the camera manufacturer and the user.
+For the user, it ensures that their privacy preferences are respected and that their personal data is used solely for the intended security purposes.
+By having control over the storage and usage of their facial recognition data, users can feel more secure and confident in their privacy being upheld.
+This can lead to a higher level of trust in the device and its manufacturer.<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">For the camera manufacturer, implementing such a protocol reduces the risk of data breaches and the misuse of sensitive facial recognition data, which can lead to legal complications and damage to their reputation.
+It streamlines the development process, as they do not need to create complex user interfaces for managing these preferences.
+Instead, integrating the PPD protocol within the home network allows for seamless and user-friendly privacy management.
+This approach can also make the product more attractive to privacy-conscious consumers, increasing its marketability and potentially leading to higher sales.
+This outcome showcases a mutually beneficial relationship where user privacy is prioritized, and manufacturers can offer a more privacy-preserving and appealing product.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="goals">
+<section id="section-5">
+      <h2 id="name-goals">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-goals" class="section-name selfRef">Goals</a>
+      </h2>
+<div id="enhance-user-control">
+<section id="section-5.1">
+        <h3 id="name-enhance-user-control">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-enhance-user-control" class="section-name selfRef">Enhance User Control</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.1-1.1">
+            <p id="section-5.1-1.1.1">Empower users with the ability to define and enforce clear, concise, and easily understandable privacy policies for their home networks.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.2">
+            <p id="section-5.1-1.2.1">Provide users with the means to effectively exercise control over the collection, use, and dissemination of their personal data by devices within their home network.<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="promote-interoperability">
+<section id="section-5.2">
+        <h3 id="name-promote-interoperability">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-promote-interoperability" class="section-name selfRef">Promote Interoperability</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.1">
+            <p id="section-5.2-1.1.1">Establish a standardized mechanism for devices from diverse manufacturers to discover and adhere to user-defined privacy policies, thereby facilitating consistent privacy management across the home network.<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="enable-flexibility">
+<section id="section-5.3">
+        <h3 id="name-enable-flexibility">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-enable-flexibility" class="section-name selfRef">Enable Flexibility</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.3-1.1">
+            <p id="section-5.3-1.1.1">Provide a framework that allows for the customization of privacy policies to accommodate the unique privacy requirements and preferences of individual users and households.<a href="#section-5.3-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="facilitate-transparency">
+<section id="section-5.4">
+        <h3 id="name-facilitate-transparency">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-facilitate-transparency" class="section-name selfRef">Facilitate Transparency</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.4-1.1">
+            <p id="section-5.4-1.1.1">Ensure that devices within the home network are obligated to provide clear and concise information regarding their data collection and usage practices to users.<a href="#section-5.4-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.4-1.2">
+            <p id="section-5.4-1.2.1">Establish a mechanism for users to easily understand the implications of their privacy policy settings on the functionality of devices within their home network.<a href="#section-5.4-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="scope">
+<section id="section-6">
+      <h2 id="name-scope">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
+      </h2>
+<p id="section-6-1">This document focuses on defining a high-level architectural framework for a Privacy Preference Declaration (PPD) protocol specifically designed for home network environments.
+This document concentrates on the conceptual framework, key architectural components, and fundamental principles for enabling users to express and enforce their privacy preferences on devices within their home networks.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">This document does not delve into specific implementation details, such as message formats, data structures, security algorithms, or user interface design.
+Furthermore, this document does not address enforcement mechanisms, legal and regulatory considerations, or specific security protocols.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">Specific implementation details and message formats will be addressed in subsequent RFCs.
+This document aims to be complementary to existing and future standards related to home networking, IoT security, and data privacy.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">This document provides the foundation for subsequent work, including:<a href="#section-6-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-5.1">
+          <p id="section-6-5.1.1">Privacy Preference Declaration Taxonomy: This document will define a taxonomy of privacy preference categories and attributes, including a mechanism for registration and management of these categories.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-5.2">
+          <p id="section-6-5.2.1">Privacy Preference Declaration Protocol Specification: This document will specify the message formats, data structures, and communication procedures for the PPD protocol, including mechanisms for device discovery, policy retrieval, and compliance reporting.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="architecture-overview">
+<section id="section-7">
+      <h2 id="name-architecture-overview">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-architecture-overview" class="section-name selfRef">Architecture Overview</a>
+      </h2>
+<div id="assumptions">
+<section id="section-7.1">
+        <h3 id="name-assumptions">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-assumptions" class="section-name selfRef">Assumptions</a>
+        </h3>
+<p id="section-7.1-1">This document makes the following assumptions:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-2.1">
+            <p id="section-7.1-2.1.1">User Control: It is assumed that users have a reasonable level of control over their home network infrastructure.
+This includes the ability to configure routers, install software updates, and manage device access to the network.
+This control is essential for users to effectively manage their privacy preferences and enforce them on devices within their home network.<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.2">
+            <p id="section-7.1-2.2.1">Resource Constraints: It is assumed that the home network environment and devices operating therein have resource limitations, such as limited processing power and bandwidth.
+We limit this assumption by considering that the PPD protocol and its associated mechanisms should be designed with these constraints in mind, minimizing overhead and ensuring efficient operation even on resource-constrained devices.<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.3">
+            <p id="section-7.1-2.3.1">Security Considerations: It is assumed that home networks in scope of this document are susceptible to typical security threats, including insider threats (or non-malicious misconfiguration) and vulnerability to local attacks.
+We limit this assumption by considering specific security threats to protect user privacy and the integrity of the privacy policy.
+This includes considerations for secure policy dissemination, device authentication, and protection against unauthorized access and modification of privacy preferences.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.4">
+            <p id="section-7.1-2.4.1">Single User Policy: This document assumes that each device implementing the protocol is governed by a single, unified privacy policy defined by its primary user.
+While other individuals within the same physical environment (e.g., household) may have different privacy preferences, the protocol is designed with the expectation that a device conforms to the policy established by its primary user.
+Future extensions could explore mechanisms for managing and reconciling multiple user-defined policies on a single device, particularly in shared or multi-user environments.<a href="#section-7.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.5">
+            <p id="section-7.1-2.5.1">Policy Agreement: It is assumed that devices joining the network are expected not only to retrieve the household privacy policy but also to explicitly agree to abide by its terms.
+This agreement forms a crucial part of the association process and is essential for ensuring device compliance with user privacy preferences. Failing to agree to the policy is a failure to adhere to the protocol.<a href="#section-7.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.6">
+            <p id="section-7.1-2.6.1">Policy Enforcement: At a minimum, devices must acknowledge that they have received and reviewed the user's privacy policy.
+This acknowledgment provides a basic mechanism for users to ensure device accountability and decide whether to onboard it onto the network.
+Future extensions could introduce more robust enforcement mechanisms to address non-compliance, such as network access restrictions or reporting to a designated authority.
+These measures would enhance the integrity of the privacy framework and reinforce user trust.<a href="#section-7.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="key-components">
+<section id="section-7.2">
+        <h3 id="name-key-components">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-key-components" class="section-name selfRef">Key Components</a>
+        </h3>
+<p id="section-7.2-1">User Interface: A user-friendly interface (e.g., mobile app, web portal) for creating and managing privacy preferences.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">Preference Repository: A secure and reliable mechanism for storing user preferences (e.g., local device, cloud service).<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">Declaration Protocol: A standardized protocol for devices to:<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-4.1">
+            <p id="section-7.2-4.1.1">Discover and retrieve user-defined privacy policies.<a href="#section-7.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-4.2">
+            <p id="section-7.2-4.2.1">Report their data collection and sharing practices.<a href="#section-7.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-4.3">
+            <p id="section-7.2-4.3.1">Request user consent for specific data uses.<a href="#section-7.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.2-5">Enforcement Mechanisms: Mechanisms for devices to enforce user-defined privacy restrictions.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="data-flows">
+<section id="section-7.3">
+        <h3 id="name-data-flows">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-data-flows" class="section-name selfRef">Data Flows</a>
+        </h3>
+<p id="section-7.3-1">This section outlines the high-level data interactions between users, devices, and the Preference Repository in the Privacy Preference Declaration (PPD) framework.
+It describes how privacy preferences are defined by users, retrieved by devices, and used to guide behavior in a home network environment.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">The process begins when a user defines a set of privacy preferences that apply to their household.
+These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
+The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
+Likewise, the underlying vocabulary and structure of the privacy preferences, including data categories and associated constraints, is specified in (Privacy Preference Declaration Taxonomy).<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">Once created, the user’s preferences are stored in a secure Preference Repository, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
+When a new device joins the home network, it initiates an onboarding process during which it discovers the repository and establishes a secure channel.
+Following onboarding, the device performs association, which involves retrieving the household privacy policy and issuing a formal acknowledgment of its terms.
+Devices may optionally report their data handling declarations to the repository at this stage.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">If a device seeks to perform actions not permitted under the baseline policy, for example, collecting or sharing data beyond what the user has authorized may initiate a consent request workflow.
+However, the design and behavior of this consent mechanism is explicitly out of scope for this document.
+Inappropriate or poorly designed consent flows, such as those that involve excessive prompting, ambiguous language, or misleading options, can inadvertently pressure users into accepting data practices that conflict with their preferences.
+Even without malicious intent, these experiences may degrade trust and lead to outcomes inconsistent with user expectations.
+Future specifications should ensure that consent interactions are clear, proportionate, and respectful, helping users make informed decisions without friction or fatigue.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-5">When the household policy is updated, or when a device’s previous association has expired, the device is required to re-associate by re-retrieving and accepting the latest version of the policy.
+Reassociation ensures that devices remain accountable to current user expectations over time.
+Devices are not expected to re-collect consent for data uses already covered by existing, valid consent.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+<p id="section-7.3-6">To support efficient transmission of privacy policies, consent records, and compliance data (particularly in constrained environments typical of home IoT systems) a compact, machine-readable encoding is recommended.
+<span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, offers an efficient format for structured data that is well-suited for this context.
+CBOR balances low-overhead serialization with the ability to represent extensible and semantically rich policy structures.
+While this document does not mandate any specific encoding, CBOR should be considered as a candidate for future protocol-level message formats.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
+<p id="section-7.3-7">It is important to note that the minimum requirement under this architecture is limited to the discovery, retrieval, and formal acknowledgment of the user’s privacy policy.
+This acknowledgment provides a foundational mechanism for establishing device accountability.
+However, this document does not define how policy enforcement must be carried out by the device, nor does it specify how to handle cases where a device cannot fully comply with a given policy.
+These aspects, including runtime enforcement, conflict resolution, or auditing, may be addressed in future work.<a href="#section-7.3-7" class="pilcrow">¶</a></p>
+<p id="section-7.3-8">Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
+These elements will be specified in a companion document, (Privacy Preference Declaration Protocol Specification).<a href="#section-7.3-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">For a privacy framework to be effective, it must not only support the expression of user preferences but also ensure that those preferences are protected during transmission, retrieval, and enforcement.
+This section outlines the necessary safeguards for ensuring the confidentiality, authenticity, and integrity of the privacy policy, as well as the anonymity of the household during key protocol operations.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<div id="secure-policy-dissemination">
+<section id="section-8.1">
+        <h3 id="name-secure-policy-dissemination">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-secure-policy-dissemination" class="section-name selfRef">Secure Policy Dissemination</a>
+        </h3>
+<p id="section-8.1-1">Communication between devices and the Preference Repository must be protected against unauthorized access and tampering.
+Cryptographic mechanisms such as encryption and mutual authentication should be employed to ensure that only legitimate devices can retrieve privacy policies and that those policies are delivered without modification.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="anonymity-and-metadata-protection">
+<section id="section-8.2">
+        <h3 id="name-anonymity-and-metadata-prot">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-anonymity-and-metadata-prot" class="section-name selfRef">Anonymity and Metadata Protection</a>
+        </h3>
+<p id="section-8.2-1">Even when privacy policies themselves do not contain sensitive personal information, the act of retrieving or acknowledging a policy may reveal characteristics about the household—such as the types of devices in use, specific user preferences, or behavioral patterns over time.
+<span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> cautions against protocol designs that expose unnecessary metadata, treating the accumulation of such information as a legitimate technical threat.
+This framework takes that warning seriously: metadata exposure during policy retrieval and device onboarding must be minimized to avoid turning privacy infrastructure into a new source of privacy leakage.
+Concepts from <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> may help inform this effort. <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> introduces techniques for authorization without identification, enabling a client to prove it is authorized without revealing who it is.
+While <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> is optimized for pseudonymous web authentication over the public internet, and assumes a centralized token issuer model, its core ideas—particularly around unlinkable token presentation—could be adapted to the PPD protocol to reduce metadata correlation and minimize household identifiability during policy exchanges.
+However, this must be done carefully, as the assumptions of <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> do not fully align with the goals or context of a local, user-governed home network.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policy-integrity">
+<section id="section-8.3">
+        <h3 id="name-policy-integrity">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-policy-integrity" class="section-name selfRef">Policy Integrity</a>
+        </h3>
+<p id="section-8.3-1">Devices must be guaranteed that the policy retrieved is authentic and unaltered. Integrity protections, such as digital signatures, are necessary to ensure that users’ preferences cannot be tampered with—either in transit or at rest—by other devices, malicious actors, or misconfigurations.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="device-authentication">
+<section id="section-8.4">
+        <h3 id="name-device-authentication">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-device-authentication" class="section-name selfRef">Device Authentication</a>
+        </h3>
+<p id="section-8.4-1">Devices participating in the privacy framework must authenticate themselves before accessing the Preference Repository.
+This ensures that policy dissemination is limited to known, authorized devices, and that users can maintain trust in the integrity of their home network's privacy relationships.
+By aligning with the concerns raised in <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> and incorporating ideas from <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> where appropriate, this framework seeks to protect users not only from overt data collection, but also from silent inference and passive metadata surveillance.
+At the same time, it avoids treating anonymity as an end in itself.
+The goal is to support privacy with accountability—where user-defined preferences are respected, devices are identifiable only as much as necessary, and no more, and the user retains ultimate visibility and influence over what occurs within their domain.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policy-agreement-and-enforcement">
+<section id="section-8.5">
+        <h3 id="name-policy-agreement-and-enforc">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-policy-agreement-and-enforc" class="section-name selfRef">Policy Agreement and Enforcement</a>
+        </h3>
+<p id="section-8.5-1">Devices must not only acknowledge receipt of the privacy policy but also explicitly agree to abide by its terms.
+This agreement should be recorded and verifiable.
+Enforcement mechanisms should be in place to address non-compliance, including network access restrictions or reporting to a designated authority.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="policy-language">
+<section id="section-9">
+      <h2 id="name-policy-language">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-policy-language" class="section-name selfRef">Policy Language</a>
+      </h2>
+<p id="section-9-1">The specific details of the Privacy Policy Language, including its syntax, structure, and extensibility mechanisms, are considered out of scope for this document, which focuses on the overall framework.
+The Privacy Policy Language, along with a taxonomy of privacy concepts and attributes, will be fully defined in a separate RFC, the "Privacy Preference Declaration Taxonomy," allowing for more detailed exploration and development of this crucial component of the PPD framework.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div id="language-requirements">
+<section id="section-9.1">
+        <h3 id="name-language-requirements">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-language-requirements" class="section-name selfRef">Language Requirements</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-9.1-1.1">
+            <p id="section-9.1-1.1.1">Human-readable: Policies should be easily understandable by users.<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.2">
+            <p id="section-9.1-1.2.1">Machine-readable: Policies should be machine-processable for automated enforcement.<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.3">
+            <p id="section-9.1-1.3.1">Extensible: The language should be flexible enough to accommodate evolving privacy needs and technologies.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.4">
+            <p id="section-9.1-1.4.1">Internationalization-compatible: Policies and identifiers used within them may need to support multilingual environments and non-ASCII characters.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.1-2">To ensure consistent interpretation and comparison of string-based policy elements, such as device names, labels, or category identifier string handling practices should align with the guidelines defined in <span>[<a href="#RFC7564" class="cite xref">RFC7564</a>]</span>.
+This is particularly important when identifiers or user-facing labels are created, stored, or matched across vendors or systems that operate in different locales or character encodings.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="proposed-approach">
+<section id="section-9.2">
+        <h3 id="name-proposed-approach">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-proposed-approach" class="section-name selfRef">Proposed Approach</a>
+        </h3>
+<p id="section-9.2-1">Consider leveraging existing privacy policy languages (e.g., P3P) or drawing lessons from privacy labeling systems used in modern application ecosystems—such as Apple’s App Privacy Labels and Google’s Data Safety section for Android apps.
+While these approaches are not protocols per se, they demonstrate how structured, declarative privacy metadata can be communicated to users and systems in a consistent way.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">Alternatively, a new, concise, and user-friendly privacy policy language may be developed specifically for the PPD framework.
+One possibility is to define an intermediate representation—similar in spirit to the intermediate representation used in compilers such as LLVM—that captures the fundamental privacy constraints and regulatory considerations (e.g., from GDPR, CCPA) in a machine-readable form.
+This representation would support automated enforcement while being straightforward to translate into human-readable language.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.2-3">Future specifications should also define guidance for how string identifiers—such as device roles, policy tags, or consent status labels—are formatted, compared, and stored, to avoid ambiguities across systems.
+In contexts where internationalized strings are involved, alignment with <span>[<a href="#RFC7564" class="cite xref">RFC7564</a>]</span> should be considered to ensure interoperability and consistency.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="future-work">
+<section id="section-10">
+      <h2 id="name-future-work">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-future-work" class="section-name selfRef">Future Work</a>
+      </h2>
+<p id="section-10-1">This document defines an architectural framework for enabling users to express and enforce privacy preferences within home network environments.
+Several aspects critical to a fully operational implementation are intentionally left out of scope here and are expected to be addressed in future specifications or companion documents.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<div id="policy-taxonomy-and-semantics">
+<section id="section-10.1">
+        <h3 id="name-policy-taxonomy-and-semanti">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-policy-taxonomy-and-semanti" class="section-name selfRef">Policy Taxonomy and Semantics</a>
+        </h3>
+<p id="section-10.1-1">A separate document, tentatively titled "Privacy Preference Declaration Taxonomy", will define:<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.1-2.1">
+            <p id="section-10.1-2.1.1">A common vocabulary and set of categories for expressing privacy preferences.<a href="#section-10.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.1-2.2">
+            <p id="section-10.1-2.2.1">Attributes and semantics for data types, sharing constraints, and processing conditions.<a href="#section-10.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.1-2.3">
+            <p id="section-10.1-2.3.1">An extensibility model for incorporating future data types and policy dimensions.<a href="#section-10.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-10.1-3">This taxonomy is foundational for consistent policy interpretation across heterogeneous devices and vendors.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="protocol-specification-and-message-formats">
+<section id="section-10.2">
+        <h3 id="name-protocol-specification-and-">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-protocol-specification-and-" class="section-name selfRef">Protocol Specification and Message Formats</a>
+        </h3>
+<p id="section-10.2-1">A companion document, "Privacy Preference Declaration Protocol Specification", is expected to define:<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.2-2.1">
+            <p id="section-10.2-2.1.1">Message formats for device onboarding, policy retrieval, acknowledgment, and compliance reporting.<a href="#section-10.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.2-2.2">
+            <p id="section-10.2-2.2.1">Optional mechanisms for consent request flows.<a href="#section-10.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.2-2.3">
+            <p id="section-10.2-2.3.1">Transport-layer considerations and discovery mechanisms.<a href="#section-10.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.2-2.4">
+            <p id="section-10.2-2.4.1">Recommended encoding formats, such as <span>[<a href="#RFC8949" class="cite xref">RFC8949</a>]</span>, for efficient representation of structured data.<a href="#section-10.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="consent-request-workflow-design-specifications">
+<section id="section-10.3">
+        <h3 id="name-consent-request-workflow-de">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-consent-request-workflow-de" class="section-name selfRef">Consent Request Workflow Design Specifications</a>
+        </h3>
+<p id="section-10.3-1">The mechanism by which devices request additional user consent for data uses not covered by the baseline policy is out of scope.
+However, future specifications should:<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.3-2.1">
+            <p id="section-10.3-2.1.1">Define clear constraints to prevent manipulative or fatiguing consent flows (e.g., dark patterns).<a href="#section-10.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.3-2.2">
+            <p id="section-10.3-2.2.1">Ensure that consent interactions are transparent, infrequent, proportionate, and user-respecting.<a href="#section-10.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.3-2.3">
+            <p id="section-10.3-2.3.1">Explore user interface standards or API affordances to preserve meaningful choice.<a href="#section-10.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-10.3-3">This is a particularly sensitive area and must balance user experience, privacy expectations, and implementation feasibility.<a href="#section-10.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="enforcement-and-policy-compliance">
+<section id="section-10.4">
+        <h3 id="name-enforcement-and-policy-comp">
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-enforcement-and-policy-comp" class="section-name selfRef">Enforcement and Policy Compliance</a>
+        </h3>
+<p id="section-10.4-1">This architecture does not define how privacy policies are to be enforced by devices or how non-compliance is to be detected or remediated.
+Future work may include:<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.4-2.1">
+            <p id="section-10.4-2.1.1">Runtime enforcement models and device-side implementation expectations.<a href="#section-10.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-2.2">
+            <p id="section-10.4-2.2.1">Auditing mechanisms for verifying compliance.<a href="#section-10.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-2.3">
+            <p id="section-10.4-2.3.1">Deconfliction strategies for devices unable to meet all user-defined constraints.<a href="#section-10.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.4-2.4">
+            <p id="section-10.4-2.4.1">Options for escalation (e.g., network access restrictions, notifications, or isolation).<a href="#section-10.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="user-interface-design-specifications">
+<section id="section-10.5">
+        <h3 id="name-user-interface-design-speci">
+<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-user-interface-design-speci" class="section-name selfRef">User Interface Design Specifications</a>
+        </h3>
+<p id="section-10.5-1">The user-facing interface used to author, modify, and review privacy preferences is out of scope.
+Future design guidance may address:<a href="#section-10.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.5-2.1">
+            <p id="section-10.5-2.1.1">User experience design principles for presenting privacy concepts clearly and accessibly.<a href="#section-10.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.5-2.2">
+            <p id="section-10.5-2.2.1">Models for progressive disclosure of policy impact.<a href="#section-10.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.5-2.3">
+            <p id="section-10.5-2.3.1">Multi-user and household-role-specific control models (e.g., parental vs. administrative roles).<a href="#section-10.5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="internationalization-and-identifier-comparison">
+<section id="section-10.6">
+        <h3 id="name-internationalization-and-id">
+<a href="#section-10.6" class="section-number selfRef">10.6. </a><a href="#name-internationalization-and-id" class="section-name selfRef">Internationalization and Identifier Comparison</a>
+        </h3>
+<p id="section-10.6-1">In contexts where privacy preferences or taxonomy elements involve user-facing or vendor-defined string identifiers, additional work may be required to:<a href="#section-10.6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.6-2.1">
+            <p id="section-10.6-2.1.1">Define string normalization and comparison rules, particularly for internationalized text.<a href="#section-10.6-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.6-2.2">
+            <p id="section-10.6-2.2.1">Ensure identifier consistency across diverse vendors and locales.<a href="#section-10.6-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.6-2.3">
+            <p id="section-10.6-2.3.1">Consider alignment with the <span>[<a href="#RFC7564" class="cite xref">RFC7564</a>]</span> for handling Unicode-aware identifiers in a secure and interoperable way.<a href="#section-10.6-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="interoperability-testing-and-reference-implementations">
+<section id="section-10.7">
+        <h3 id="name-interoperability-testing-an">
+<a href="#section-10.7" class="section-number selfRef">10.7. </a><a href="#name-interoperability-testing-an" class="section-name selfRef">Interoperability Testing and Reference Implementations</a>
+        </h3>
+<p id="section-10.7-1">Future work may also include:<a href="#section-10.7-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.7-2.1">
+            <p id="section-10.7-2.1.1">Development of reference implementations of the PPD protocol and repository components.<a href="#section-10.7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.7-2.2">
+            <p id="section-10.7-2.2.1">Interoperability testing across devices and vendors.<a href="#section-10.7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-10.7-2.3">
+            <p id="section-10.7-2.3.1">Conformance guidelines and self-certification procedures.<a href="#section-10.7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-11">
+      <h2 id="name-iana-considerations">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-11-1">This document has no IANA actions.<a href="#section-11-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-12">
+      <h2 id="name-references">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-12.1">
+        <h3 id="name-normative-references">
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8949">[RFC8949]</dt>
+      <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-12.2">
+        <h3 id="name-informative-references">
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC6973">[RFC6973]</dt>
+        <dd>
+<span class="refAuthor">Cooper, A.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Aboba, B.</span>, <span class="refAuthor">Peterson, J.</span>, <span class="refAuthor">Morris, J.</span>, <span class="refAuthor">Hansen, M.</span>, and <span class="refAuthor">R. Smith</span>, <span class="refTitle">"Privacy Considerations for Internet Protocols"</span>, <span class="seriesInfo">RFC 6973</span>, <span class="seriesInfo">DOI 10.17487/RFC6973</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6973">https://www.rfc-editor.org/rfc/rfc6973</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7258">[RFC7258]</dt>
+        <dd>
+<span class="refAuthor">Farrell, S.</span> and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Pervasive Monitoring Is an Attack"</span>, <span class="seriesInfo">BCP 188</span>, <span class="seriesInfo">RFC 7258</span>, <span class="seriesInfo">DOI 10.17487/RFC7258</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7258">https://www.rfc-editor.org/rfc/rfc7258</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7564">[RFC7564]</dt>
+        <dd>
+<span class="refAuthor">Saint-Andre, P.</span> and <span class="refAuthor">M. Blanchet</span>, <span class="refTitle">"PRECIS Framework: Preparation, Enforcement, and Comparison of Internationalized Strings in Application Protocols"</span>, <span class="seriesInfo">RFC 7564</span>, <span class="seriesInfo">DOI 10.17487/RFC7564</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7564">https://www.rfc-editor.org/rfc/rfc7564</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8280">[RFC8280]</dt>
+        <dd>
+<span class="refAuthor">ten Oever, N.</span> and <span class="refAuthor">C. Cath</span>, <span class="refTitle">"Research into Human Rights Protocol Considerations"</span>, <span class="seriesInfo">RFC 8280</span>, <span class="seriesInfo">DOI 10.17487/RFC8280</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8280">https://www.rfc-editor.org/rfc/rfc8280</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9577">[RFC9577]</dt>
+      <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass HTTP Authentication Scheme"</span>, <span class="seriesInfo">RFC 9577</span>, <span class="seriesInfo">DOI 10.17487/RFC9577</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9577">https://www.rfc-editor.org/rfc/rfc9577</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Daniel Smullen</span></div>
+<div dir="auto" class="left"><span class="org">CableLabs</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:d.smullen@cablelabs.com" class="email">d.smullen@cablelabs.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
