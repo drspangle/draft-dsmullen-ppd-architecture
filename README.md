@@ -1,8 +1,8 @@
 <!-- regenerate: on (set to off if you edit this file) -->
 
-# TODO - Your title
+# Privacy Preference Declaration for Home Networks
 
-This is the working area for the individual Internet-Draft, "TODO - Your title".
+This is the working area for the individual Internet-Draft, "Privacy Preference Declaration for Home Networks".
 
 * [Editor's Copy](https://drspangle.github.io/draft-dsmullen-ppd-architecture/#go.draft-dsmullen-ppd-architecture.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-dsmullen-ppd-architecture)
