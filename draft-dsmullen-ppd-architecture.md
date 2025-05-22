@@ -1,11 +1,6 @@
 ---
-<<<<<<< Updated upstream
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-=======
 title: "Privacy Preference Declaration for Home Networks"
 abbrev: "PPDArch"
->>>>>>> Stashed changes
 category: info
 
 docname: draft-dsmullen-ppd-architecture-latest
@@ -25,24 +20,14 @@ venue:
 #  type: Working Group
 #  mail: WG@example.com
 #  arch: https://example.com/WG
-<<<<<<< Updated upstream
-  github: "drspangle/draft-dsmullen-ppd-architecture"
-  latest: "https://drspangle.github.io/draft-dsmullen-ppd-architecture/draft-dsmullen-ppd-architecture.html"
-=======
   github: "drspangle/draft-smullen-ppd-architecture"
   latest: "https://drspangle.github.io/draft-smullen-ppd-architecture/draft-dsmullen-ppd-architecture.html"
->>>>>>> Stashed changes
 
 author:
  -
     fullname: "Daniel Smullen"
-<<<<<<< Updated upstream
-    organization: Your Organization Here
-    email: "2737227+drspangle@users.noreply.github.com"
-=======
     organization: CableLabs
     email: "d.smullen@cablelabs.com"
->>>>>>> Stashed changes
 
 normative:
 
@@ -51,9 +36,7 @@ informative:
 
 --- abstract
 
-This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol.
-As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities.
-The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance.
+This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol. As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities. The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance.
 
 --- middle
 
