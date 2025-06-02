@@ -29,6 +29,11 @@ author:
     organization: CableLabs
     email: "d.smullen@cablelabs.com"
 
+ -
+    fullname: "Brian Scriber"
+    organization: CableLabs
+    email: "brian.scriber@computer.org"
+
 normative:
 
 informative:
