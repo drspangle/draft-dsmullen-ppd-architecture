@@ -3,9 +3,9 @@
 
 
 Network Working Group                                         D. Smullen
-Internet-Draft                                                 CableLabs
-Intended status: Informational                               22 May 2025
-Expires: 23 November 2025
+Internet-Draft                                                B. Scriber
+Intended status: Informational                                 CableLabs
+Expires: 4 December 2025                                     2 June 2025
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2025.
+   This Internet-Draft will expire on 4 December 2025.
 
 Copyright Notice
 
@@ -116,7 +116,7 @@ Table of Contents
      12.1.  Normative References
      12.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -921,8 +921,13 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
    Daniel Smullen
    CableLabs
    Email: d.smullen@cablelabs.com
+
+
+   Brian Scriber
+   CableLabs
+   Email: brian.scriber@computer.org
