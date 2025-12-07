@@ -41,7 +41,7 @@ informative:
 
 --- abstract
 
-This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol. As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities. The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance.
+This document proposes a framework that empowers users to define and enforce privacy policies within their home networks through a Privacy Preference Declaration (PPD) protocol and architecture. As connected devices proliferate, this approach enhances user control by enabling user-defined privacy settings for different data types, automatic policy discovery by new devices, and accountability measures such as notifications, network restrictions, or perhaps reporting non-compliance with users' defined preferences to designated authorities. The framework aims to cultivate a privacy-conscious home network environment through clear, enforceable privacy governance.
 
 --- middle
 
