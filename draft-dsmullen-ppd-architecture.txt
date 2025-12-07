@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 4 December 2025                                     2 June 2025
+Expires: 10 June 2026                                    7 December 2025
 
 
             Privacy Preference Declaration for Home Networks
@@ -15,10 +15,10 @@ Abstract
 
    This document proposes a framework that empowers users to define and
    enforce privacy policies within their home networks through a Privacy
-   Preference Declaration (PPD) protocol.  As connected devices
-   proliferate, this approach enhances user control by enabling user-
-   defined privacy settings for different data types, automatic policy
-   discovery by new devices, and accountability measures such as
+   Preference Declaration (PPD) protocol and architecture.  As connected
+   devices proliferate, this approach enhances user control by enabling
+   user-defined privacy settings for different data types, automatic
+   policy discovery by new devices, and accountability measures such as
    notifications, network restrictions, or perhaps reporting non-
    compliance with users' defined preferences to designated authorities.
    The framework aims to cultivate a privacy-conscious home network
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 December 2025.
+   This Internet-Draft will expire on 10 June 2026.
 
 Copyright Notice
 
