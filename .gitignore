@@ -16,6 +16,7 @@
 /lib
 /node_modules/
 /versioned/
+internal-notes/scripts/*.log
 Gemfile.lock
 archive.json
 draft-dsmullen-ppd-architecture.xml

@@ -7,12 +7,14 @@ on:
     - CONTRIBUTING.md
     - LICENSE.md
     - .gitignore
+    - internal-notes/**
   pull_request:
     paths-ignore:
     - README.md
     - CONTRIBUTING.md
     - LICENSE.md
     - .gitignore
+    - internal-notes/**
 
 jobs:
   build:
