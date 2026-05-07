@@ -77,6 +77,13 @@ contents. It is not part of the rendered Internet-Draft.
 - Made the reciprocal-acknowledgment point more explicit so the draft now says
   household-controlled acknowledgment records can support later accountability
   or review without asserting compliance or defining enforcement behavior.
+- Cleaned up the architecture draft for IETF-style review by adding proper
+  informative references, removing the stream metadata mismatch with the
+  current Datatracker record, and tightening sections that had become too
+  speculative or product-oriented.
+- Updated the architecture draft's companion-protocol wording so it now refers
+  coherently to the new protocol-draft work under the expected name
+  `draft-dsmullen-ppd-protocol`.
 - Removed explicit prototype-derived wording from the JSON baseline discussion
   so the draft no longer cites prototype experience directly.
 - Updated future-work and security text to align with the service-endpoint and

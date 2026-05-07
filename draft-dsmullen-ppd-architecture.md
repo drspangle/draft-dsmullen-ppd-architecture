@@ -4,7 +4,6 @@ abbrev: "PPDArch"
 category: info
 
 docname: draft-dsmullen-ppd-architecture-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: false
@@ -34,11 +33,6 @@ author:
     fullname: "Brian Scriber"
     organization: CableLabs
     email: "brian.scriber@computer.org"
-
-normative:
-
-informative:
-
 
 --- abstract
 
@@ -163,11 +157,8 @@ This fosters a general resignation towards privacy management, making it difficu
 ## DNT and P3P
 
 Protocols like Do Not Track (DNT) and Platform for Privacy Preferences Project (P3P) have not achieved widespread adoption and have proven inadequate for addressing nuanced privacy needs.
-These protocols lack the granularity required to express fine-grained user preferences and may not effectively prevent unintended data collection or sharing.
-For instance, consider a smart security camera within a home network.
-While DNT or P3P can signal a user's general preference not to be tracked or share data, they do not enable users to specify detailed privacy settings, such as allowing the camera to record video but not audio, or restricting data sharing to only within the home network.
-Users need more precise control options to manage their privacy effectively and communicate their preferences across different devices and contexts.
-These limitations, coupled with the increasing complexity of the IoT ecosystem, hinder the effective exercise of user control over their data within the home environment and pose a significant threat to user privacy.
+These protocols do not provide the participant-specific policy signaling, lifecycle handling, or home-network operational posture needed here.
+They also do not provide a practical basis for recording that a participating device or associated service was presented with a household policy instance.
 
 
 # Operational Scenarios
@@ -244,8 +235,8 @@ Their presence can inform transparency and local management decisions, but it do
 
 # Scope
 
-This document focuses on defining a high-level architectural framework for a Privacy Preference Declaration (PPD) protocol specifically designed for home network environments.
-This document concentrates on the conceptual framework, key architectural components, and fundamental principles for enabling users to express privacy preferences and signal those preferences to devices within their home networks.
+This document defines a high-level architectural framework for Privacy Preference Declaration (PPD) in home-network environments.
+It focuses on roles, trust boundaries, lifecycle meaning, and operational assumptions for making household privacy preferences available to devices and associated services.
 
 This document does not delve into specific implementation details, such as message formats, data structures, security algorithms, or user interface design.
 Furthermore, this document does not define mechanisms that modify device behavior, legal and regulatory considerations, or specific security protocols.
@@ -257,9 +248,9 @@ This document aims to be complementary to existing and future standards related 
 
 This document provides the foundation for subsequent work, including:
 
-* Privacy Preference Declaration Taxonomy: This document will define a taxonomy of privacy preference categories and attributes, including a mechanism for registration and management of these categories.
+* Privacy Preference Declaration Taxonomy: {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the taxonomy of privacy preference categories and attributes, including a mechanism for registration and management of these categories.
 
-* Privacy Preference Declaration Protocol Specification: This document is expected to specify the message formats, data structures, and communication procedures for the PPD protocol, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
+* A companion protocol specification document, currently expected to become `draft-dsmullen-ppd-protocol`, is expected to define the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
 
 
 # Architecture Overview
@@ -381,7 +372,7 @@ It describes how privacy preferences are defined by users, made available to par
 The process begins when a user defines a set of privacy preferences that apply to their household.
 These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
 The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
-Likewise, the underlying vocabulary and structure of the privacy preferences, including data categories and associated constraints, is specified in (Privacy Preference Declaration Taxonomy).
+Likewise, the underlying vocabulary and structure of the privacy preferences, including data categories and associated constraints, are specified in {{?I-D.draft-dsmullen-ppd-taxonomy}}.
 
 Once created, the user's preferences are maintained by a policy authority, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
 The policy authority may include storage, effective policy derivation, or both.
@@ -422,7 +413,7 @@ However, this document does not define how device behavior is changed by the pol
 These aspects, including optional status reporting, conflict resolution, or auditing, may be addressed in future work.
 
 Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
-These elements will be specified in a companion document, (Privacy Preference Declaration Protocol Specification).
+These elements are expected to be specified in a companion protocol specification document, currently expected to become `draft-dsmullen-ppd-protocol`.
 
 ## Non-PPD and Network-Observed Devices
 
@@ -438,8 +429,8 @@ Any local response to unmanaged devices, such as notification, inventory display
 
 # Policy Language
 
-The specific details of the Privacy Policy Language, including its syntax, structure, and extensibility mechanisms, are considered out of scope for this document, which focuses on the overall framework.
-The Privacy Policy Language, along with a taxonomy of privacy concepts and attributes, is expected to be defined in a separate document, the "Privacy Preference Declaration Taxonomy", allowing for more detailed exploration and development of this component of the PPD framework.
+The specific details of the privacy policy language, including its syntax, structure, and extensibility mechanisms, are out of scope for this document.
+The policy vocabulary and taxonomy of privacy concepts and attributes are expected to be defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, with any protocol serialization details defined separately.
 
 ## Language Requirements
 
@@ -451,17 +442,19 @@ The Privacy Policy Language, along with a taxonomy of privacy concepts and attri
 To ensure consistent interpretation and comparison of string-based policy elements, such as device names, labels, or category identifier string handling practices should align with the guidelines defined in {{?RFC7564}}.
 This is particularly important when identifiers or user-facing labels are created, stored, or matched across vendors or systems that operate in different locales or character encodings.
 
-## Proposed Approach
+## Architectural Direction
 
-Consider leveraging existing privacy policy languages (e.g., P3P) or drawing lessons from privacy labeling systems used in modern application ecosystems--such as Apple's App Privacy Labels and Google's Data Safety section for Android apps.
-While these approaches are not protocols per se, they demonstrate how structured, declarative privacy metadata can be communicated to users and systems in a consistent way.
+The architecture assumes a policy representation that is both machine-readable
+and suitable for user-facing explanation.
+The taxonomy document is expected to define the semantic vocabulary, while a
+companion protocol document is expected to define any wire-format or
+serialization profile needed for exchange.
 
-Alternatively, a new, concise, and user-friendly privacy policy language may be developed specifically for the PPD framework.
-One possibility is to define an intermediate representation--similar in spirit to the intermediate representation used in compilers such as LLVM--that captures the fundamental privacy constraints and regulatory considerations (e.g., from GDPR, CCPA) in a machine-readable form.
-This representation would support automated interpretation while being straightforward to translate into human-readable language.
-
-Future specifications should also define guidance for how string identifiers--such as device roles, policy tags, or consent status labels--are formatted, compared, and stored, to avoid ambiguities across systems.
-In contexts where internationalized strings are involved, alignment with {{?RFC7564}} should be considered to ensure interoperability and consistency.
+Future specifications should also define how string identifiers--such as device
+roles, policy tags, or consent status labels--are formatted, compared, and
+stored, so implementations avoid ambiguous matching behavior.
+In contexts where internationalized strings are involved, alignment with
+{{?RFC7564}} should be considered to ensure interoperability and consistency.
 
 
 # Future Work
@@ -471,7 +464,7 @@ Several aspects critical to a fully operational implementation are intentionally
 
 ## Policy Taxonomy and Semantics
 
-A separate document, tentatively titled "Privacy Preference Declaration Taxonomy", will define:
+{{?I-D.draft-dsmullen-ppd-taxonomy}} defines:
 
 * A common vocabulary and set of categories for expressing privacy preferences.
 * Attributes and semantics for data types, sharing constraints, and processing conditions.
@@ -481,7 +474,8 @@ This taxonomy is foundational for consistent policy interpretation across hetero
 
 ## Protocol Specification and Message Formats
 
-A companion document, "Privacy Preference Declaration Protocol Specification", is expected to define:
+A companion protocol specification document, currently expected to become
+`draft-dsmullen-ppd-protocol`, is expected to define:
 
 * Message formats for device onboarding, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
 * Optional mechanisms for consent request flows.
@@ -602,3 +596,7 @@ At minimum, the selected mechanism needs to provide:
 
 A policy acknowledgment is not, by itself, an assertion about subsequent device behavior.
 Any local response to non-participation or other local observations is outside the baseline signaling mechanism defined by this architecture.
+
+--- normative
+
+--- informative
