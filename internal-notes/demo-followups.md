@@ -48,6 +48,12 @@ scheduled and implemented deliberately.
   - effective-policy derivation logic
 - Leave room for more complex effective-policy calculations to move elsewhere in
   the future without changing the baseline client-facing contract.
+- If the participant-facing service and authoritative policy logic split apart,
+  preserve an unambiguous binding between:
+  - the participant-facing service endpoint
+  - the policy-instance identifier presented to the participant
+  - the freshness or renewal metadata associated with that policy instance
+  - the underlying authoritative policy state
 
 ## Association Lifecycle
 
@@ -87,7 +93,12 @@ scheduled and implemented deliberately.
 - The demo should keep a path from simple compatibility mode toward stronger
   authenticated participation, likely including:
   - better service authentication
+  - a clearer separation between discovery of candidate endpoints and trust in
+    the selected endpoint
   - participant identity binding
+  - a concrete protected-receipt mechanism for acknowledgments, such as a
+    signature or equivalent integrity-protected record that can support later
+    review
   - stronger acknowledgment integrity and replay protection
   - clearer distinction between local-device and backend-on-behalf-of-device
     acknowledgment

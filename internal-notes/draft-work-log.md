@@ -61,6 +61,22 @@ contents. It is not part of the rendered Internet-Draft.
 - Strengthened the lifecycle model so current association now includes
   freshness, can expire without policy-content change, and distinguishes stale
   association from broader needs-reassociation states.
+- Added a dedicated architecture subsection that explains association state and
+  freshness in one place, including the role of the PPD service endpoint as the
+  source of truth for whether a participant is current, stale, or in needs
+  reassociation.
+- Added explicit discovery/trust language so the draft now treats discovery as
+  yielding candidate PPD service endpoints, with trust in a selected endpoint
+  established separately by the applicable protocol and security mechanisms.
+- Added an explicit policy-authority boundary model so the draft now says the
+  participant-facing contract ends at the PPD service endpoint even when policy
+  storage or effective-policy derivation live elsewhere.
+- Tightened the introduction and goals so the front half of the draft reads
+  more like an IETF architecture document and less like product or advocacy
+  framing.
+- Made the reciprocal-acknowledgment point more explicit so the draft now says
+  household-controlled acknowledgment records can support later accountability
+  or review without asserting compliance or defining enforcement behavior.
 - Removed explicit prototype-derived wording from the JSON baseline discussion
   so the draft no longer cites prototype experience directly.
 - Updated future-work and security text to align with the service-endpoint and

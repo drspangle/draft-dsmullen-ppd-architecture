@@ -42,7 +42,7 @@ informative:
 
 --- abstract
 
-This document describes an architecture for signaling household privacy preferences to devices in home networks through Privacy Preference Declarations (PPDs).  The architecture enables a PPD participant to discover a PPD service endpoint, retrieve the applicable household policy instance, and acknowledge receipt of that policy instance.  The acknowledgment establishes that a specific policy instance was made available to the participant; it does not, by itself, assert anything about the participant's subsequent behavior.
+This document describes an architecture for signaling household privacy preferences to devices in home networks through Privacy Preference Declarations (PPDs).  The architecture enables a PPD participant to discover a PPD service endpoint, establish trust in that endpoint through the applicable protocol and security profile, retrieve the applicable household policy instance, and acknowledge receipt of that policy instance.  The acknowledgment establishes that a specific policy instance was made available to the participant; it does not, by itself, assert anything about the participant's subsequent behavior.
 
 --- middle
 
@@ -52,10 +52,9 @@ The rapid growth of Internet-connected devices in the home has introduced new an
 While many of these devices collect sensitive data by design, the tools offered to users to understand or control that collection are fragmented, confusing, or entirely absent.
 When privacy settings do exist, they are often buried in obscure menus, expressed in legal or technical jargon, and lack the contextual clarity needed to support meaningful decision-making.
 
-This results in a deeply flawed model: users are expected to defend their own privacy across a chaotic landscape of inconsistent, ad hoc controls--many of which are ineffective or misleading.
-At the same time, device vendors face growing pressure to meet user expectations and comply with evolving privacy regulations.
-In response, they often develop bespoke privacy mechanisms that are complex to implement, difficult to maintain, and ultimately fail to provide users with clarity or confidence.
-These mechanisms are typically built in isolation, without shared patterns or cross-device consistency, leading to privacy interfaces that are overengineered, underused, and poorly aligned with real user needs.
+The result is a fragmented operational model.
+Users must manage privacy through device-specific controls that vary widely in quality and semantics, while device vendors and service providers often implement isolated mechanisms with no common way to convey household privacy preferences across devices.
+This lack of a shared signaling model makes it difficult for households to understand which devices have been presented with which privacy expectations, and it makes interoperable deployment harder for implementers.
 
 {{?RFC7258}} frames mass data collection as a technical threat, urging protocol designers to limit exposure through encryption and data minimization.
 While this principle is crucial in adversarial, internet-scale contexts, the model proposed in this document takes a different approach: rather than hiding data flows, it seeks to govern them.
@@ -67,11 +66,11 @@ This document is also aligned with the user-agency goals described in {{?RFC8280
 It describes an architecture for privacy-preference signaling and recordkeeping, not a general framework for human-rights analysis or for constraining device behavior.
 Home networks are a significant and operationally important IoT environment.
 They commonly place a local administrative boundary around large numbers of devices, many with limited or no end-user interface, making them a concrete target for a privacy-preference signaling architecture.
-
-This shift benefits both users and developers.
-End users gain the ability to make contextual, informed privacy decisions without being overwhelmed by constant prompts or opaque controls.
-Developers, in turn, are provided with a clearer, more predictable way to meet privacy expectations--reducing the need to reinvent complex and often inadequate consent and configuration systems.
-What is needed is not more prompts or disclaimers, but a coherent mechanism for devices to retrieve and interpret user-directed privacy choices.
+In this architecture, discovery identifies candidate participant-facing service endpoints.
+Trust in a selected endpoint, and in the policy instances it presents, is established separately through the applicable protocol and security mechanisms rather than by discovery alone.
+This also addresses an asymmetry common in current deployments: the household user is often required to acknowledge device- or vendor-defined terms, while the household has no comparable way to record that a participating device or associated service was presented with the household's privacy policy.
+PPD introduces a reciprocal signaling path in which presentation and acknowledgment of a household policy instance can be recorded by the household domain.
+The objective is to provide a coherent architectural basis for devices and associated services to retrieve, acknowledge, and keep current with household privacy preferences within that administrative domain.
 
 
 # Conventions and Definitions
@@ -96,10 +95,10 @@ Privacy Preference Declaration (PPD):
 :  A structured expression of household privacy preferences that can be discovered, retrieved, and acknowledged by PPD participants.
 
 PPD service endpoint:
-:  A participant-facing service through which a PPD participant discovers, retrieves, and acknowledges applicable policy instances.
+:  A participant-facing service, and the baseline discovery target for participants, through which a PPD participant discovers, retrieves, and acknowledges applicable policy instances.
 
 Policy authority:
-:  The authoritative source of household policy state and of any inputs used to derive an effective policy for a participant.  The policy authority may be local or remote.
+:  The authoritative source of household policy state and of any inputs used to derive an effective policy for a participant.  The policy authority may be local or remote.  Participants are not required to discover or address the policy authority directly in the baseline architecture.
 
 Household policy:
 :  A policy selected or maintained for a home network that represents the household's privacy preferences.
@@ -178,9 +177,10 @@ The scenarios focus on discovery, association, reassociation, and mixed-particip
 
 ## Initial Discovery and Association
 
-A PPD participant joins the home network and obtains a PPD service endpoint through configuration or local network discovery.
+A PPD participant joins the home network and obtains one or more candidate PPD service endpoints through configuration or local network discovery.
 In a common home deployment model, the PPD service endpoint is hosted by a residential gateway or equivalent home-network service.
-The participant establishes a secure connection to that endpoint, retrieves the applicable effective policy instance, and acknowledges receipt of that policy instance.
+Discovery identifies reachability, not authority.
+The participant establishes a secure connection to a selected endpoint, confirms that endpoint through the applicable trust mechanism, retrieves the applicable effective policy instance, and acknowledges receipt of that policy instance.
 The PPD service endpoint may present policy derived from a local or remote policy authority without exposing that internal topology to the participant.
 At the end of this process, the participant has established association if the current applicable effective policy has been delivered and acknowledged.
 The PPD service endpoint also determines the initial freshness state of that association.
@@ -222,21 +222,24 @@ Their presence can inform transparency and local management decisions, but it do
 
 ## Enhance User Control
 
-* Empower users with the ability to define clear, concise, and easily understandable privacy policies for their home networks.
-* Provide users with the means to effectively exercise control over the collection, use, and dissemination of their personal data by devices within their home network.
+* Support a household's ability to define privacy preferences that can be made available consistently across participating devices and associated services.
+* Provide an architectural basis for recording whether the current applicable policy was made available to a participant.
+* Create a reciprocal acknowledgment model in which the household can retain a record that a participant or associated service was presented with, and acknowledged, a specific household policy instance.
 
 ## Promote Interoperability
 
-* Establish a standardized mechanism for devices from diverse manufacturers to discover PPD service endpoints, retrieve applicable privacy policies, and acknowledge policy instances, thereby facilitating consistent privacy signaling across the home network.
+* Establish a standardized mechanism for devices from diverse manufacturers to discover PPD service endpoints, retrieve applicable privacy policies, and acknowledge policy instances.
+* Support consistent association and reassociation behavior across heterogeneous participants.
 
 ## Enable Flexibility
 
-* Provide a framework that allows for the customization of privacy policies to accommodate the unique privacy requirements and preferences of individual users and households.
+* Allow deployments to place policy storage and effective-policy derivation locally or remotely without changing the baseline participant-facing contract.
+* Leave room for deployment-specific protocol profiles where constrained environments or different operational models require them.
 
 ## Facilitate Transparency
 
-* Provide a consistent way for devices within the home network to communicate clear and concise information regarding their data collection and usage practices to users.
-* Establish a mechanism for users to easily understand the implications of their privacy policy settings on the functionality of devices within their home network.
+* Provide a basis for local management functions to distinguish currently associated participants, stale or reassociation-needed participants, and non-participating devices.
+* Improve visibility into which participants have been presented with the current applicable policy instance, without implying enforcement of device behavior.
 
 
 # Scope
@@ -247,6 +250,7 @@ This document concentrates on the conceptual framework, key architectural compon
 This document does not delve into specific implementation details, such as message formats, data structures, security algorithms, or user interface design.
 Furthermore, this document does not define mechanisms that modify device behavior, legal and regulatory considerations, or specific security protocols.
 Where this document discusses recordkeeping, that recordkeeping is limited to signaling and recording that an applicable household policy was made available to and acknowledged by a PPD participant.
+That recordkeeping can provide a basis for later accountability, audit, or dispute analysis, but this document does not define enforcement behavior or prove subsequent compliance.
 
 Specific implementation details and message formats are expected to be addressed in companion specifications.
 This document aims to be complementary to existing and future standards related to home networking, IoT security, and data privacy.
@@ -279,6 +283,10 @@ This includes considerations for secure policy dissemination, device authenticat
 While other individuals within the same physical environment (e.g., household) may have different privacy preferences, the protocol is designed with the expectation that a device or associated service can receive the policy established by its primary user.
 Future extensions could explore mechanisms for managing and reconciling multiple user-defined policies on a single device, particularly in shared or multi-user environments.
 
+* Endpoint Discovery and Trust: It is assumed that configuration or local network mechanisms can identify one or more candidate PPD service endpoints for a participant.
+Discovery alone does not establish that an endpoint is authoritative for household policy.
+The applicable protocol profile needs a separate way to authenticate the selected endpoint and confirm that policy presented through that endpoint is authoritative for the participant's household context.
+
 * Policy Signaling: It is assumed that PPD participants can retrieve the applicable household privacy policy through a PPD service endpoint and acknowledge receipt of that policy instance.
 This acknowledgment forms the basis of association.
 It is a receipt signal only; it does not assert that the participant is compatible with every policy term or that it will behave in a particular way.
@@ -290,16 +298,72 @@ Participant-initiated exchanges provide the renewal or recovery path, but the PP
 * Local Recordkeeping: At a minimum, the architecture enables the household to know which PPD participants have acknowledged the current applicable policy.
 Deployment-specific responses to participants that do not acknowledge policy, or to devices that do not participate in PPD, are local management decisions and are outside the baseline signaling function defined here.
 
+## Association State and Freshness
+
+This architecture treats the PPD service endpoint as the source of truth for
+participant association state.
+A participant establishes association when it retrieves and acknowledges a
+specific applicable effective policy instance.
+
+Current association exists only when both of the following are true:
+
+* the acknowledged policy instance still corresponds to the latest applicable
+  effective policy for that participant; and
+* the association remains fresh according to the renewal model enforced by the
+  PPD service endpoint.
+
+If the applicable effective policy instance is unchanged but the freshness
+interval expires before renewal, the participant enters stale association.
+If the applicable effective policy changes, if participant state relevant to
+effective policy derivation changes, or if enough state is lost that the prior
+association can no longer be trusted, the participant enters a
+needs-reassociation state.
+In either case, the participant no longer has current association.
+
+Participant-initiated exchanges provide the renewal or recovery path, but they
+are not the source of truth for whether association is current.
+The PPD service endpoint determines whether a participant is current, stale, or
+in needs reassociation.
+
+## Discovery and Policy-Authority Boundary
+
+This architecture separates discovery of a participant-facing service endpoint
+from trust establishment.
+A participant may learn one or more candidate PPD service endpoints through
+configuration or local network mechanisms, but discovery alone does not make
+any candidate authoritative.
+Before treating a policy instance as authoritative, the participant needs the
+applicable protocol profile to authenticate the selected endpoint and confirm
+that it is authorized to present policy for the household context.
+
+The participant-facing contract is the PPD service endpoint, not direct access
+to the policy authority.
+A deployment may place storage, policy combination, and effective policy
+derivation behind that service.
+When the PPD service endpoint and policy authority are distinct, the deployment
+needs to preserve at least:
+
+* authenticity of the effective policy instance presented to the participant;
+* integrity of policy-instance identifiers and association-freshness metadata;
+* an unambiguous binding between the selected PPD service endpoint and the
+  policy authority on whose behalf it presents policy.
+
+These are architectural invariants.
+The specific transport, metadata confirmation, and cryptographic mechanisms are
+left to future protocol specifications.
+
 ## Key Components
 
 User Interface: A user-friendly interface (e.g., mobile app, web portal) for creating and managing privacy preferences.
 
 PPD Service Endpoint: A participant-facing service through which PPD participants discover, retrieve, and acknowledge applicable policy instances.
 In a common home deployment model, this service is hosted by a residential gateway or equivalent home-network service.
+A participant may learn candidate PPD service endpoints through configuration or local network discovery, but it treats a selected endpoint as authoritative only after the applicable trust mechanism succeeds.
 
 Policy Authority: The authoritative source of household policy state and any inputs used for effective policy derivation.
 The policy authority may be local or remote.
 A PPD service endpoint can obtain policy from a policy authority without exposing internal storage or computation topology to participants.
+Participants are not required to discover or communicate with the policy authority directly in the baseline architecture.
 
 Effective Policy Derivation: The logical function, performed by or on behalf of the policy authority, that determines the applicable policy instance for a participant.
 
@@ -321,10 +385,14 @@ Likewise, the underlying vocabulary and structure of the privacy preferences, in
 
 Once created, the user's preferences are maintained by a policy authority, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
 The policy authority may include storage, effective policy derivation, or both.
-When a new device joins the home network, it initiates an onboarding process during which it obtains a PPD service endpoint through configuration or local network mechanisms and establishes a secure channel to that endpoint.
+When a new device joins the home network, it initiates an onboarding process during which it obtains one or more candidate PPD service endpoints through configuration or local network mechanisms.
+Discovery identifies reachable candidates, but does not by itself establish that any candidate is authoritative for household policy.
+The participant then establishes a secure channel to a selected endpoint and authenticates that endpoint according to the applicable protocol profile before retrieving policy.
 Following onboarding, the PPD participant performs association, which involves retrieving the household privacy policy and acknowledging receipt of the applicable policy instance.
 In some deployments, the participant is a backend service associated with the device rather than the local device itself.
 The PPD service endpoint may present policy derived from a local or remote policy authority without exposing that internal topology to the participant.
+The participant-facing contract ends at the PPD service endpoint; any split between that service and the policy authority is internal to the deployment.
+Where those components are distinct, the deployment preserves the authenticity and integrity of the effective policy instance, policy-instance identifier, and freshness metadata presented through the service endpoint.
 Devices may optionally report their data handling declarations to the PPD service endpoint at this stage.
 The PPD service endpoint also determines a freshness interval or renewal deadline for the resulting association state.
 
@@ -348,8 +416,8 @@ More compact encodings can be considered later if a specific deployment profile 
 Future protocol specifications also need to define how association freshness is conveyed, including whether the protocol uses bounded renewal intervals, explicit renewal deadlines, or equivalent lease-style semantics.
 Those specifications need to distinguish stale association from needs-reassociation states caused by policy or participant-state changes.
 
-It is important to note that the minimum requirement under this architecture is limited to discovery, retrieval, and acknowledgment of the user's privacy policy.
-This acknowledgment provides a foundational mechanism for establishing that the current applicable policy was seen by the participant.
+It is important to note that the baseline requirement under this architecture is limited to discovery, retrieval, acknowledgment, and any renewal needed to maintain current association for the user's privacy policy.
+These actions provide a signaling and recordkeeping mechanism for establishing that the current applicable policy was made available to the participant.
 However, this document does not define how device behavior is changed by the policy, nor does it specify how to handle cases where a device cannot fully satisfy a given policy.
 These aspects, including optional status reporting, conflict resolution, or auditing, may be addressed in future work.
 
@@ -417,7 +485,7 @@ A companion document, "Privacy Preference Declaration Protocol Specification", i
 
 * Message formats for device onboarding, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
 * Optional mechanisms for consent request flows.
-* Discovery profiles and metadata confirmation for PPD service endpoints.
+* Discovery profiles, lightweight metadata confirmation, and trust-establishment bindings for PPD service endpoints.
 * Transport-layer considerations, service authentication, and policy-authority trust expectations.
 * Association freshness semantics, including how renewal intervals or deadlines are conveyed and how stale association is distinguished from needs-reassociation states.
 * Baseline encoding expectations for structured data, with JSON as a practical starting point and more compact encodings reserved for deployment profiles that need them.
@@ -486,7 +554,9 @@ This section outlines safeguards for confidentiality, authenticity, integrity, a
 
 Communication between PPD participants and the PPD service endpoint needs protection against unauthorized access and tampering.
 When the PPD service endpoint and policy authority are distinct, deployments also need to preserve policy authenticity and integrity across that boundary.
+Discovery mechanisms can identify candidate PPD service endpoints, but discovery alone is not sufficient to establish that an endpoint is authorized to present household policy.
 Future protocol specifications need to identify appropriate cryptographic mechanisms, such as encryption and mutual authentication, so that legitimate participants can retrieve privacy policies and detect modification.
+Those specifications also need to protect the binding between the authenticated participant-facing service endpoint and the policy state it presents.
 
 ## Anonymity and Metadata Protection
 
@@ -501,6 +571,7 @@ However, this needs careful analysis, as the assumptions of {{?RFC9577}} do not 
 
 Devices need assurance that the policy retrieved is authentic and unaltered.
 Integrity protections, such as digital signatures, are necessary to ensure that users' preferences cannot be tampered with in transit or at rest by other devices, malicious actors, or misconfigurations.
+If policy is obtained through a participant-facing service from a distinct policy authority, integrity protections also need to cover the policy-instance identifier and any freshness metadata presented through that service.
 
 ## Device Authentication
 
@@ -517,12 +588,16 @@ PPD participants need a way to acknowledge receipt of the applicable privacy pol
 This acknowledgment should be recorded and verifiable so that the household can determine which participants have seen the current policy.
 The record needs to bind the participant identity, the acknowledged policy instance, and the time or sequence context in which the acknowledgment was made.
 For devices that rely on a backend service, the record also needs to distinguish between acknowledgment by the local device and acknowledgment by the backend service acting on behalf of that device.
+This record is important because it creates a reciprocal acknowledgment path.
+In many current deployments, the household user is asked to acknowledge device or vendor policy terms, but there is no comparably strong household-controlled record that the participant was presented with the household's own privacy policy.
+An authenticated and integrity-protected acknowledgment record allows the household to show that presentation and acknowledgment occurred, which can support later accountability or review even when the architecture does not define automated enforcement.
 Future protocol specifications need to define how acknowledgments are protected against forgery, replay, and stale-policy confusion while still being practical for constrained home-network devices.
 At minimum, the selected mechanism needs to provide:
 
 * participant authentication sufficient to bind the acknowledgment to the device or backend service that made it;
 * policy-instance integrity so that the acknowledged policy can be identified unambiguously;
 * freshness or sequencing so that an old acknowledgment cannot be replayed as evidence of current association;
+* verifiability sufficient for the acknowledgment record to function as a protected receipt of policy presentation and acknowledgment; and
 * a way to retain or export the acknowledgment record without exposing more household metadata than necessary.
 
 A policy acknowledgment is not, by itself, an assertion about subsequent device behavior.

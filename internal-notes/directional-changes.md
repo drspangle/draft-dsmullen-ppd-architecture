@@ -8,6 +8,9 @@ leadership or stakeholder updates.
 
 - The participant-facing architectural contract now centers on a `PPD service
   endpoint` rather than on direct discovery of a repository.
+- Discovery is now treated as yielding candidate participant-facing service
+  endpoints only; trust in a selected endpoint is established separately rather
+  than being implied by discovery alone.
 - A gateway-hosted PPD service is now treated as a common home deployment model
   rather than as the only deployment model.
 - The architecture now uses `policy authority` as the stronger term for the
@@ -18,6 +21,14 @@ leadership or stakeholder updates.
   contract.
 - The architecture now recognizes `effective policy derivation` as a logical
   function performed by or on behalf of the policy authority.
+- The draft now makes the service-to-authority boundary explicit as an internal
+  deployment boundary that must preserve policy authenticity, policy-instance
+  identity, and freshness metadata without turning the policy authority into a
+  second client-facing protocol surface.
+- The draft now makes explicit that protected acknowledgment records create a
+  reciprocal household-side record of policy presentation and acknowledgment,
+  which can support later accountability without implying automated enforcement
+  or proving compliance.
 - Reassociation is now framed as a condition-based lifecycle event: it occurs
   when current association can no longer be confirmed, rather than being tied
   to any one network or transport event.
