@@ -139,3 +139,5 @@ contents. It is not part of the rendered Internet-Draft.
 - Added `security-mechanism-options.md` to track candidate mechanism families,
   required properties, and the open decision without committing the current
   architecture draft to one mechanism prematurely.
+
+- Added internal-notes/relationship-to-existing-work.md and expanded the architecture draft's prior-work discussion so the main comparison to DNT/P3P, MUD, and vocabulary or policy-model efforts now lives in the architecture document, with the protocol draft carrying only a short cross-reference.

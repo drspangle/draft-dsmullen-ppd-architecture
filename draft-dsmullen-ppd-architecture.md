@@ -154,11 +154,26 @@ Navigating and configuring privacy settings on individual devices can be a time-
 These ineffective interfaces often lead users to habitually agree to relax their privacy preferences without fully understanding the implications of their decisions.
 This fosters a general resignation towards privacy management, making it difficult for users to exert meaningful control over their personal data and ultimately compromising their privacy expectations.
 
-## DNT and P3P
+## Relationship to Existing Work
+
+### DNT and P3P
 
 Protocols like Do Not Track (DNT) and Platform for Privacy Preferences Project (P3P) have not achieved widespread adoption and have proven inadequate for addressing nuanced privacy needs.
 These protocols do not provide the participant-specific policy signaling, lifecycle handling, or home-network operational posture needed here.
 They also do not provide a practical basis for recording that a participating device or associated service was presented with a household policy instance.
+
+### MUD
+
+Manufacturer Usage Description (MUD) {{?RFC8520}} is the closest existing precedent for device-to-home-network signaling.
+MUD is focused on manufacturer-defined network communication intent presented to local network infrastructure.
+PPD addresses a different problem: household-defined privacy preference signaling, participant-specific effective policy presentation, and recordkeeping about whether a participant was presented with a current household policy instance.
+The two approaches may complement each other in a deployment, but MUD does not provide the privacy-policy lifecycle or recordkeeping model described here.
+
+### Privacy Vocabularies and Policy Models
+
+Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
+PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
+Instead, PPD separates concerns: this architecture defines roles and lifecycle, the companion taxonomy work defines compact terms that can map to richer vocabularies, and the companion protocol work defines the participant-facing signaling path by which an effective household policy is presented and acknowledged.
 
 
 # Operational Scenarios

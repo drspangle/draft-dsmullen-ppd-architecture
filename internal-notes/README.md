@@ -17,6 +17,9 @@ Use these files as follows:
   draft.
 - `security-mechanism-options.md`: working notes for selecting the future
   policy-acknowledgment security mechanism.
+- `relationship-to-existing-work.md`: working notes for positioning PPD
+  against adjacent work such as DNT/P3P, MUD, and privacy vocabulary or
+  policy-expression efforts.
 
 Rules for this directory:
 
