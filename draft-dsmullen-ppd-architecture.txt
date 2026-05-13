@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 8 November 2026                                      7 May 2026
+Expires: 14 November 2026                                    13 May 2026
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 November 2026.
+   This Internet-Draft will expire on 14 November 2026.
 
 Copyright Notice
 
@@ -76,7 +76,10 @@ Table of Contents
    3.  Limitations of Existing Mechanisms
      3.1.  Device-specific Configurations
      3.2.  Ineffective and Unusable User Interfaces
-     3.3.  DNT and P3P
+     3.3.  Relationship to Existing Work
+       3.3.1.  DNT and P3P
+       3.3.2.  MUD
+       3.3.3.  Privacy Vocabularies and Policy Models
    4.  Operational Scenarios
      4.1.  Initial Discovery and Association
      4.2.  Policy Update and Reassociation
@@ -311,7 +314,9 @@ Table of Contents
    meaningful control over their personal data and ultimately
    compromising their privacy expectations.
 
-3.3.  DNT and P3P
+3.3.  Relationship to Existing Work
+
+3.3.1.  DNT and P3P
 
    Protocols like Do Not Track (DNT) and Platform for Privacy
    Preferences Project (P3P) have not achieved widespread adoption and
@@ -321,6 +326,31 @@ Table of Contents
    They also do not provide a practical basis for recording that a
    participating device or associated service was presented with a
    household policy instance.
+
+3.3.2.  MUD
+
+   Manufacturer Usage Description (MUD) [RFC8520] is the closest
+   existing precedent for device-to-home-network signaling.  MUD is
+   focused on manufacturer-defined network communication intent
+   presented to local network infrastructure.  PPD addresses a different
+   problem: household-defined privacy preference signaling, participant-
+   specific effective policy presentation, and recordkeeping about
+   whether a participant was presented with a current household policy
+   instance.  The two approaches may complement each other in a
+   deployment, but MUD does not provide the privacy-policy lifecycle or
+   recordkeeping model described here.
+
+3.3.3.  Privacy Vocabularies and Policy Models
+
+   Vocabulary and policy-expression efforts such as the Data Privacy
+   Vocabulary (DPV) and ODRL are closer to the content layer than to the
+   signaling layer.  PPD does not attempt to replace such work with a
+   new general-purpose ontology or rights language.  Instead, PPD
+   separates concerns: this architecture defines roles and lifecycle,
+   the companion taxonomy work defines compact terms that can map to
+   richer vocabularies, and the companion protocol work defines the
+   participant-facing signaling path by which an effective household
+   policy is presented and acknowledged.
 
 4.  Operational Scenarios
 
@@ -1121,6 +1151,11 @@ Table of Contents
    [RFC8280]  ten Oever, N. and C. Cath, "Research into Human Rights
               Protocol Considerations", RFC 8280, DOI 10.17487/RFC8280,
               October 2017, <https://www.rfc-editor.org/rfc/rfc8280>.
+
+   [RFC8520]  Lear, E., Droms, R., and D. Romascanu, "Manufacturer Usage
+              Description Specification", RFC 8520,
+              DOI 10.17487/RFC8520, March 2019,
+              <https://www.rfc-editor.org/rfc/rfc8520>.
 
    [RFC9577]  Pauly, T., Valdez, S., and C. A. Wood, "The Privacy Pass
               HTTP Authentication Scheme", RFC 9577,
