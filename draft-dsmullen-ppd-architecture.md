@@ -263,9 +263,9 @@ This document aims to be complementary to existing and future standards related 
 
 This document provides the foundation for subsequent work, including:
 
-* Privacy Preference Declaration Taxonomy: {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the taxonomy of privacy preference categories and attributes, including a mechanism for registration and management of these categories.
+* Privacy Preference Declaration Taxonomy: {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension model, and mapping expectations for the privacy-related terms used by PPD statements and rules.
 
-* A companion protocol specification document, currently expected to become `draft-dsmullen-ppd-protocol`, is expected to define the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
+* The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
 
 
 # Architecture Overview
@@ -355,8 +355,8 @@ needs to preserve at least:
   policy authority on whose behalf it presents policy.
 
 These are architectural invariants.
-The specific transport, metadata confirmation, and cryptographic mechanisms are
-left to future protocol specifications.
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the participant-facing transport, metadata confirmation, and security-profile expectations,
+while deployment profiles still choose concrete mechanism details.
 
 ## Key Components
 
@@ -415,12 +415,12 @@ This can occur because the applicable effective policy changed, because particip
 Reassociation re-establishes current association by retrieving and acknowledging the latest applicable effective policy instance, or by completing a renewal procedure defined by the applicable protocol profile when the policy instance is unchanged.
 Devices are not expected to re-collect consent for data uses already covered by existing, valid consent.
 
-To support straightforward implementation and debugging, future protocol work should define a simple machine-readable representation for privacy policies, declarations, and acknowledgment state.
+To support straightforward implementation and debugging, the companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines a simple machine-readable representation for privacy policies, declarations, and acknowledgment state.
 JSON is a practical baseline encoding for the architecture and for many constrained home-network deployments.
 More compact encodings can be considered later if a specific deployment profile demonstrates a need for them.
 
-Future protocol specifications also need to define how association freshness is conveyed, including whether the protocol uses bounded renewal intervals, explicit renewal deadlines, or equivalent lease-style semantics.
-Those specifications need to distinguish stale association from needs-reassociation states caused by policy or participant-state changes.
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines how association freshness is conveyed, including whether the protocol uses bounded renewal intervals, explicit renewal deadlines, or equivalent lease-style semantics.
+It also distinguishes stale association from needs-reassociation states caused by policy or participant-state changes.
 
 It is important to note that the baseline requirement under this architecture is limited to discovery, retrieval, acknowledgment, and any renewal needed to maintain current association for the user's privacy policy.
 These actions provide a signaling and recordkeeping mechanism for establishing that the current applicable policy was made available to the participant.
@@ -428,7 +428,7 @@ However, this document does not define how device behavior is changed by the pol
 These aspects, including optional status reporting, conflict resolution, or auditing, may be addressed in future work.
 
 Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
-These elements are expected to be specified in a companion protocol specification document, currently expected to become `draft-dsmullen-ppd-protocol`.
+These elements are specified in the companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, with any further deployment-specific refinements left to future work.
 
 ## Non-PPD and Network-Observed Devices
 
@@ -445,7 +445,7 @@ Any local response to unmanaged devices, such as notification, inventory display
 # Policy Language
 
 The specific details of the privacy policy language, including its syntax, structure, and extensibility mechanisms, are out of scope for this document.
-The policy vocabulary and taxonomy of privacy concepts and attributes are expected to be defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, with any protocol serialization details defined separately.
+The policy vocabulary and taxonomy of privacy concepts and attributes are defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, including the compact identifier model, extension namespaces, and mapping expectations used by the companion protocol specification.
 
 ## Language Requirements
 
@@ -489,8 +489,7 @@ This taxonomy is foundational for consistent policy interpretation across hetero
 
 ## Protocol Specification and Message Formats
 
-A companion protocol specification document, currently expected to become
-`draft-dsmullen-ppd-protocol`, is expected to define:
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines:
 
 * Message formats for device onboarding, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
 * Optional mechanisms for consent request flows.
@@ -564,8 +563,8 @@ This section outlines safeguards for confidentiality, authenticity, integrity, a
 Communication between PPD participants and the PPD service endpoint needs protection against unauthorized access and tampering.
 When the PPD service endpoint and policy authority are distinct, deployments also need to preserve policy authenticity and integrity across that boundary.
 Discovery mechanisms can identify candidate PPD service endpoints, but discovery alone is not sufficient to establish that an endpoint is authorized to present household policy.
-Future protocol specifications need to identify appropriate cryptographic mechanisms, such as encryption and mutual authentication, so that legitimate participants can retrieve privacy policies and detect modification.
-Those specifications also need to protect the binding between the authenticated participant-facing service endpoint and the policy state it presents.
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines explicit participant-facing security profiles and the accountability properties they need to provide. Future deployment profiles still need to identify concrete cryptographic mechanisms, such as encryption and mutual authentication, so that legitimate participants can retrieve privacy policies and detect modification.
+Those deployment profiles also need to protect the binding between the authenticated participant-facing service endpoint and the policy state it presents.
 
 ## Anonymity and Metadata Protection
 
@@ -600,7 +599,7 @@ For devices that rely on a backend service, the record also needs to distinguish
 This record is important because it creates a reciprocal acknowledgment path.
 In many current deployments, the household user is asked to acknowledge device or vendor policy terms, but there is no comparably strong household-controlled record that the participant was presented with the household's own privacy policy.
 An authenticated and integrity-protected acknowledgment record allows the household to show that presentation and acknowledgment occurred, which can support later accountability or review even when the architecture does not define automated enforcement.
-Future protocol specifications need to define how acknowledgments are protected against forgery, replay, and stale-policy confusion while still being practical for constrained home-network devices.
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines baseline acknowledgment semantics and the protection properties acknowledgment mechanisms need to provide. Future deployment profiles still need concrete mechanisms that remain practical for constrained home-network devices.
 At minimum, the selected mechanism needs to provide:
 
 * participant authentication sufficient to bind the acknowledgment to the device or backend service that made it;
