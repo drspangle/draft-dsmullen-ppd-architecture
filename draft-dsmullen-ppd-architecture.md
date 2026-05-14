@@ -104,7 +104,7 @@ Effective policy:
 :  The policy instance that applies to a particular PPD participant at a particular time, after effective policy derivation has resolved household policy state and any applicable participant-specific inputs.
 
 PPD participant:
-:  A device, or a backend service acting on behalf of a device, that participates in PPD by retrieving and acknowledging an applicable policy instance.
+:  A device, or a trusted intermediary such as a backend service acting on behalf of a device, that participates in PPD by retrieving and acknowledging an applicable policy instance.
 
 Policy instance:
 :  A specific version or representation of an effective policy that can be identified for acknowledgment and recordkeeping.
@@ -240,7 +240,7 @@ Their presence can inform transparency and local management decisions, but it do
 ## Enable Flexibility
 
 * Allow deployments to place policy storage and effective-policy derivation locally or remotely without changing the baseline participant-facing contract.
-* Leave room for deployment-specific protocol profiles where constrained environments or different operational models require them.
+* Leave room for deployment-specific protocol profiles where constrained environments or different operational models require them, including trusted-intermediary participation for devices that cannot satisfy the minimum authenticated direct-participant bar.
 
 ## Facilitate Transparency
 
@@ -279,7 +279,7 @@ This includes the ability to configure routers, install software updates, and ma
 This control is essential for users to effectively manage their privacy preferences and make them available to devices within their home network.
 
 * Resource Constraints: It is assumed that the home network environment and devices operating therein have resource limitations, such as limited processing power and bandwidth.
-We limit this assumption by considering that the PPD protocol and its associated mechanisms should be designed with these constraints in mind, minimizing overhead and ensuring efficient operation even on resource-constrained devices.
+We limit this assumption by considering that the PPD protocol and its associated mechanisms should be designed with these constraints in mind, minimizing overhead and ensuring efficient operation even on resource-constrained devices. Where a device cannot satisfy the minimum authenticated direct-participant bar, this architecture expects indirect participation through a trusted intermediary rather than weakening the meaning of direct protocol participation.
 
 * Security Considerations: It is assumed that home networks in scope of this document are susceptible to typical security threats, including insider threats (or non-malicious misconfiguration) and vulnerability to local attacks.
 We limit this assumption by considering specific security threats to protect user privacy and the integrity of the privacy policy.
@@ -375,6 +375,7 @@ Effective Policy Derivation: The logical function, performed by or on behalf of 
 
 Participant Declarations and Consent Requests: Optional participant inputs that can disclose data-handling declarations or request consent for uses not covered by baseline policy.
 These inputs are distinct from the minimal path of policy retrieval and policy acknowledgment.
+Where a deployment exposes a coarse comparison result for participant declarations at the protocol boundary, that result belongs on the declaration path rather than in the effective policy or policy acknowledgment objects. That comparison surface is diagnostic only; it is not a baseline negotiation channel, policy-relaxation mechanism, or homeowner-prompt path.
 
 Recordkeeping and Management Mechanisms: Deployment-specific mechanisms for presenting association state, participant status, effective policy views, and network-observed devices to the household.
 Such mechanisms are not device-behavior requirements in the baseline PPD architecture.
@@ -425,7 +426,7 @@ It also distinguishes stale association from needs-reassociation states caused b
 It is important to note that the baseline requirement under this architecture is limited to discovery, retrieval, acknowledgment, and any renewal needed to maintain current association for the user's privacy policy.
 These actions provide a signaling and recordkeeping mechanism for establishing that the current applicable policy was made available to the participant.
 However, this document does not define how device behavior is changed by the policy, nor does it specify how to handle cases where a device cannot fully satisfy a given policy.
-These aspects, including optional status reporting, conflict resolution, or auditing, may be addressed in future work.
+These aspects, including optional status reporting, detailed conflict-resolution procedures, or auditing, may be addressed in future work.
 
 Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
 These elements are specified in the companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, with any further deployment-specific refinements left to future work.
