@@ -9,6 +9,42 @@ This is the working area for the individual Internet-Draft, "Privacy Preference 
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-architecture)
 * [Compare Editor's Copy to Individual Draft](https://drspangle.github.io/draft-dsmullen-ppd-architecture/#go.draft-dsmullen-ppd-architecture.diff)
 
+Use this repository for the draft source, local render workflow, and local
+working notes for this draft only.
+
+## Workstation Bootstrap
+
+This repository owns its own draft-render setup. Bootstrap it with:
+
+```sh
+python3 scripts/setup_draft_workstation.py bootstrap
+```
+
+There is intentionally no shared workspace bootstrap. This bootstrap configures
+only this repository.
+
+Validation steps for this repository are in [WORKSTATION-VALIDATION.md](WORKSTATION-VALIDATION.md).
+
+## Related Drafts
+
+- taxonomy draft source: [draft-dsmullen-ppd-taxonomy](https://github.com/drspangle/draft-dsmullen-ppd-taxonomy)
+- taxonomy draft Datatracker page: [draft-dsmullen-ppd-taxonomy](https://datatracker.ietf.org/doc/draft-dsmullen-ppd-taxonomy)
+- protocol draft source: [draft-dsmullen-ppd-protocol](https://github.com/drspangle/draft-dsmullen-ppd-protocol)
+- protocol draft Datatracker page: [draft-dsmullen-ppd-protocol](https://datatracker.ietf.org/doc/draft-dsmullen-ppd-protocol/)
+
+## Start Here
+
+1. Bootstrap the local render workflow with `python3 scripts/setup_draft_workstation.py bootstrap`.
+2. Validate the local setup with [WORKSTATION-VALIDATION.md](WORKSTATION-VALIDATION.md).
+3. Build the draft with `make`.
+4. Use [internal-notes/README.md](internal-notes/README.md) for local working notes.
+
+On Windows, prefer native POSIX tooling when available. Use WSL only as an
+explicit fallback:
+
+```powershell
+py -3 scripts\setup_draft_workstation.py bootstrap --use-wsl --install-wsl-deps
+```
 
 ## Contributing
 
@@ -29,4 +65,3 @@ $ make
 
 Command line usage requires that you have the necessary software installed.  See
 [the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
-

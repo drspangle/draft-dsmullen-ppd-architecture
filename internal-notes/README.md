@@ -4,6 +4,11 @@ This directory is for working notes only. It is intentionally separate from the
 Internet-Draft source, generated artifacts, template files, and CI-managed
 publication outputs.
 
+Use this README to decide where draft-adjacent local notes belong before adding
+another file here.
+
+## Start Here
+
 Use these files as follows:
 
 - `template-operations.md`: build, render, GitHub Pages, and Datatracker
