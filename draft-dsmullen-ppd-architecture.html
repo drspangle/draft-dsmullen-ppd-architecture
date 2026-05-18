@@ -1053,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Smullen &amp; Scriber</td>
-<td class="center">Expires 16 November 2026</td>
+<td class="center">Expires 19 November 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dsmullen-ppd-architecture-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-15" class="published">15 May 2026</time>
+<time datetime="2026-05-18" class="published">18 May 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-16">16 November 2026</time></dd>
+<dd class="expires"><time datetime="2026-11-19">19 November 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1120,7 +1120,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1705,7 +1705,7 @@ This document aims to be complementary to existing and future standards related 
           <p id="section-6-5.1.1">Privacy Preference Declaration Taxonomy: <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines the core vocabulary, extension model, and mapping expectations for the privacy-related terms used by PPD statements and rules.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-5.2">
-          <p id="section-6-5.2.1">The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-5.2.1">The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1897,7 +1897,8 @@ These actions provide a signaling and recordkeeping mechanism for establishing t
 However, this document does not define how device behavior is changed by the policy, nor does it specify how to handle cases where a device cannot fully satisfy a given policy.
 These aspects, including optional status reporting, detailed conflict-resolution procedures, or auditing, may be addressed in future work.<a href="#section-7.5-8" class="pilcrow">¶</a></p>
 <p id="section-7.5-9">Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
-These elements are specified in the companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, with any further deployment-specific refinements left to future work.<a href="#section-7.5-9" class="pilcrow">¶</a></p>
+The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, specifies the participant-facing message formats and protocol details.
+Consent interface specifications, if any, remain future work.<a href="#section-7.5-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="non-ppd-and-network-observed-devices">
@@ -1999,22 +2000,19 @@ Several aspects critical to a fully operational implementation are intentionally
 <p id="section-9.2-1">The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.2-2.1">
-            <p id="section-9.2-2.1.1">Message formats for device onboarding, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.<a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-2.1.1">Message formats for participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.<a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-2.2">
-            <p id="section-9.2-2.2.1">Optional mechanisms for consent request flows.<a href="#section-9.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-2.2.1">Discovery profiles, lightweight metadata confirmation, and trust-establishment bindings for PPD service endpoints.<a href="#section-9.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-2.3">
-            <p id="section-9.2-2.3.1">Discovery profiles, lightweight metadata confirmation, and trust-establishment bindings for PPD service endpoints.<a href="#section-9.2-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-2.3.1">Transport-layer considerations, service authentication, and policy-authority trust expectations.<a href="#section-9.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-2.4">
-            <p id="section-9.2-2.4.1">Transport-layer considerations, service authentication, and policy-authority trust expectations.<a href="#section-9.2-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-2.4.1">Association freshness semantics, including how renewal intervals or deadlines are conveyed and how stale association is distinguished from needs-reassociation states.<a href="#section-9.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.2-2.5">
-            <p id="section-9.2-2.5.1">Association freshness semantics, including how renewal intervals or deadlines are conveyed and how stale association is distinguished from needs-reassociation states.<a href="#section-9.2-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.2-2.6">
-            <p id="section-9.2-2.6.1">Baseline encoding expectations for structured data, with JSON as a practical starting point and more compact encodings reserved for deployment profiles that need them.<a href="#section-9.2-2.6.1" class="pilcrow">¶</a></p>
+            <p id="section-9.2-2.5.1">Baseline encoding expectations for structured data, with JSON as a practical starting point and more compact encodings reserved for deployment profiles that need them.<a href="#section-9.2-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

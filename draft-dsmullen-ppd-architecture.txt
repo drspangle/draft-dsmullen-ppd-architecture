@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 16 November 2026                                    15 May 2026
+Expires: 19 November 2026                                    18 May 2026
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 November 2026.
+   This Internet-Draft will expire on 19 November 2026.
 
 Copyright Notice
 
@@ -505,9 +505,10 @@ Table of Contents
    *  The companion protocol specification document,
       [I-D.draft-dsmullen-ppd-protocol], defines the message formats,
       data structures, and communication procedures for PPD, including
-      mechanisms for PPD service endpoint discovery, policy retrieval,
-      policy acknowledgment, participant resynchronization, and optional
-      participant status reporting.
+      mechanisms for PPD service endpoint discovery, metadata
+      confirmation, participant registration, optional participant
+      declaration, policy retrieval, policy acknowledgment, renewal, and
+      reassociation.
 
 7.  Architecture Overview
 
@@ -800,9 +801,10 @@ Table of Contents
    Finally, while this document defines the overall data flow and
    interaction sequence, it does not define message formats,
    communication protocol details, or consent interface specifications.
-   These elements are specified in the companion protocol specification
-   document, [I-D.draft-dsmullen-ppd-protocol], with any further
-   deployment-specific refinements left to future work.
+   The companion protocol specification document,
+   [I-D.draft-dsmullen-ppd-protocol], specifies the participant-facing
+   message formats and protocol details.  Consent interface
+   specifications, if any, remain future work.
 
 7.6.  Non-PPD and Network-Observed Devices
 
@@ -899,11 +901,9 @@ Table of Contents
    The companion protocol specification document,
    [I-D.draft-dsmullen-ppd-protocol], defines:
 
-   *  Message formats for device onboarding, policy retrieval, policy
-      acknowledgment, participant resynchronization, and optional
-      participant status reporting.
-
-   *  Optional mechanisms for consent request flows.
+   *  Message formats for participant registration, optional participant
+      declaration, policy retrieval, policy acknowledgment, renewal, and
+      reassociation.
 
    *  Discovery profiles, lightweight metadata confirmation, and trust-
       establishment bindings for PPD service endpoints.
