@@ -265,7 +265,7 @@ This document provides the foundation for subsequent work, including:
 
 * Privacy Preference Declaration Taxonomy: {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension model, and mapping expectations for the privacy-related terms used by PPD statements and rules.
 
-* The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
+* The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
 
 
 # Architecture Overview
@@ -429,7 +429,8 @@ However, this document does not define how device behavior is changed by the pol
 These aspects, including optional status reporting, detailed conflict-resolution procedures, or auditing, may be addressed in future work.
 
 Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
-These elements are specified in the companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, with any further deployment-specific refinements left to future work.
+The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, specifies the participant-facing message formats and protocol details.
+Consent interface specifications, if any, remain future work.
 
 ## Non-PPD and Network-Observed Devices
 
@@ -492,8 +493,7 @@ This taxonomy is foundational for consistent policy interpretation across hetero
 
 The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines:
 
-* Message formats for device onboarding, policy retrieval, policy acknowledgment, participant resynchronization, and optional participant status reporting.
-* Optional mechanisms for consent request flows.
+* Message formats for participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
 * Discovery profiles, lightweight metadata confirmation, and trust-establishment bindings for PPD service endpoints.
 * Transport-layer considerations, service authentication, and policy-authority trust expectations.
 * Association freshness semantics, including how renewal intervals or deadlines are conveyed and how stale association is distinguished from needs-reassociation states.
