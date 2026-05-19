@@ -25,6 +25,8 @@ Use these files as follows:
 - `relationship-to-existing-work.md`: working notes for positioning PPD
   against adjacent work such as DNT/P3P, MUD, and privacy vocabulary or
   policy-expression efforts.
+- `taxonomy-protocol-coordination.md`: architecture-side note on how to align
+  later with the evolving taxonomy/protocol semantic model
 
 Rules for this directory:
 

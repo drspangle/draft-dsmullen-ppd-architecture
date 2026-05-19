@@ -141,3 +141,10 @@ contents. It is not part of the rendered Internet-Draft.
   architecture draft to one mechanism prematurely.
 
 - Added internal-notes/relationship-to-existing-work.md and expanded the architecture draft's prior-work discussion so the main comparison to DNT/P3P, MUD, and vocabulary or policy-model efforts now lives in the architecture document, with the protocol draft carrying only a short cross-reference.
+
+## 2026-05-19
+
+- Added `internal-notes/taxonomy-protocol-coordination.md` to record the
+  current architecture-side coordination assessment: no direct semantic
+  conflict with the newer taxonomy/protocol direction, but likely later wording
+  alignment once the atomic-dataflow and qualifier model settles.
