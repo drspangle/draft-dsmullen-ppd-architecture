@@ -271,7 +271,9 @@ This document provides the foundation for subsequent work, including:
   {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension
   model, and mapping expectations for the privacy-related terms used by PPD
   statements and rules, including the shared semantic floor that keeps those
-  terms computable across heterogeneous devices and vendors.
+  terms computable across heterogeneous devices and vendors. That core is
+  intentionally small; richer vocabularies can still be used so long as they
+  remain reducible to the shared baseline primitives.
 
 * The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
 
