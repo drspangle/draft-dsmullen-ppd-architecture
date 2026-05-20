@@ -174,7 +174,7 @@ The two approaches may complement each other in a deployment, but MUD does not p
 Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
 PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
 Instead, PPD separates concerns: this architecture defines roles and
-lifecycle, the companion taxonomy work defines the semantic roles and shared
+lifecycle, the companion taxonomy work defines the core fields and shared
 computable floor that can map to richer vocabularies, and the companion
 protocol work defines the participant-facing signaling path by which an
 effective household policy is presented and acknowledged.
@@ -399,7 +399,7 @@ The process begins when a user defines a set of privacy preferences that apply t
 These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
 The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
 Likewise, the underlying vocabulary and structure of the privacy preferences,
-including the semantic roles used in atomic privacy-relevant dataflows and the
+including the core fields used in atomic privacy-relevant dataflows and the
 associated qualifier families, are specified in
 {{?I-D.draft-dsmullen-ppd-taxonomy}}.
 
@@ -499,7 +499,7 @@ Several aspects critical to a fully operational implementation are intentionally
 
 {{?I-D.draft-dsmullen-ppd-taxonomy}} defines:
 
-* A common vocabulary and set of semantic roles for expressing atomic
+* A common vocabulary and set of core fields for expressing atomic
   privacy-relevant dataflows.
 * Attributes and semantics for data types, purposes, actions, sources,
   destinations, and qualifier families used in those dataflows.
