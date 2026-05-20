@@ -1053,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Smullen &amp; Scriber</td>
-<td class="center">Expires 19 November 2026</td>
+<td class="center">Expires 21 November 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dsmullen-ppd-architecture-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-05-18" class="published">18 May 2026</time>
+<time datetime="2026-05-20" class="published">20 May 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-11-19">19 November 2026</time></dd>
+<dd class="expires"><time datetime="2026-11-21">21 November 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1120,7 +1120,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1538,7 +1538,11 @@ The two approaches may complement each other in a deployment, but MUD does not p
           </h4>
 <p id="section-3.3.3-1">Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
 PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
-Instead, PPD separates concerns: this architecture defines roles and lifecycle, the companion taxonomy work defines compact terms that can map to richer vocabularies, and the companion protocol work defines the participant-facing signaling path by which an effective household policy is presented and acknowledged.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+Instead, PPD separates concerns: this architecture defines roles and
+lifecycle, the companion taxonomy work defines the semantic roles and shared
+computable floor that can map to richer vocabularies, and the companion
+protocol work defines the participant-facing signaling path by which an
+effective household policy is presented and acknowledged.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1702,7 +1706,11 @@ This document aims to be complementary to existing and future standards related 
 <p id="section-6-4">This document provides the foundation for subsequent work, including:<a href="#section-6-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-5.1">
-          <p id="section-6-5.1.1">Privacy Preference Declaration Taxonomy: <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines the core vocabulary, extension model, and mapping expectations for the privacy-related terms used by PPD statements and rules.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
+          <p id="section-6-5.1.1">Privacy Preference Declaration Taxonomy:
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines the core vocabulary, extension
+model, and mapping expectations for the privacy-related terms used by PPD
+statements and rules, including the shared semantic floor that keeps those
+terms computable across heterogeneous devices and vendors.<a href="#section-6-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-6-5.2">
           <p id="section-6-5.2.1">The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.<a href="#section-6-5.2.1" class="pilcrow">¶</a></p>
@@ -1863,7 +1871,10 @@ It describes how privacy preferences are defined by users, made available to par
 <p id="section-7.5-2">The process begins when a user defines a set of privacy preferences that apply to their household.
 These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
 The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
-Likewise, the underlying vocabulary and structure of the privacy preferences, including data categories and associated constraints, are specified in <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
+Likewise, the underlying vocabulary and structure of the privacy preferences,
+including the semantic roles used in atomic privacy-relevant dataflows and the
+associated qualifier families, are specified in
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
 <p id="section-7.5-3">Once created, the user's preferences are maintained by a policy authority, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
 The policy authority may include storage, effective policy derivation, or both.
 When a new device joins the home network, it initiates an onboarding process during which it obtains one or more candidate PPD service endpoints through configuration or local network mechanisms.
@@ -1922,7 +1933,10 @@ Network observation does not create association, does not imply that the device 
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-policy-language" class="section-name selfRef">Policy Language</a>
       </h2>
 <p id="section-8-1">The specific details of the privacy policy language, including its syntax, structure, and extensibility mechanisms, are out of scope for this document.
-The policy vocabulary and taxonomy of privacy concepts and attributes are defined in <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>, including the compact identifier model, extension namespaces, and mapping expectations used by the companion protocol specification.<a href="#section-8-1" class="pilcrow">¶</a></p>
+The policy vocabulary and taxonomy of privacy concepts and attributes are
+defined in <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>, including the compact
+identifier model, the shared computable semantic floor, extension namespaces,
+and the mapping expectations used by the companion protocol specification.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="language-requirements">
 <section id="section-8.1">
         <h3 id="name-language-requirements">
@@ -1980,13 +1994,16 @@ Several aspects critical to a fully operational implementation are intentionally
 <p id="section-9.1-1"><span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.1-2.1">
-            <p id="section-9.1-2.1.1">A common vocabulary and set of categories for expressing privacy preferences.<a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-2.1.1">A common vocabulary and set of semantic roles for expressing atomic
+privacy-relevant dataflows.<a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-2.2">
-            <p id="section-9.1-2.2.1">Attributes and semantics for data types, sharing constraints, and processing conditions.<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-2.2.1">Attributes and semantics for data types, purposes, actions, sources,
+destinations, and qualifier families used in those dataflows.<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-9.1-2.3">
-            <p id="section-9.1-2.3.1">An extensibility model for incorporating future data types and policy dimensions.<a href="#section-9.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-2.3.1">An extensibility model that allows richer vocabularies while preserving a
+shared computable semantic floor.<a href="#section-9.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-9.1-3">This taxonomy is foundational for consistent policy interpretation across heterogeneous devices and vendors.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
@@ -2255,11 +2272,11 @@ Any local response to non-participation or other local observations is outside t
 <dl class="references">
 <dt id="I-D.draft-dsmullen-ppd-protocol">[I-D.draft-dsmullen-ppd-protocol]</dt>
         <dd>
-<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-protocol-00</span>, <time datetime="2026-05-18" class="refDate">18 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-00">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.draft-dsmullen-ppd-taxonomy">[I-D.draft-dsmullen-ppd-taxonomy]</dt>
         <dd>
-<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Taxonomy"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-taxonomy-02</span>, <time datetime="2025-12-07" class="refDate">7 December 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-02">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Taxonomy"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-taxonomy-03</span>, <time datetime="2026-05-18" class="refDate">18 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-03">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6973">[RFC6973]</dt>
         <dd>

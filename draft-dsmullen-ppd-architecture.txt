@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 19 November 2026                                    18 May 2026
+Expires: 21 November 2026                                    20 May 2026
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 November 2026.
+   This Internet-Draft will expire on 21 November 2026.
 
 Copyright Notice
 
@@ -347,10 +347,10 @@ Table of Contents
    signaling layer.  PPD does not attempt to replace such work with a
    new general-purpose ontology or rights language.  Instead, PPD
    separates concerns: this architecture defines roles and lifecycle,
-   the companion taxonomy work defines compact terms that can map to
-   richer vocabularies, and the companion protocol work defines the
-   participant-facing signaling path by which an effective household
-   policy is presented and acknowledged.
+   the companion taxonomy work defines the semantic roles and shared
+   computable floor that can map to richer vocabularies, and the
+   companion protocol work defines the participant-facing signaling path
+   by which an effective household policy is presented and acknowledged.
 
 4.  Operational Scenarios
 
@@ -500,7 +500,9 @@ Table of Contents
    *  Privacy Preference Declaration Taxonomy:
       [I-D.draft-dsmullen-ppd-taxonomy] defines the core vocabulary,
       extension model, and mapping expectations for the privacy-related
-      terms used by PPD statements and rules.
+      terms used by PPD statements and rules, including the shared
+      semantic floor that keeps those terms computable across
+      heterogeneous devices and vendors.
 
    *  The companion protocol specification document,
       [I-D.draft-dsmullen-ppd-protocol], defines the message formats,
@@ -708,8 +710,9 @@ Table of Contents
    preferences, including its presentation, usability, or input
    modalities, is out of scope for this document, and will be addressed
    separately.  Likewise, the underlying vocabulary and structure of the
-   privacy preferences, including data categories and associated
-   constraints, are specified in [I-D.draft-dsmullen-ppd-taxonomy].
+   privacy preferences, including the semantic roles used in atomic
+   privacy-relevant dataflows and the associated qualifier families, are
+   specified in [I-D.draft-dsmullen-ppd-taxonomy].
 
    Once created, the user's preferences are maintained by a policy
    authority, which may reside locally on a networked controller or be
@@ -832,8 +835,9 @@ Table of Contents
    this document.  The policy vocabulary and taxonomy of privacy
    concepts and attributes are defined in
    [I-D.draft-dsmullen-ppd-taxonomy], including the compact identifier
-   model, extension namespaces, and mapping expectations used by the
-   companion protocol specification.
+   model, the shared computable semantic floor, extension namespaces,
+   and the mapping expectations used by the companion protocol
+   specification.
 
 8.1.  Language Requirements
 
@@ -884,14 +888,15 @@ Table of Contents
 
    [I-D.draft-dsmullen-ppd-taxonomy] defines:
 
-   *  A common vocabulary and set of categories for expressing privacy
-      preferences.
+   *  A common vocabulary and set of semantic roles for expressing
+      atomic privacy-relevant dataflows.
 
-   *  Attributes and semantics for data types, sharing constraints, and
-      processing conditions.
+   *  Attributes and semantics for data types, purposes, actions,
+      sources, destinations, and qualifier families used in those
+      dataflows.
 
-   *  An extensibility model for incorporating future data types and
-      policy dimensions.
+   *  An extensibility model that allows richer vocabularies while
+      preserving a shared computable semantic floor.
 
    This taxonomy is foundational for consistent policy interpretation
    across heterogeneous devices and vendors.
@@ -1147,14 +1152,18 @@ Table of Contents
 13.2.  Informative References
 
    [I-D.draft-dsmullen-ppd-protocol]
-              "*** BROKEN REFERENCE ***".
+              Smullen, D. and B. Scriber, "Privacy Preference
+              Declaration Protocol Specification", Work in Progress,
+              Internet-Draft, draft-dsmullen-ppd-protocol-00, 18 May
+              2026, <https://datatracker.ietf.org/doc/html/draft-
+              dsmullen-ppd-protocol-00>.
 
    [I-D.draft-dsmullen-ppd-taxonomy]
               Smullen, D. and B. Scriber, "Privacy Preference
               Declaration Taxonomy", Work in Progress, Internet-Draft,
-              draft-dsmullen-ppd-taxonomy-02, 7 December 2025,
+              draft-dsmullen-ppd-taxonomy-03, 18 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-
-              taxonomy-02>.
+              taxonomy-03>.
 
    [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
               Morris, J., Hansen, M., and R. Smith, "Privacy
