@@ -173,7 +173,11 @@ The two approaches may complement each other in a deployment, but MUD does not p
 
 Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
 PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
-Instead, PPD separates concerns: this architecture defines roles and lifecycle, the companion taxonomy work defines compact terms that can map to richer vocabularies, and the companion protocol work defines the participant-facing signaling path by which an effective household policy is presented and acknowledged.
+Instead, PPD separates concerns: this architecture defines roles and
+lifecycle, the companion taxonomy work defines the semantic roles and shared
+computable floor that can map to richer vocabularies, and the companion
+protocol work defines the participant-facing signaling path by which an
+effective household policy is presented and acknowledged.
 
 
 # Operational Scenarios
@@ -263,7 +267,11 @@ This document aims to be complementary to existing and future standards related 
 
 This document provides the foundation for subsequent work, including:
 
-* Privacy Preference Declaration Taxonomy: {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension model, and mapping expectations for the privacy-related terms used by PPD statements and rules.
+* Privacy Preference Declaration Taxonomy:
+  {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension
+  model, and mapping expectations for the privacy-related terms used by PPD
+  statements and rules, including the shared semantic floor that keeps those
+  terms computable across heterogeneous devices and vendors.
 
 * The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
 
@@ -388,7 +396,10 @@ It describes how privacy preferences are defined by users, made available to par
 The process begins when a user defines a set of privacy preferences that apply to their household.
 These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
 The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
-Likewise, the underlying vocabulary and structure of the privacy preferences, including data categories and associated constraints, are specified in {{?I-D.draft-dsmullen-ppd-taxonomy}}.
+Likewise, the underlying vocabulary and structure of the privacy preferences,
+including the semantic roles used in atomic privacy-relevant dataflows and the
+associated qualifier families, are specified in
+{{?I-D.draft-dsmullen-ppd-taxonomy}}.
 
 Once created, the user's preferences are maintained by a policy authority, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
 The policy authority may include storage, effective policy derivation, or both.
@@ -447,7 +458,10 @@ Any local response to unmanaged devices, such as notification, inventory display
 # Policy Language
 
 The specific details of the privacy policy language, including its syntax, structure, and extensibility mechanisms, are out of scope for this document.
-The policy vocabulary and taxonomy of privacy concepts and attributes are defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, including the compact identifier model, extension namespaces, and mapping expectations used by the companion protocol specification.
+The policy vocabulary and taxonomy of privacy concepts and attributes are
+defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, including the compact
+identifier model, the shared computable semantic floor, extension namespaces,
+and the mapping expectations used by the companion protocol specification.
 
 ## Language Requirements
 
@@ -483,9 +497,12 @@ Several aspects critical to a fully operational implementation are intentionally
 
 {{?I-D.draft-dsmullen-ppd-taxonomy}} defines:
 
-* A common vocabulary and set of categories for expressing privacy preferences.
-* Attributes and semantics for data types, sharing constraints, and processing conditions.
-* An extensibility model for incorporating future data types and policy dimensions.
+* A common vocabulary and set of semantic roles for expressing atomic
+  privacy-relevant dataflows.
+* Attributes and semantics for data types, purposes, actions, sources,
+  destinations, and qualifier families used in those dataflows.
+* An extensibility model that allows richer vocabularies while preserving a
+  shared computable semantic floor.
 
 This taxonomy is foundational for consistent policy interpretation across heterogeneous devices and vendors.
 
