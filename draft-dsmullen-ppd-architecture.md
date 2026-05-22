@@ -503,6 +503,8 @@ Several aspects critical to a fully operational implementation are intentionally
   privacy-relevant dataflows.
 * Attributes and semantics for data types, purposes, actions, sources,
   handling contexts, and qualifier families used in those dataflows.
+  Here, handling context means the context a handling step is directed into
+  or occurs within, not only a transfer destination.
 * An extensibility model that allows richer vocabularies while preserving a
   shared computable semantic floor.
 
