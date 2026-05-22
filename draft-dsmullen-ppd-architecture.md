@@ -502,7 +502,7 @@ Several aspects critical to a fully operational implementation are intentionally
 * A common vocabulary and set of core fields for expressing atomic
   privacy-relevant dataflows.
 * Attributes and semantics for data types, purposes, actions, sources,
-  destinations, and qualifier families used in those dataflows.
+  handling contexts, and qualifier families used in those dataflows.
 * An extensibility model that allows richer vocabularies while preserving a
   shared computable semantic floor.
 
