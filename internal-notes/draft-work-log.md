@@ -148,3 +148,18 @@ contents. It is not part of the rendered Internet-Draft.
   current architecture-side coordination assessment: no direct semantic
   conflict with the newer taxonomy/protocol direction, but likely later wording
   alignment once the atomic-dataflow and qualifier model settles.
+
+## 2026-05-22
+
+- Aligned the architecture draft's terminology with `handling_context` and
+  added a short explanatory note so the field is described consistently with
+  the taxonomy and protocol drafts.
+- Tightened the scope and taxonomy-reference discussion so the architecture
+  states more explicitly why PPD is limited to signaling and recordkeeping,
+  while enforcement remains outside the baseline architectural layer.
+- Added explicit user-control rationale that the shared semantic floor exists
+  to keep the burden of normalizing varied vendor privacy vocabularies off the
+  household.
+- Current near-term status: no major architectural redesign remains pending;
+  the next pass should only check for wording drift introduced by further
+  taxonomy/protocol refinements.

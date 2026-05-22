@@ -233,6 +233,7 @@ Their presence can inform transparency and local management decisions, but it do
 ## Enhance User Control
 
 * Support a household's ability to define privacy preferences that can be made available consistently across participating devices and associated services.
+* Ensure the household does not have to normalize or mentally reconcile each participant's local privacy vocabulary or interpretation strategy in order to express those preferences.
 * Provide an architectural basis for recording whether the current applicable policy was made available to a participant.
 * Create a reciprocal acknowledgment model in which the household can retain a record that a participant or associated service was presented with, and acknowledged, a specific household policy instance.
 
@@ -261,6 +262,11 @@ This document does not delve into specific implementation details, such as messa
 Furthermore, this document does not define mechanisms that modify device behavior, legal and regulatory considerations, or specific security protocols.
 Where this document discusses recordkeeping, that recordkeeping is limited to signaling and recording that an applicable household policy was made available to and acknowledged by a PPD participant.
 That recordkeeping can provide a basis for later accountability, audit, or dispute analysis, but this document does not define enforcement behavior or prove subsequent compliance.
+That boundary is intentional: the architectural problem addressed here is
+interoperable preference signaling and recordkeeping across heterogeneous home
+deployments, while enforcement depends on deployment-specific control points,
+trust models, and participant capabilities that cannot be assumed uniformly at
+the architectural layer.
 
 Specific implementation details and message formats are expected to be addressed in companion specifications.
 This document aims to be complementary to existing and future standards related to home networking, IoT security, and data privacy.
@@ -503,10 +509,13 @@ Several aspects critical to a fully operational implementation are intentionally
   privacy-relevant dataflows.
 * Attributes and semantics for data types, purposes, actions, sources,
   handling contexts, and qualifier families used in those dataflows.
-  Here, handling context means the context a handling step is directed into
-  or occurs within, not only a transfer destination.
+  Here, handling context means the context in which a dataflow occurs or into
+  which it is directed, not only a transfer destination.
 * An extensibility model that allows richer vocabularies while preserving a
   shared computable semantic floor.
+  That floor exists so that local variation or ambiguity in participant-facing
+  privacy descriptions can still be reduced to a shared comparison basis
+  without shifting the normalization burden onto the household.
 
 This taxonomy is foundational for consistent policy interpretation across heterogeneous devices and vendors.
 
