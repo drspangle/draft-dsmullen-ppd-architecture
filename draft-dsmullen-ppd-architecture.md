@@ -42,13 +42,18 @@ This document describes an architecture for signaling household privacy preferen
 
 # Introduction
 
-The rapid growth of Internet-connected devices in the home has introduced new and often overwhelming challenges to personal privacy.
-While many of these devices collect sensitive data by design, the tools offered to users to understand or control that collection are fragmented, confusing, or entirely absent.
-When privacy settings do exist, they are often buried in obscure menus, expressed in legal or technical jargon, and lack the contextual clarity needed to support meaningful decision-making.
+Internet-connected home devices commonly collect sensitive data, yet the tools
+available to households for understanding or controlling that collection are
+often fragmented, confusing, or absent. When privacy settings do exist, they
+frequently vary widely in semantics and presentation across devices and
+services.
 
-The result is a fragmented operational model.
-Users must manage privacy through device-specific controls that vary widely in quality and semantics, while device vendors and service providers often implement isolated mechanisms with no common way to convey household privacy preferences across devices.
-This lack of a shared signaling model makes it difficult for households to understand which devices have been presented with which privacy expectations, and it makes interoperable deployment harder for implementers.
+The result is a fragmented operational model. Households must manage privacy
+through device-specific controls, while vendors and service providers have no
+common way to receive household privacy preferences across devices. That lack
+of a shared signaling model makes it harder for households to understand which
+participants have been presented with which privacy expectations, and harder
+for implementers to support interoperable behavior.
 
 {{?RFC7258}} frames mass data collection as a technical threat, urging protocol designers to limit exposure through encryption and data minimization.
 While this principle is crucial in adversarial, internet-scale contexts, the model proposed in this document takes a different approach: rather than hiding data flows, it seeks to govern them.
@@ -268,20 +273,10 @@ deployments, while enforcement depends on deployment-specific control points,
 trust models, and participant capabilities that cannot be assumed uniformly at
 the architectural layer.
 
-Specific implementation details and message formats are expected to be addressed in companion specifications.
-This document aims to be complementary to existing and future standards related to home networking, IoT security, and data privacy.
-
-This document provides the foundation for subsequent work, including:
-
-* Privacy Preference Declaration Taxonomy:
-  {{?I-D.draft-dsmullen-ppd-taxonomy}} defines the core vocabulary, extension
-  model, and mapping expectations for the privacy-related terms used by PPD
-  statements and rules, including the shared semantic floor that keeps those
-  terms computable across heterogeneous devices and vendors. That core is
-  intentionally small; richer vocabularies can still be used so long as they
-  remain reducible to the shared baseline primitives.
-
-* The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines the message formats, data structures, and communication procedures for PPD, including mechanisms for PPD service endpoint discovery, metadata confirmation, participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
+Specific message formats, transport details, and semantic field definitions
+are carried by the companion protocol and taxonomy specifications:
+{{?I-D.draft-dsmullen-ppd-protocol}} and
+{{?I-D.draft-dsmullen-ppd-taxonomy}}.
 
 
 # Architecture Overview
@@ -290,35 +285,20 @@ This document provides the foundation for subsequent work, including:
 
 This document makes the following assumptions:
 
-* User Control: It is assumed that users have a reasonable level of control over their home network infrastructure.
-This includes the ability to configure routers, install software updates, and manage device access to the network.
-This control is essential for users to effectively manage their privacy preferences and make them available to devices within their home network.
-
-* Resource Constraints: It is assumed that the home network environment and devices operating therein have resource limitations, such as limited processing power and bandwidth.
-We limit this assumption by considering that the PPD protocol and its associated mechanisms should be designed with these constraints in mind, minimizing overhead and ensuring efficient operation even on resource-constrained devices. Where a device cannot satisfy the minimum authenticated direct-participant bar, this architecture expects indirect participation through a trusted intermediary rather than weakening the meaning of direct protocol participation.
-
-* Security Considerations: It is assumed that home networks in scope of this document are susceptible to typical security threats, including insider threats (or non-malicious misconfiguration) and vulnerability to local attacks.
-We limit this assumption by considering specific security threats to protect user privacy and the integrity of the privacy policy.
-This includes considerations for secure policy dissemination, device authentication, and protection against unauthorized access and modification of privacy preferences.
-
-* Single User Policy: This document assumes that each device implementing the protocol is governed by a single, unified privacy policy defined by its primary user.
-While other individuals within the same physical environment (e.g., household) may have different privacy preferences, the protocol is designed with the expectation that a device or associated service can receive the policy established by its primary user.
-Future extensions could explore mechanisms for managing and reconciling multiple user-defined policies on a single device, particularly in shared or multi-user environments.
-
-* Endpoint Discovery and Trust: It is assumed that configuration or local network mechanisms can identify one or more candidate PPD service endpoints for a participant.
-Discovery alone does not establish that an endpoint is authoritative for household policy.
-The applicable protocol profile needs a separate way to authenticate the selected endpoint and confirm that policy presented through that endpoint is authoritative for the participant's household context.
-
-* Policy Signaling: It is assumed that PPD participants can retrieve the applicable household privacy policy through a PPD service endpoint and acknowledge receipt of that policy instance.
-This acknowledgment forms the basis of association.
-It is a receipt signal only; it does not assert that the participant is compatible with every policy term or that it will behave in a particular way.
-Current association also depends on association freshness as determined by the PPD service endpoint.
-
-* Association Freshness: It is assumed that current association expires unless the participant renews within a bounded interval accepted by the PPD service endpoint.
-Participant-initiated exchanges provide the renewal or recovery path, but the PPD service endpoint remains the source of truth for whether association is current, stale, or in a needs-reassociation state.
-
-* Local Recordkeeping: At a minimum, the architecture enables the household to know which PPD participants have acknowledged the current applicable policy.
-Deployment-specific responses to participants that do not acknowledge policy, or to devices that do not participate in PPD, are local management decisions and are outside the baseline signaling function defined here.
+* Resource Constraints: Participants and home-network components may be
+  constrained in processing power, memory, or bandwidth. The architecture
+  therefore favors lightweight participant-facing interaction. Where a device
+  cannot satisfy the minimum authenticated direct-participant bar, this
+  architecture expects indirect participation through a trusted intermediary
+  rather than weakening the meaning of direct participation.
+* Single User Policy: Each participant is assumed to be governed by one
+  effective household policy at a time. Multi-user reconciliation may be
+  relevant in some deployments, but it is outside the baseline architecture.
+* Endpoint Discovery and Trust: Configuration or local-network mechanisms can
+  identify candidate PPD service endpoints, but discovery alone does not
+  establish authority. The applicable protocol profile needs a separate way to
+  authenticate the selected endpoint and confirm that the policy it presents
+  is authoritative for the participant's household context.
 
 ## Association State and Freshness
 
@@ -398,58 +378,61 @@ Such mechanisms are not device-behavior requirements in the baseline PPD archite
 
 ## Data Flows
 
-This section outlines the high-level data interactions between users, PPD participants, the PPD service endpoint, and the policy authority in the Privacy Preference Declaration (PPD) framework.
-It describes how privacy preferences are defined by users, made available to participants, and used as the basis for signaling and recordkeeping in a home network environment.
+This section outlines the high-level interactions between users, PPD
+participants, the PPD service endpoint, and the policy authority.
 
-The process begins when a user defines a set of privacy preferences that apply to their household.
-These preferences may express rules such as which types of data may be collected, under what conditions data may be processed or shared, or which retention practices are acceptable.
-The design of the user interface used to author these preferences, including its presentation, usability, or input modalities, is out of scope for this document, and will be addressed separately.
-Likewise, the underlying vocabulary and structure of the privacy preferences,
-including the core fields used in atomic privacy-relevant dataflows and the
-associated qualifier families, are specified in
+The process begins when a household defines privacy preferences. Those
+preferences may express which types of data may be collected, under what
+conditions data may be processed or shared, and which retention practices are
+acceptable. User-interface design for authoring those preferences is out of
+scope, as are the detailed semantic fields and qualifier families used in the
+policy representation; those are defined in
 {{?I-D.draft-dsmullen-ppd-taxonomy}}.
 
-Once created, the user's preferences are maintained by a policy authority, which may reside locally on a networked controller or be accessible through other trusted infrastructure.
-The policy authority may include storage, effective policy derivation, or both.
-When a new device joins the home network, it initiates an onboarding process during which it obtains one or more candidate PPD service endpoints through configuration or local network mechanisms.
-Discovery identifies reachable candidates, but does not by itself establish that any candidate is authoritative for household policy.
-The participant then establishes a secure channel to a selected endpoint and authenticates that endpoint according to the applicable protocol profile before retrieving policy.
-Following onboarding, the PPD participant performs association, which involves retrieving the household privacy policy and acknowledging receipt of the applicable policy instance.
-In some deployments, the participant is a backend service associated with the device rather than the local device itself.
-The PPD service endpoint may present policy derived from a local or remote policy authority without exposing that internal topology to the participant.
-The participant-facing contract ends at the PPD service endpoint; any split between that service and the policy authority is internal to the deployment.
-Where those components are distinct, the deployment preserves the authenticity and integrity of the effective policy instance, policy-instance identifier, and freshness metadata presented through the service endpoint.
-Devices may optionally report their data handling declarations to the PPD service endpoint at this stage.
-The PPD service endpoint also determines a freshness interval or renewal deadline for the resulting association state.
+Once created, the preferences are maintained by a policy authority, which may
+be local or remote and may include storage, effective-policy derivation, or
+both. When a new participant joins the home network, it obtains one or more
+candidate PPD service endpoints through configuration or local-network
+mechanisms. Discovery identifies reachable candidates, but does not by itself
+establish authority. The participant authenticates a selected endpoint
+according to the applicable protocol profile, retrieves the applicable policy
+instance, and acknowledges receipt of that instance. In some deployments, the
+participant is a backend service associated with the device rather than the
+local device itself.
 
-If a device seeks to perform actions not permitted under the baseline policy, for example, collecting or sharing data beyond what the user has authorized, it may initiate a consent request workflow.
-However, the design and behavior of this consent mechanism is explicitly out of scope for this document.
-Inappropriate or poorly designed consent flows, such as those that involve excessive prompting, ambiguous language, or misleading options, can inadvertently pressure users into accepting data practices that conflict with their preferences.
-Even without malicious intent, these experiences may degrade trust and lead to outcomes inconsistent with user expectations.
-Future specifications should describe consent interactions that are clear, proportionate, and respectful, helping users make informed decisions without friction or fatigue.
+The participant-facing contract ends at the PPD service endpoint; any split
+between that service and the policy authority is internal to the deployment.
+Where those components are distinct, the deployment preserves the authenticity
+and integrity of the effective policy instance, policy-instance identifier,
+and freshness metadata presented through the service endpoint. Participants
+may optionally report declarations at this stage. The service endpoint also
+determines the freshness interval or renewal deadline for the resulting
+association state.
+
+If a participant seeks to perform actions not permitted under the baseline
+policy, it may initiate a consent request workflow. The design and behavior of
+that workflow are out of scope here. Future specifications should ensure that
+consent interactions are clear, proportionate, and resistant to manipulative
+or fatiguing prompting.
 
 Current association is not indefinite.
 If the participant does not renew before the freshness interval expires, the PPD service endpoint treats the association as stale even if the applicable effective policy instance is unchanged.
-Reassociation is required when current association can no longer be confirmed for a participant.
-This can occur because the applicable effective policy changed, because participant state relevant to effective policy derivation changed, because the association became stale, or because enough state was lost that the prior association can no longer be trusted.
-Reassociation re-establishes current association by retrieving and acknowledging the latest applicable effective policy instance, or by completing a renewal procedure defined by the applicable protocol profile when the policy instance is unchanged.
-Devices are not expected to re-collect consent for data uses already covered by existing, valid consent.
+Reassociation is required when current association can no longer be confirmed.
+This can occur because the applicable effective policy changed, participant
+state relevant to effective policy derivation changed, the association became
+stale, or enough state was lost that the prior association can no longer be
+trusted. Reassociation re-establishes current association by retrieving and
+acknowledging the latest applicable effective policy instance, or by
+completing the applicable renewal procedure when the policy instance is
+unchanged.
 
-To support straightforward implementation and debugging, the companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines a simple machine-readable representation for privacy policies, declarations, and acknowledgment state.
-JSON is a practical baseline encoding for the architecture and for many constrained home-network deployments.
-More compact encodings can be considered later if a specific deployment profile demonstrates a need for them.
-
-The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines how association freshness is conveyed, including whether the protocol uses bounded renewal intervals, explicit renewal deadlines, or equivalent lease-style semantics.
-It also distinguishes stale association from needs-reassociation states caused by policy or participant-state changes.
-
-It is important to note that the baseline requirement under this architecture is limited to discovery, retrieval, acknowledgment, and any renewal needed to maintain current association for the user's privacy policy.
-These actions provide a signaling and recordkeeping mechanism for establishing that the current applicable policy was made available to the participant.
-However, this document does not define how device behavior is changed by the policy, nor does it specify how to handle cases where a device cannot fully satisfy a given policy.
-These aspects, including optional status reporting, detailed conflict-resolution procedures, or auditing, may be addressed in future work.
-
-Finally, while this document defines the overall data flow and interaction sequence, it does not define message formats, communication protocol details, or consent interface specifications.
-The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, specifies the participant-facing message formats and protocol details.
-Consent interface specifications, if any, remain future work.
+The companion protocol specification document,
+{{?I-D.draft-dsmullen-ppd-protocol}}, defines the participant-facing message
+formats, baseline machine-readable encoding, and the way association freshness
+is conveyed. This architecture remains limited to the signaling and
+recordkeeping meaning of those interactions. It does not define how device
+behavior is changed by policy, nor how deployments respond when a participant
+cannot satisfy a given policy.
 
 ## Non-PPD and Network-Observed Devices
 
@@ -465,11 +448,12 @@ Any local response to unmanaged devices, such as notification, inventory display
 
 # Policy Language
 
-The specific details of the privacy policy language, including its syntax, structure, and extensibility mechanisms, are out of scope for this document.
-The policy vocabulary and taxonomy of privacy concepts and attributes are
-defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, including the compact
-identifier model, the shared computable semantic floor, extension namespaces,
-and the mapping expectations used by the companion protocol specification.
+The specific details of the privacy policy language are out of scope for this
+document. The policy vocabulary and taxonomy of privacy concepts and
+attributes are defined in {{?I-D.draft-dsmullen-ppd-taxonomy}}, including the
+compact identifier model, the shared computable semantic floor, extension
+namespaces, and the mapping expectations used by the companion protocol
+specification.
 
 ## Language Requirements
 
@@ -481,69 +465,30 @@ and the mapping expectations used by the companion protocol specification.
 To ensure consistent interpretation and comparison of string-based policy elements, such as device names, labels, or category identifier string handling practices should align with the guidelines defined in {{?RFC7564}}.
 This is particularly important when identifiers or user-facing labels are created, stored, or matched across vendors or systems that operate in different locales or character encodings.
 
-## Architectural Direction
-
-The architecture assumes a policy representation that is both machine-readable
-and suitable for user-facing explanation.
-The taxonomy document is expected to define the semantic vocabulary, while a
-companion protocol document is expected to define any wire-format or
-serialization profile needed for exchange.
-
-Future specifications should also define how string identifiers--such as device
-roles, policy tags, or consent status labels--are formatted, compared, and
-stored, so implementations avoid ambiguous matching behavior.
-In contexts where internationalized strings are involved, alignment with
-{{?RFC7564}} should be considered to ensure interoperability and consistency.
-
-
 # Future Work
 
-This document defines an architectural framework for enabling users to express privacy preferences and signal those preferences within home network environments.
-Several aspects critical to a fully operational implementation are intentionally left out of scope here and are expected to be addressed in future specifications or companion documents.
+This document defines the architectural layer for PPD. The companion protocol
+and taxonomy specifications define the participant-facing protocol and shared
+semantic model. The remaining future work is therefore in adjacent areas that
+this architecture intentionally leaves out of scope.
 
-## Policy Taxonomy and Semantics
+## Consent Request Workflows
 
-{{?I-D.draft-dsmullen-ppd-taxonomy}} defines:
-
-* A common vocabulary and set of core fields for expressing atomic
-  privacy-relevant dataflows.
-* Attributes and semantics for data types, purposes, actions, sources,
-  handling contexts, and qualifier families used in those dataflows.
-  Here, handling context means the context in which a dataflow occurs or into
-  which it is directed, not only a transfer destination.
-* An extensibility model that allows richer vocabularies while preserving a
-  shared computable semantic floor.
-  That floor exists so that local variation or ambiguity in participant-facing
-  privacy descriptions can still be reduced to a shared comparison basis
-  without shifting the normalization burden onto the household.
-
-This taxonomy is foundational for consistent policy interpretation across heterogeneous devices and vendors.
-
-## Protocol Specification and Message Formats
-
-The companion protocol specification document, {{?I-D.draft-dsmullen-ppd-protocol}}, defines:
-
-* Message formats for participant registration, optional participant declaration, policy retrieval, policy acknowledgment, renewal, and reassociation.
-* Discovery profiles, lightweight metadata confirmation, and trust-establishment bindings for PPD service endpoints.
-* Transport-layer considerations, service authentication, and policy-authority trust expectations.
-* Association freshness semantics, including how renewal intervals or deadlines are conveyed and how stale association is distinguished from needs-reassociation states.
-* Baseline encoding expectations for structured data, with JSON as a practical starting point and more compact encodings reserved for deployment profiles that need them.
-
-## Consent Request Workflow Design Specifications
-
-The mechanism by which devices request additional user consent for data uses not covered by the baseline policy is out of scope.
-However, future specifications should:
+The mechanism by which devices request additional user consent for data uses
+not covered by the baseline policy is out of scope. Future specifications
+should:
 
 * Define clear constraints to prevent manipulative or fatiguing consent flows (e.g., dark patterns).
 * Describe consent interactions that are transparent, infrequent, proportionate, and user-respecting.
 * Explore user interface standards or API affordances to preserve meaningful choice.
 
-This is a particularly sensitive area and must balance user experience, privacy expectations, and implementation feasibility.
+This is a sensitive area and needs to balance user experience, privacy
+expectations, and implementation feasibility.
 
 ## Recordkeeping and Local Management
 
-This architecture does not define how devices act on privacy policies or how departures from policy are detected or remediated.
-The baseline function is signaling: a participant can receive an applicable household policy and acknowledge that policy instance.
+This architecture does not define how devices act on privacy policies or how
+departures from policy are detected or remediated.
 Future work may include:
 
 * Optional participant status reporting models and device-side implementation expectations.
@@ -552,7 +497,7 @@ Future work may include:
 * Deconfliction strategies for devices unable to meet all user-defined constraints.
 * Deployment-local management options, such as notifications or inventory display.
 
-## User Interface Design Specifications
+## User Interface Design
 
 The user-facing interface used to author, modify, and review privacy preferences is out of scope.
 Future design guidance may address:
