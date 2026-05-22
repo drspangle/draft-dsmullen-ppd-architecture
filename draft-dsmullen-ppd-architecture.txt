@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 21 November 2026                                    20 May 2026
+Expires: 23 November 2026                                    22 May 2026
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 November 2026.
+   This Internet-Draft will expire on 23 November 2026.
 
 Copyright Notice
 
@@ -431,6 +431,10 @@ Table of Contents
       can be made available consistently across participating devices
       and associated services.
 
+   *  Ensure the household does not have to normalize or mentally
+      reconcile each participant's local privacy vocabulary or
+      interpretation strategy in order to express those preferences.
+
    *  Provide an architectural basis for recording whether the current
       applicable policy was made available to a participant.
 
@@ -488,7 +492,12 @@ Table of Contents
    to and acknowledged by a PPD participant.  That recordkeeping can
    provide a basis for later accountability, audit, or dispute analysis,
    but this document does not define enforcement behavior or prove
-   subsequent compliance.
+   subsequent compliance.  That boundary is intentional: the
+   architectural problem addressed here is interoperable preference
+   signaling and recordkeeping across heterogeneous home deployments,
+   while enforcement depends on deployment-specific control points,
+   trust models, and participant capabilities that cannot be assumed
+   uniformly at the architectural layer.
 
    Specific implementation details and message formats are expected to
    be addressed in companion specifications.  This document aims to be
@@ -894,11 +903,16 @@ Table of Contents
       privacy-relevant dataflows.
 
    *  Attributes and semantics for data types, purposes, actions,
-      sources, destinations, and qualifier families used in those
-      dataflows.
+      sources, handling contexts, and qualifier families used in those
+      dataflows.  Here, handling context means the context in which a
+      dataflow occurs or into which it is directed, not only a transfer
+      destination.
 
    *  An extensibility model that allows richer vocabularies while
-      preserving a shared computable semantic floor.
+      preserving a shared computable semantic floor.  That floor exists
+      so that local variation or ambiguity in participant-facing privacy
+      descriptions can still be reduced to a shared comparison basis
+      without shifting the normalization burden onto the household.
 
    This taxonomy is foundational for consistent policy interpretation
    across heterogeneous devices and vendors.
@@ -1163,9 +1177,9 @@ Table of Contents
    [I-D.draft-dsmullen-ppd-taxonomy]
               Smullen, D. and B. Scriber, "Privacy Preference
               Declaration Taxonomy", Work in Progress, Internet-Draft,
-              draft-dsmullen-ppd-taxonomy-03, 18 May 2026,
+              draft-dsmullen-ppd-taxonomy-04, 20 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-
-              taxonomy-03>.
+              taxonomy-04>.
 
    [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
               Morris, J., Hansen, M., and R. Smith, "Privacy
