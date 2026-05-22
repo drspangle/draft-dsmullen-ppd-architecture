@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Privacy Preference Declaration for Home Networks</title>
+<meta content="Daniel Smullen" name="author">
+<meta content="Brian Scriber" name="author">
+<meta content="
+       This document describes an architecture for signaling household privacy preferences to devices in home networks through Privacy Preference Declarations (PPDs).  The architecture enables a PPD participant to discover a PPD service endpoint, establish trust in that endpoint through the applicable protocol and security profile, retrieve the applicable household policy instance, and acknowledge receipt of that policy instance.  The acknowledgment establishes that a specific policy instance was made available to the participant; it does not, by itself, assert anything about the participant's subsequent behavior. 
+    " name="description">
+<meta content="xml2rfc 3.33.0" name="generator">
+<meta content="privacy preferences" name="keyword">
+<meta content="home networks" name="keyword">
+<meta content="internet of things" name="keyword">
+<meta content="device transparency" name="keyword">
+<meta content="draft-dsmullen-ppd-architecture-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.33.0
+    Python 3.12.13
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
+    intervaltree 3.2.1
+    Jinja2 3.1.6
+    lxml 6.0.2
+    platformdirs 4.9.6
+    pycountry 24.6.1
+    PyYAML 6.0.3
+    requests 2.33.1
+    wcwidth 0.7.0
+-->
+<link href="draft-dsmullen-ppd-architecture.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+}
+
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: italic;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-greek.woff2') format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Sofia Sans Semi Condensed';
+  font-style: normal;
+  font-weight: 1 1000;
+  src: url('https://martinthomson.github.io/rfc-css/fonts/sofiasanssemicondensed-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  --font-title: "Sofia Sans Semi Condensed", sans-serif;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+section {
+  clear: both;
+}
+.section-number {
+  padding-right: 0.5em;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 680;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+  & :is(ol, ul) {
+    margin-left: 1em;
+  }
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+  & li {
+    margin-top: 0.5em;
+  }
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  margin: 0 0 0 2em;
+  & li {
+    margin: 0;
+    & :first-child { margin-top: 0; }
+    & :last-child { margin-bottom: 0; }
+  }
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+  &.olPercent {
+    --indent: 5ch;
+    & > dt {
+      min-width: calc(var(--indent) - 2ch);
+    }
+  }
+  &.olPercent > dt {
+    float: none;
+  }
+
+  dl > dd > & {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+  }
+}
+dl:not(.dlNewline) > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+  & > :is(:first-child, .break:first-child + *) {
+    margin-top: 0;
+  }
+  & > :is(:last-child) {
+    margin-bottom: 0;
+  }
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+  caption-side: bottom;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+  &[href] {
+    color: var(--pilcrow-weak);
+    &:hover { text-decoration: none; }
+  }
+}
+@media not print {
+  :hover > a.pilcrow, a.pilcrow:focus {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+  & dt {
+    width: var(--identifier-width);
+    min-width: var(--identifier-width);
+    clear: left;
+    float: left;
+    text-align: right;
+    margin-right: 1ch;
+  }
+  & dd {
+    margin: 0;
+    margin-left: calc(1em + var(--identifier-width)) !important;
+    min-width: 5em;
+  }
+  & .authors {
+    & .author {
+      display: inline-block;
+      margin-right: 1.5em;
+    }
+    & .org {
+      font-style: italic;
+    }
+  }
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+
+  & nav {
+    & ul {
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    & li {
+      line-height: 1.3em;
+      margin: 2px 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+  & a.xref {
+    white-space: normal;
+  }
+}
+
+.references {
+  & > dt {
+    text-align: right;
+    font-weight: bold;
+    min-width: 10ch;
+    margin-right: 1.5ch;
+    &:target::before {
+      content: "⇒";
+      margin: 0 10px 0 -25px;
+    }
+  }
+  & > dd {
+    margin-left: 12ch !important;
+    overflow: visible;
+    & .refInstance {
+      margin-bottom: 0.8em;
+    }
+    & .ascii {
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  max-width: 20em;
+  margin: 1em auto 1em 0;
+
+  & .nameRole {
+    font-weight: 700;
+    margin-left: 0;
+  }
+  & .label {
+    margin: 0.5em 0;
+  }
+  & .type {
+    display: none;
+  }
+  & .alternative-contact {
+    margin: 0.5em 0 0.25em 0;
+  }
+  & .non-ascii {
+    margin: 0 0 0 2em;
+  }
+  & div.left {
+    text-align: left;
+  }
+  & div.right {
+    text-align: right;
+  }
+}
+
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+/* Comments */
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+
+@media screen {
+  #toc nav {
+    font-family: var(--font-title);
+    font-weight: 360;
+    & > ul { margin-bottom: 2em; }
+    & ul {
+      margin: 0 0 0 4px;
+      & :is(p, li) {
+        margin: 2px 0;
+      }
+    }
+  }
+  #toc a.toplink {
+    float: right;
+  }
+}
+@media not screen {
+  #toc a.toplink {
+    display: none;
+  }
+}
+
+
+/* TOC layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    &::before { /* css hamburger */
+      float: right;
+      position: relative;
+      width: 1em;
+      height: 1px;
+      left: -164px;
+      margin: 8px 0 0 0;
+      background: white none repeat scroll 0 0;
+      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+      content: "";
+    }
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active {
+    opacity: 1;
+    & nav { display: block; }
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:is(:link, :focus, :hover),
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin: 2px 0.5em 0;
+  }
+}
+
+/* TOC layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+  #toc a.toplink {
+    margin: 8px 0.5em 0;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PPDArch</td>
+<td class="right">May 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Smullen &amp; Scriber</td>
+<td class="center">Expires 23 November 2026</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-dsmullen-ppd-architecture-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-05-22" class="published">22 May 2026</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2026-11-23">23 November 2026</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">D. Smullen</div>
+<div class="org">CableLabs</div>
+</div>
+<div class="author">
+      <div class="author-name">B. Scriber</div>
+<div class="org">CableLabs</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Privacy Preference Declaration for Home Networks</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document describes an architecture for signaling household privacy preferences to devices in home networks through Privacy Preference Declarations (PPDs).  The architecture enables a PPD participant to discover a PPD service endpoint, establish trust in that endpoint through the applicable protocol and security profile, retrieve the applicable household policy instance, and acknowledge receipt of that policy instance.  The acknowledgment establishes that a specific policy instance was made available to the participant; it does not, by itself, assert anything about the participant's subsequent behavior.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        The latest revision of this draft can be found at <span><a href="https://drspangle.github.io/draft-dsmullen-ppd-architecture/draft-dsmullen-ppd-architecture.html">https://drspangle.github.io/draft-dsmullen-ppd-architecture/draft-dsmullen-ppd-architecture.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-dsmullen-ppd-architecture/">https://datatracker.ietf.org/doc/draft-dsmullen-ppd-architecture/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/drspangle/draft-dsmullen-ppd-architecture">https://github.com/drspangle/draft-dsmullen-ppd-architecture</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 23 November 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2026 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-limitations-of-existing-mec" class="internal xref">Limitations of Existing Mechanisms</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-device-specific-configurati" class="internal xref">Device-specific Configurations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-ineffective-and-unusable-us" class="internal xref">Ineffective and Unusable User Interfaces</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-relationship-to-existing-wo" class="internal xref">Relationship to Existing Work</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-dnt-and-p3p" class="internal xref">DNT and P3P</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-mud" class="internal xref">MUD</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.3">
+                    <p id="section-toc.1-1.3.2.3.2.3.1"><a href="#section-3.3.3" class="auto internal xref">3.3.3</a>.  <a href="#name-privacy-vocabularies-and-po" class="internal xref">Privacy Vocabularies and Policy Models</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-operational-scenarios" class="internal xref">Operational Scenarios</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-initial-discovery-and-assoc" class="internal xref">Initial Discovery and Association</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-policy-update-and-reassocia" class="internal xref">Policy Update and Reassociation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-association-freshness-expir" class="internal xref">Association Freshness Expiry and Renewal</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-participant-state-change" class="internal xref">Participant State Change</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="auto internal xref">4.5</a>.  <a href="#name-mixed-participant-network-v" class="internal xref">Mixed-Participant Network Visibility</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-goals" class="internal xref">Goals</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-enhance-user-control" class="internal xref">Enhance User Control</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-promote-interoperability" class="internal xref">Promote Interoperability</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-enable-flexibility" class="internal xref">Enable Flexibility</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-facilitate-transparency" class="internal xref">Facilitate Transparency</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-scope" class="internal xref">Scope</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-architecture-overview" class="internal xref">Architecture Overview</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-assumptions" class="internal xref">Assumptions</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-association-state-and-fresh" class="internal xref">Association State and Freshness</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-discovery-and-policy-author" class="internal xref">Discovery and Policy-Authority Boundary</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-key-components" class="internal xref">Key Components</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="auto internal xref">7.5</a>.  <a href="#name-data-flows" class="internal xref">Data Flows</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.6">
+                <p id="section-toc.1-1.7.2.6.1"><a href="#section-7.6" class="auto internal xref">7.6</a>.  <a href="#name-non-ppd-and-network-observe" class="internal xref">Non-PPD and Network-Observed Devices</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-policy-language" class="internal xref">Policy Language</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-language-requirements" class="internal xref">Language Requirements</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-future-work" class="internal xref">Future Work</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-consent-request-workflows" class="internal xref">Consent Request Workflows</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-recordkeeping-and-local-man" class="internal xref">Recordkeeping and Local Management</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-user-interface-design" class="internal xref">User Interface Design</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-interoperability-testing-an" class="internal xref">Interoperability Testing and Reference Implementations</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-internationalization-consid" class="internal xref">Internationalization Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-secure-policy-dissemination" class="internal xref">Secure Policy Dissemination</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-anonymity-and-metadata-prot" class="internal xref">Anonymity and Metadata Protection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
+                <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-policy-integrity" class="internal xref">Policy Integrity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
+                <p id="section-toc.1-1.12.2.4.1"><a href="#section-12.4" class="auto internal xref">12.4</a>.  <a href="#name-device-authentication" class="internal xref">Device Authentication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
+                <p id="section-toc.1-1.12.2.5.1"><a href="#section-12.5" class="auto internal xref">12.5</a>.  <a href="#name-policy-acknowledgment-and-r" class="internal xref">Policy Acknowledgment and Recordkeeping</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref">13.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Internet-connected home devices commonly collect sensitive data, yet the tools
+available to households for understanding or controlling that collection are
+often fragmented, confusing, or absent. When privacy settings do exist, they
+frequently vary widely in semantics and presentation across devices and
+services.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The result is a fragmented operational model. Households must manage privacy
+through device-specific controls, while vendors and service providers have no
+common way to receive household privacy preferences across devices. That lack
+of a shared signaling model makes it harder for households to understand which
+participants have been presented with which privacy expectations, and harder
+for implementers to support interoperable behavior.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3"><span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> frames mass data collection as a technical threat, urging protocol designers to limit exposure through encryption and data minimization.
+While this principle is crucial in adversarial, internet-scale contexts, the model proposed in this document takes a different approach: rather than hiding data flows, it seeks to govern them.
+Privacy here is not achieved by making devices blind, but by making user-defined preferences visible to devices and associated services.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This use of privacy is related to, but distinct from, the privacy guidance in <span>[<a href="#RFC6973" class="cite xref">RFC6973</a>]</span>, which emphasizes reduced observability, linkability, and identifiability in protocol design.
+Those properties remain important, but PPD focuses on a different home-network problem: a user needs a consistent way to express household privacy preferences and to know that those preferences were made available to participating devices or associated services.
+This document is also aligned with the user-agency goals described in <span>[<a href="#RFC8280" class="cite xref">RFC8280</a>]</span>, but it is narrower and more operational.
+It describes an architecture for privacy-preference signaling and recordkeeping, not a general framework for human-rights analysis or for constraining device behavior.
+Home networks are a significant and operationally important IoT environment.
+They commonly place a local administrative boundary around large numbers of devices, many with limited or no end-user interface, making them a concrete target for a privacy-preference signaling architecture.
+In this architecture, discovery identifies candidate participant-facing service endpoints.
+Trust in a selected endpoint, and in the policy instances it presents, is established separately through the applicable protocol and security mechanisms rather than by discovery alone.
+This also addresses an asymmetry common in current deployments: the household user is often required to acknowledge device- or vendor-defined terms, while the household has no comparable way to record that a participating device or associated service was presented with the household's privacy policy.
+PPD introduces a reciprocal signaling path in which presentation and acknowledgment of a household policy instance can be recorded by the household domain.
+The objective is to provide a coherent architectural basis for devices and associated services to retrieve, acknowledge, and keep current with household privacy preferences within that administrative domain.<a href="#section-1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The terms below define both protocol roles and core concepts used by this architecture.
+The definitions of privacy, transparency, and user control are included here because they describe the conceptual scope of PPD rather than separate protocol mechanisms.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-2.1">
+        <h3 id="name-terminology">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<span class="break"></span><dl class="dlParallel" id="section-2.1-1">
+          <dt id="section-2.1-1.1">Privacy:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.2">
+            <p id="section-2.1-1.2.1">In this document, the ability of users to understand and shape how data about them, their household, or their home environment is collected, used, retained, and shared by devices and associated services.<a href="#section-2.1-1.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.3">Transparency:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.4">
+            <p id="section-2.1-1.4.1">The property that data practices are made visible and understandable to the user, including what data is collected, how it is processed, where it is shared, and what policy preferences apply.<a href="#section-2.1-1.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.5">User control:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.6">
+            <p id="section-2.1-1.6.1">The ability of a user or household to define privacy preferences and make those preferences visible to devices or associated services in a consistent and actionable way.<a href="#section-2.1-1.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.7">Privacy Preference Declaration (PPD):</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.8">
+            <p id="section-2.1-1.8.1">A structured expression of household privacy preferences that can be discovered, retrieved, and acknowledged by PPD participants.<a href="#section-2.1-1.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.9">PPD service endpoint:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.10">
+            <p id="section-2.1-1.10.1">A participant-facing service, and the baseline discovery target for participants, through which a PPD participant discovers, retrieves, and acknowledges applicable policy instances.<a href="#section-2.1-1.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.11">Policy authority:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.12">
+            <p id="section-2.1-1.12.1">The authoritative source of household policy state and of any inputs used to derive an effective policy for a participant.  The policy authority may be local or remote.  Participants are not required to discover or address the policy authority directly in the baseline architecture.<a href="#section-2.1-1.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.13">Household policy:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.14">
+            <p id="section-2.1-1.14.1">A policy selected or maintained for a home network that represents the household's privacy preferences.<a href="#section-2.1-1.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.15">Effective policy derivation:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.16">
+            <p id="section-2.1-1.16.1">The logical function, performed by or on behalf of the policy authority, that determines the effective policy instance for a participant.<a href="#section-2.1-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.17">Effective policy:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.18">
+            <p id="section-2.1-1.18.1">The policy instance that applies to a particular PPD participant at a particular time, after effective policy derivation has resolved household policy state and any applicable participant-specific inputs.<a href="#section-2.1-1.18.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.19">PPD participant:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.20">
+            <p id="section-2.1-1.20.1">A device, or a trusted intermediary such as a backend service acting on behalf of a device, that participates in PPD by retrieving and acknowledging an applicable policy instance.<a href="#section-2.1-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.21">Policy instance:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.22">
+            <p id="section-2.1-1.22.1">A specific version or representation of an effective policy that can be identified for acknowledgment and recordkeeping.<a href="#section-2.1-1.22.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.23">Association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.24">
+            <p id="section-2.1-1.24.1">The state established when a PPD participant has retrieved the current applicable effective policy and acknowledged receipt of that specific policy instance.<a href="#section-2.1-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.25">Current association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.26">
+            <p id="section-2.1-1.26.1">Association state that still corresponds to the latest applicable effective policy for the participant and remains fresh according to the renewal model enforced by the PPD service endpoint.<a href="#section-2.1-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.27">Association freshness:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.28">
+            <p id="section-2.1-1.28.1">The property that an association remains within the bounded interval, or before the renewal deadline, accepted by the PPD service endpoint for treating that association as current.<a href="#section-2.1-1.28.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.29">Stale association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.30">
+            <p id="section-2.1-1.30.1">Association state that still refers to the latest applicable effective policy instance, but whose freshness can no longer be confirmed because renewal did not occur within the bounded interval accepted by the PPD service endpoint.<a href="#section-2.1-1.30.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.31">Needs reassociation:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.32">
+            <p id="section-2.1-1.32.1">A state in which current association cannot be confirmed because the applicable effective policy changed, participant state relevant to effective policy derivation changed, or enough state was lost that the existing association no longer applies reliably.<a href="#section-2.1-1.32.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.33">Reassociation:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.34">
+            <p id="section-2.1-1.34.1">The process by which a PPD participant recovers from stale association or a needs-reassociation state and re-establishes current association.<a href="#section-2.1-1.34.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.35">Broken association:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.36">
+            <p id="section-2.1-1.36.1">A state in which stored or reported information is contradictory or incomplete enough that current association cannot be determined reliably.<a href="#section-2.1-1.36.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.37">Policy acknowledgment:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.38">
+            <p id="section-2.1-1.38.1">A signal that a PPD participant has received a specific effective policy instance.  A policy acknowledgment is not a statement that the device is compatible with every policy term or that the device will behave in a particular way.<a href="#section-2.1-1.38.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.39">Network-observed device:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.40">
+            <p id="section-2.1-1.40.1">A device that is visible to the local network through ordinary network observation but that has not established association through PPD.<a href="#section-2.1-1.40.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-2.1-1.41">Unmanaged device:</dt>
+          <dd style="margin-left: 1.5em" id="section-2.1-1.42">
+            <p id="section-2.1-1.42.1">A network-observed device that is not known to participate in PPD or is not currently manageable through PPD association.<a href="#section-2.1-1.42.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="limitations-of-existing-mechanisms">
+<section id="section-3">
+      <h2 id="name-limitations-of-existing-mec">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-limitations-of-existing-mec" class="section-name selfRef">Limitations of Existing Mechanisms</a>
+      </h2>
+<p id="section-3-1">Current mechanisms for managing data privacy within the home environment exhibit limitations.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="device-specific-configurations">
+<section id="section-3.1">
+        <h3 id="name-device-specific-configurati">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-device-specific-configurati" class="section-name selfRef">Device-specific Configurations</a>
+        </h3>
+<p id="section-3.1-1">Individual devices often employ unique privacy settings, thereby complicating user management of privacy across the entire network.
+This complexity can inadvertently lead to unintended data sharing.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ineffective-and-unusable-user-interfaces">
+<section id="section-3.2">
+        <h3 id="name-ineffective-and-unusable-us">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-ineffective-and-unusable-us" class="section-name selfRef">Ineffective and Unusable User Interfaces</a>
+        </h3>
+<p id="section-3.2-1">Navigating and configuring privacy settings on individual devices can be a time-consuming and frustrating experience for users.
+These ineffective interfaces often lead users to habitually agree to relax their privacy preferences without fully understanding the implications of their decisions.
+This fosters a general resignation towards privacy management, making it difficult for users to exert meaningful control over their personal data and ultimately compromising their privacy expectations.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="relationship-to-existing-work">
+<section id="section-3.3">
+        <h3 id="name-relationship-to-existing-wo">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-relationship-to-existing-wo" class="section-name selfRef">Relationship to Existing Work</a>
+        </h3>
+<div id="dnt-and-p3p">
+<section id="section-3.3.1">
+          <h4 id="name-dnt-and-p3p">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-dnt-and-p3p" class="section-name selfRef">DNT and P3P</a>
+          </h4>
+<p id="section-3.3.1-1">Protocols like Do Not Track (DNT) and Platform for Privacy Preferences Project (P3P) have not achieved widespread adoption and have proven inadequate for addressing nuanced privacy needs.
+These protocols do not provide the participant-specific policy signaling, lifecycle handling, or home-network operational posture needed here.
+They also do not provide a practical basis for recording that a participating device or associated service was presented with a household policy instance.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mud">
+<section id="section-3.3.2">
+          <h4 id="name-mud">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-mud" class="section-name selfRef">MUD</a>
+          </h4>
+<p id="section-3.3.2-1">Manufacturer Usage Description (MUD) <span>[<a href="#RFC8520" class="cite xref">RFC8520</a>]</span> is the closest existing precedent for device-to-home-network signaling.
+MUD is focused on manufacturer-defined network communication intent presented to local network infrastructure.
+PPD addresses a different problem: household-defined privacy preference signaling, participant-specific effective policy presentation, and recordkeeping about whether a participant was presented with a current household policy instance.
+The two approaches may complement each other in a deployment, but MUD does not provide the privacy-policy lifecycle or recordkeeping model described here.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="privacy-vocabularies-and-policy-models">
+<section id="section-3.3.3">
+          <h4 id="name-privacy-vocabularies-and-po">
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-privacy-vocabularies-and-po" class="section-name selfRef">Privacy Vocabularies and Policy Models</a>
+          </h4>
+<p id="section-3.3.3-1">Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
+PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
+Instead, PPD separates concerns: this architecture defines roles and
+lifecycle; <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines the core fields and
+shared computable floor that can map to richer vocabularies; and
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines the participant-facing signaling
+path by which an effective household policy is presented and acknowledged.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="operational-scenarios">
+<section id="section-4">
+      <h2 id="name-operational-scenarios">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-operational-scenarios" class="section-name selfRef">Operational Scenarios</a>
+      </h2>
+<p id="section-4-1">This section describes representative operational cases for the architecture in home-network environments.
+The scenarios focus on discovery, association, reassociation, and mixed-participant visibility rather than on user-interface details.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="initial-discovery-and-association">
+<section id="section-4.1">
+        <h3 id="name-initial-discovery-and-assoc">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-initial-discovery-and-assoc" class="section-name selfRef">Initial Discovery and Association</a>
+        </h3>
+<p id="section-4.1-1">A PPD participant joins the home network and obtains one or more candidate PPD service endpoints through configuration or local network discovery.
+In a common home deployment model, the PPD service endpoint is hosted by a residential gateway or equivalent home-network service.
+Discovery identifies reachability, not authority.
+The participant establishes a secure connection to a selected endpoint, confirms that endpoint through the applicable trust mechanism, retrieves the applicable effective policy instance, and acknowledges receipt of that policy instance.
+The PPD service endpoint may present policy derived from a local or remote policy authority without exposing that internal topology to the participant.
+At the end of this process, the participant has established association if the current applicable effective policy has been delivered and acknowledged.
+The PPD service endpoint also determines the initial freshness state of that association.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policy-update-and-reassociation">
+<section id="section-4.2">
+        <h3 id="name-policy-update-and-reassocia">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-policy-update-and-reassocia" class="section-name selfRef">Policy Update and Reassociation</a>
+        </h3>
+<p id="section-4.2-1">The household policy, or the participant's effective policy, changes.
+The PPD service endpoint immediately invalidates current association for the participant.
+The participant enters a needs-reassociation state until it retrieves and acknowledges the updated effective policy instance.
+This scenario illustrates that association state is tied to a specific policy instance and not to prior acknowledgments alone.
+Reassociation re-establishes current association by confirming that the participant has seen the latest applicable policy instance.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="association-freshness-expiry-and-renewal">
+<section id="section-4.3">
+        <h3 id="name-association-freshness-expir">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-association-freshness-expir" class="section-name selfRef">Association Freshness Expiry and Renewal</a>
+        </h3>
+<p id="section-4.3-1">The applicable effective policy instance is unchanged, but the participant does
+not renew within the bounded interval accepted by the PPD service endpoint.
+The association becomes stale even though no policy change occurred.
+The participant no longer has current association until it completes the
+required renewal procedure.
+This scenario distinguishes stale association from a needs-reassociation state
+caused by a changed policy instance.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="participant-state-change">
+<section id="section-4.4">
+        <h3 id="name-participant-state-change">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-participant-state-change" class="section-name selfRef">Participant State Change</a>
+        </h3>
+<p id="section-4.4-1">A participant changes in a way that can affect the applicable effective policy instance, such as a declaration update, capability change, or other state change relevant to effective policy derivation.
+The PPD service endpoint determines that current association can no longer be confirmed using existing state alone.
+The participant then retrieves and acknowledges the newly applicable effective policy instance.
+This scenario keeps the architecture focused on policy signaling and recordkeeping without assuming that every state change requires the same local handling or transport behavior.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mixed-participant-network-visibility">
+<section id="section-4.5">
+        <h3 id="name-mixed-participant-network-v">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-mixed-participant-network-v" class="section-name selfRef">Mixed-Participant Network Visibility</a>
+        </h3>
+<p id="section-4.5-1">A home network contains both PPD participants and devices that do not participate in PPD.
+The household can still use local management functions to distinguish associated participants, participants whose current association cannot be confirmed, and network-observed or unmanaged devices.
+This scenario illustrates that non-participating devices are an expected operational reality.
+Their presence can inform transparency and local management decisions, but it does not create association or change the baseline signaling role of PPD.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="goals">
+<section id="section-5">
+      <h2 id="name-goals">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-goals" class="section-name selfRef">Goals</a>
+      </h2>
+<div id="enhance-user-control">
+<section id="section-5.1">
+        <h3 id="name-enhance-user-control">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-enhance-user-control" class="section-name selfRef">Enhance User Control</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.1-1.1">
+            <p id="section-5.1-1.1.1">Support a household's ability to define privacy preferences that can be made available consistently across participating devices and associated services.<a href="#section-5.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.2">
+            <p id="section-5.1-1.2.1">Ensure the household does not have to normalize or mentally reconcile each participant's local privacy vocabulary or interpretation strategy in order to express those preferences.<a href="#section-5.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.3">
+            <p id="section-5.1-1.3.1">Provide an architectural basis for recording whether the current applicable policy was made available to a participant.<a href="#section-5.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-1.4">
+            <p id="section-5.1-1.4.1">Create a reciprocal acknowledgment model in which the household can retain a record that a participant or associated service was presented with, and acknowledged, a specific household policy instance.<a href="#section-5.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="promote-interoperability">
+<section id="section-5.2">
+        <h3 id="name-promote-interoperability">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-promote-interoperability" class="section-name selfRef">Promote Interoperability</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.2-1.1">
+            <p id="section-5.2-1.1.1">Establish a standardized mechanism for devices from diverse manufacturers to discover PPD service endpoints, retrieve applicable privacy policies, and acknowledge policy instances.<a href="#section-5.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-1.2">
+            <p id="section-5.2-1.2.1">Support consistent association and reassociation behavior across heterogeneous participants.<a href="#section-5.2-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="enable-flexibility">
+<section id="section-5.3">
+        <h3 id="name-enable-flexibility">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-enable-flexibility" class="section-name selfRef">Enable Flexibility</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.3-1.1">
+            <p id="section-5.3-1.1.1">Allow deployments to place policy storage and effective-policy derivation locally or remotely without changing the baseline participant-facing contract.<a href="#section-5.3-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.3-1.2">
+            <p id="section-5.3-1.2.1">Leave room for deployment-specific protocol profiles where constrained environments or different operational models require them, including trusted-intermediary participation for devices that cannot satisfy the minimum authenticated direct-participant bar.<a href="#section-5.3-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="facilitate-transparency">
+<section id="section-5.4">
+        <h3 id="name-facilitate-transparency">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-facilitate-transparency" class="section-name selfRef">Facilitate Transparency</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-5.4-1.1">
+            <p id="section-5.4-1.1.1">Provide a basis for local management functions to distinguish currently associated participants, stale or reassociation-needed participants, and non-participating devices.<a href="#section-5.4-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.4-1.2">
+            <p id="section-5.4-1.2.1">Improve visibility into which participants have been presented with the current applicable policy instance, without implying enforcement of device behavior.<a href="#section-5.4-1.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="scope">
+<section id="section-6">
+      <h2 id="name-scope">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
+      </h2>
+<p id="section-6-1">This document defines a high-level architectural framework for Privacy Preference Declaration (PPD) in home-network environments.
+It focuses on roles, trust boundaries, lifecycle meaning, and operational assumptions for making household privacy preferences available to devices and associated services.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">This document does not delve into specific implementation details, such as message formats, data structures, security algorithms, or user interface design.
+Furthermore, this document does not define mechanisms that modify device behavior, legal and regulatory considerations, or specific security protocols.
+Where this document discusses recordkeeping, that recordkeeping is limited to signaling and recording that an applicable household policy was made available to and acknowledged by a PPD participant.
+That recordkeeping can provide a basis for later accountability, audit, or dispute analysis, but this document does not define enforcement behavior or prove subsequent compliance.
+That boundary is intentional: the architectural problem addressed here is
+interoperable preference signaling and recordkeeping across heterogeneous home
+deployments, while enforcement depends on deployment-specific control points,
+trust models, and participant capabilities that cannot be assumed uniformly at
+the architectural layer.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">Specific message formats, transport details, and semantic field definitions
+are defined in <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> and
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>.<a href="#section-6-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="architecture-overview">
+<section id="section-7">
+      <h2 id="name-architecture-overview">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-architecture-overview" class="section-name selfRef">Architecture Overview</a>
+      </h2>
+<div id="assumptions">
+<section id="section-7.1">
+        <h3 id="name-assumptions">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-assumptions" class="section-name selfRef">Assumptions</a>
+        </h3>
+<p id="section-7.1-1">This document makes the following assumptions:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1-2.1">
+            <p id="section-7.1-2.1.1">Resource Constraints: Participants and home-network components may be
+constrained in processing power, memory, or bandwidth. The architecture
+therefore favors lightweight participant-facing interaction. Where a device
+cannot satisfy the minimum authenticated direct-participant bar, this
+architecture expects indirect participation through a trusted intermediary
+rather than weakening the meaning of direct participation.<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.2">
+            <p id="section-7.1-2.2.1">Single User Policy: Each participant is assumed to be governed by one
+effective household policy at a time. Multi-user reconciliation may be
+relevant in some deployments, but it is outside the baseline architecture.<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.1-2.3">
+            <p id="section-7.1-2.3.1">Endpoint Discovery and Trust: Configuration or local-network mechanisms can
+identify candidate PPD service endpoints, but discovery alone does not
+establish authority. The applicable protocol profile needs a separate way to
+authenticate the selected endpoint and confirm that the policy it presents
+is authoritative for the participant's household context.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="association-state-and-freshness">
+<section id="section-7.2">
+        <h3 id="name-association-state-and-fresh">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-association-state-and-fresh" class="section-name selfRef">Association State and Freshness</a>
+        </h3>
+<p id="section-7.2-1">This architecture treats the PPD service endpoint as the source of truth for
+participant association state.
+A participant establishes association when it retrieves and acknowledges a
+specific applicable effective policy instance.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">Current association exists only when both of the following are true:<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-3.1">
+            <p id="section-7.2-3.1.1">the acknowledged policy instance still corresponds to the latest applicable
+effective policy for that participant; and<a href="#section-7.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-3.2">
+            <p id="section-7.2-3.2.1">the association remains fresh according to the renewal model enforced by the
+PPD service endpoint.<a href="#section-7.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.2-4">If the applicable effective policy instance is unchanged but the freshness
+interval expires before renewal, the participant enters stale association.
+If the applicable effective policy changes, if participant state relevant to
+effective policy derivation changes, or if enough state is lost that the prior
+association can no longer be trusted, the participant enters a
+needs-reassociation state.
+In either case, the participant no longer has current association.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.2-5">Participant-initiated exchanges provide the renewal or recovery path, but they
+are not the source of truth for whether association is current.
+The PPD service endpoint determines whether a participant is current, stale, or
+in needs reassociation.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="discovery-and-policy-authority-boundary">
+<section id="section-7.3">
+        <h3 id="name-discovery-and-policy-author">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-discovery-and-policy-author" class="section-name selfRef">Discovery and Policy-Authority Boundary</a>
+        </h3>
+<p id="section-7.3-1">This architecture separates discovery of a participant-facing service endpoint
+from trust establishment.
+A participant may learn one or more candidate PPD service endpoints through
+configuration or local network mechanisms, but discovery alone does not make
+any candidate authoritative.
+Before treating a policy instance as authoritative, the participant needs the
+applicable protocol profile to authenticate the selected endpoint and confirm
+that it is authorized to present policy for the household context.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">The participant-facing contract is the PPD service endpoint, not direct access
+to the policy authority.
+A deployment may place storage, policy combination, and effective policy
+derivation behind that service.
+When the PPD service endpoint and policy authority are distinct, the deployment
+needs to preserve at least:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.3-3.1">
+            <p id="section-7.3-3.1.1">authenticity of the effective policy instance presented to the participant;<a href="#section-7.3-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-3.2">
+            <p id="section-7.3-3.2.1">integrity of policy-instance identifiers and association-freshness metadata;<a href="#section-7.3-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.3-3.3">
+            <p id="section-7.3-3.3.1">an unambiguous binding between the selected PPD service endpoint and the
+policy authority on whose behalf it presents policy.<a href="#section-7.3-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.3-4">These are architectural invariants. Participant-facing transport, metadata
+confirmation, and security-profile expectations are defined in
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, while deployment profiles still choose
+concrete mechanism details.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="key-components">
+<section id="section-7.4">
+        <h3 id="name-key-components">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-key-components" class="section-name selfRef">Key Components</a>
+        </h3>
+<p id="section-7.4-1">User Interface: A user-friendly interface (e.g., mobile app, web portal) for creating and managing privacy preferences.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-2">PPD Service Endpoint: A participant-facing service through which PPD participants discover, retrieve, and acknowledge applicable policy instances.
+In a common home deployment model, this service is hosted by a residential gateway or equivalent home-network service.
+A participant may learn candidate PPD service endpoints through configuration or local network discovery, but it treats a selected endpoint as authoritative only after the applicable trust mechanism succeeds.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-3">Policy Authority: The authoritative source of household policy state and any inputs used for effective policy derivation.
+The policy authority may be local or remote.
+A PPD service endpoint can obtain policy from a policy authority without exposing internal storage or computation topology to participants.
+Participants are not required to discover or communicate with the policy authority directly in the baseline architecture.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.4-4">Effective Policy Derivation: The logical function, performed by or on behalf of the policy authority, that determines the applicable policy instance for a participant.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
+<p id="section-7.4-5">Participant Declarations and Consent Requests: Optional participant inputs that can disclose data-handling declarations or request consent for uses not covered by baseline policy.
+These inputs are distinct from the minimal path of policy retrieval and policy acknowledgment.
+Where a deployment exposes a coarse comparison result for participant declarations at the protocol boundary, that result belongs on the declaration path rather than in the effective policy or policy acknowledgment objects. That comparison surface is diagnostic only; it is not a baseline negotiation channel, policy-relaxation mechanism, or homeowner-prompt path.<a href="#section-7.4-5" class="pilcrow">¶</a></p>
+<p id="section-7.4-6">Recordkeeping and Management Mechanisms: Deployment-specific mechanisms for presenting association state, participant status, effective policy views, and network-observed devices to the household.
+Such mechanisms are not device-behavior requirements in the baseline PPD architecture.<a href="#section-7.4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="data-flows">
+<section id="section-7.5">
+        <h3 id="name-data-flows">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-data-flows" class="section-name selfRef">Data Flows</a>
+        </h3>
+<p id="section-7.5-1">This section outlines the high-level interactions between users, PPD
+participants, the PPD service endpoint, and the policy authority.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+<p id="section-7.5-2">The process begins when a household defines privacy preferences. Those
+preferences may express which types of data may be collected, under what
+conditions data may be processed or shared, and which retention practices are
+acceptable. User-interface design for authoring those preferences is out of
+scope, as are the detailed semantic fields and qualifier families used in the
+policy representation; those are defined in
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
+<p id="section-7.5-3">Once created, the preferences are maintained by a policy authority, which may
+be local or remote and may include storage, effective-policy derivation, or
+both. When a new participant joins the home network, it obtains one or more
+candidate PPD service endpoints through configuration or local-network
+mechanisms. Discovery identifies reachable candidates, but does not by itself
+establish authority. The participant authenticates a selected endpoint
+according to the applicable protocol profile, retrieves the applicable policy
+instance, and acknowledges receipt of that instance. In some deployments, the
+participant is a backend service associated with the device rather than the
+local device itself.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
+<p id="section-7.5-4">The participant-facing contract ends at the PPD service endpoint; any split
+between that service and the policy authority is internal to the deployment.
+Where those components are distinct, the deployment preserves the authenticity
+and integrity of the effective policy instance, policy-instance identifier,
+and freshness metadata presented through the service endpoint. Participants
+may optionally report declarations at this stage. The service endpoint also
+determines the freshness interval or renewal deadline for the resulting
+association state.<a href="#section-7.5-4" class="pilcrow">¶</a></p>
+<p id="section-7.5-5">If a participant seeks to perform actions not permitted under the baseline
+policy, it may initiate a consent request workflow. The design and behavior of
+that workflow are out of scope here. Future specifications should ensure that
+consent interactions are clear, proportionate, and resistant to manipulative
+or fatiguing prompting.<a href="#section-7.5-5" class="pilcrow">¶</a></p>
+<p id="section-7.5-6">Current association is not indefinite.
+If the participant does not renew before the freshness interval expires, the PPD service endpoint treats the association as stale even if the applicable effective policy instance is unchanged.
+Reassociation is required when current association can no longer be confirmed.
+This can occur because the applicable effective policy changed, participant
+state relevant to effective policy derivation changed, the association became
+stale, or enough state was lost that the prior association can no longer be
+trusted. Reassociation re-establishes current association by retrieving and
+acknowledging the latest applicable effective policy instance, or by
+completing the applicable renewal procedure when the policy instance is
+unchanged.<a href="#section-7.5-6" class="pilcrow">¶</a></p>
+<p id="section-7.5-7"><span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines the participant-facing message
+formats, baseline machine-readable encoding, and the way association freshness
+is conveyed. This architecture remains limited to the signaling and
+recordkeeping meaning of those interactions. It does not define how device
+behavior is changed by policy, nor how deployments respond when a participant
+cannot satisfy a given policy.<a href="#section-7.5-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="non-ppd-and-network-observed-devices">
+<section id="section-7.6">
+        <h3 id="name-non-ppd-and-network-observe">
+<a href="#section-7.6" class="section-number selfRef">7.6. </a><a href="#name-non-ppd-and-network-observe" class="section-name selfRef">Non-PPD and Network-Observed Devices</a>
+        </h3>
+<p id="section-7.6-1">Home networks commonly include devices that do not implement PPD, cannot be updated to implement PPD, or are visible only through local network observation.
+The architecture treats these devices as expected operational cases rather than exceptional failures.<a href="#section-7.6-1" class="pilcrow">¶</a></p>
+<p id="section-7.6-2">A local management function can classify such devices as network-observed or unmanaged based on information available within the home network.
+That classification can improve household transparency by showing that a device is present even though it has not established association through PPD.
+Network observation does not create association, does not imply that the device has received a household policy, and does not imply anything about the device's behavior.<a href="#section-7.6-2" class="pilcrow">¶</a></p>
+<p id="section-7.6-3">Any local response to unmanaged devices, such as notification, inventory display, or other network management action, is a deployment decision outside the baseline PPD signaling architecture.<a href="#section-7.6-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="policy-language">
+<section id="section-8">
+      <h2 id="name-policy-language">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-policy-language" class="section-name selfRef">Policy Language</a>
+      </h2>
+<p id="section-8-1">The specific details of the privacy policy language are out of scope for this
+document. The policy vocabulary and taxonomy of privacy concepts and
+attributes are defined in <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>, including the
+compact identifier model, the shared computable semantic floor, extension
+namespaces, and the mapping expectations used by
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<div id="language-requirements">
+<section id="section-8.1">
+        <h3 id="name-language-requirements">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-language-requirements" class="section-name selfRef">Language Requirements</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-8.1-1.1">
+            <p id="section-8.1-1.1.1">Human-readable: Policies should be easily understandable by users.<a href="#section-8.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.1-1.2">
+            <p id="section-8.1-1.2.1">Machine-readable: Policies should be machine-processable for automated interpretation and signaling.<a href="#section-8.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.1-1.3">
+            <p id="section-8.1-1.3.1">Extensible: The language should be flexible enough to accommodate evolving privacy needs and technologies.<a href="#section-8.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.1-1.4">
+            <p id="section-8.1-1.4.1">Internationalization-compatible: Policies and identifiers used within them may need to support multilingual environments and non-ASCII characters.<a href="#section-8.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.1-2">To ensure consistent interpretation and comparison of string-based policy elements, such as device names, labels, or category identifier string handling practices should align with the guidelines defined in <span>[<a href="#RFC7564" class="cite xref">RFC7564</a>]</span>.
+This is particularly important when identifiers or user-facing labels are created, stored, or matched across vendors or systems that operate in different locales or character encodings.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="future-work">
+<section id="section-9">
+      <h2 id="name-future-work">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-future-work" class="section-name selfRef">Future Work</a>
+      </h2>
+<p id="section-9-1">This document defines the architectural layer for PPD.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> and
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> define the participant-facing protocol
+and shared semantic model. The remaining future work is therefore in adjacent
+areas that this architecture intentionally leaves out of scope.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div id="consent-request-workflows">
+<section id="section-9.1">
+        <h3 id="name-consent-request-workflows">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-consent-request-workflows" class="section-name selfRef">Consent Request Workflows</a>
+        </h3>
+<p id="section-9.1-1">The mechanism by which devices request additional user consent for data uses
+not covered by the baseline policy is out of scope. Future specifications
+should:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-2.1">
+            <p id="section-9.1-2.1.1">Define clear constraints to prevent manipulative or fatiguing consent flows (e.g., dark patterns).<a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-2.2">
+            <p id="section-9.1-2.2.1">Describe consent interactions that are transparent, infrequent, proportionate, and user-respecting.<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-2.3">
+            <p id="section-9.1-2.3.1">Explore user interface standards or API affordances to preserve meaningful choice.<a href="#section-9.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-9.1-3">This is a sensitive area and needs to balance user experience, privacy
+expectations, and implementation feasibility.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="recordkeeping-and-local-management">
+<section id="section-9.2">
+        <h3 id="name-recordkeeping-and-local-man">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-recordkeeping-and-local-man" class="section-name selfRef">Recordkeeping and Local Management</a>
+        </h3>
+<p id="section-9.2-1">This architecture does not define how devices act on privacy policies or how
+departures from policy are detected or remediated.
+Future work may include:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1">
+            <p id="section-9.2-2.1.1">Optional participant status reporting models and device-side implementation expectations.<a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-2.2">
+            <p id="section-9.2-2.2.1">Recordkeeping mechanisms for correlating policy delivery and acknowledgment records.<a href="#section-9.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-2.3">
+            <p id="section-9.2-2.3.1">State models that distinguish current, stale, and needs-reassociation participant status.<a href="#section-9.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-2.4">
+            <p id="section-9.2-2.4.1">Deconfliction strategies for devices unable to meet all user-defined constraints.<a href="#section-9.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.2-2.5">
+            <p id="section-9.2-2.5.1">Deployment-local management options, such as notifications or inventory display.<a href="#section-9.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="user-interface-design">
+<section id="section-9.3">
+        <h3 id="name-user-interface-design">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-user-interface-design" class="section-name selfRef">User Interface Design</a>
+        </h3>
+<p id="section-9.3-1">The user-facing interface used to author, modify, and review privacy preferences is out of scope.
+Future design guidance may address:<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.3-2.1">
+            <p id="section-9.3-2.1.1">User experience design principles for presenting privacy concepts clearly and accessibly.<a href="#section-9.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.3-2.2">
+            <p id="section-9.3-2.2.1">Models for progressive disclosure of policy impact.<a href="#section-9.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.3-2.3">
+            <p id="section-9.3-2.3.1">Multi-user and household-role-specific control models (e.g., parental vs. administrative roles).<a href="#section-9.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="interoperability-testing-and-reference-implementations">
+<section id="section-9.4">
+        <h3 id="name-interoperability-testing-an">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-interoperability-testing-an" class="section-name selfRef">Interoperability Testing and Reference Implementations</a>
+        </h3>
+<p id="section-9.4-1">Future work may also include:<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.4-2.1">
+            <p id="section-9.4-2.1.1">Development of reference implementations of the PPD protocol, PPD service endpoint, and policy-authority components.<a href="#section-9.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.4-2.2">
+            <p id="section-9.4-2.2.1">Interoperability testing across devices and vendors.<a href="#section-9.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.4-2.3">
+            <p id="section-9.4-2.3.1">Conformance guidelines and self-certification procedures.<a href="#section-9.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-10">
+      <h2 id="name-iana-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-10-1">This document has no IANA actions.<a href="#section-10-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="internationalization-considerations">
+<section id="section-11">
+      <h2 id="name-internationalization-consid">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-internationalization-consid" class="section-name selfRef">Internationalization Considerations</a>
+      </h2>
+<p id="section-11-1">In contexts where privacy preferences or taxonomy elements involve user-facing or vendor-defined string identifiers, additional work may be required to:<a href="#section-11-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-2.1">
+          <p id="section-11-2.1.1">Define string normalization and comparison rules, particularly for internationalized text.<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-2.2">
+          <p id="section-11-2.2.1">Support identifier consistency across diverse vendors and locales.<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-2.3">
+          <p id="section-11-2.3.1">Consider alignment with <span>[<a href="#RFC7564" class="cite xref">RFC7564</a>]</span> for handling Unicode-aware identifiers in a secure and interoperable way.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-12">
+      <h2 id="name-security-considerations">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-12-1">For a privacy framework to be effective, it needs to support the expression of user preferences and protect those preferences during transmission, retrieval, and acknowledgment.
+This section outlines safeguards for confidentiality, authenticity, integrity, and metadata minimization during PPD operations.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<div id="secure-policy-dissemination">
+<section id="section-12.1">
+        <h3 id="name-secure-policy-dissemination">
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-secure-policy-dissemination" class="section-name selfRef">Secure Policy Dissemination</a>
+        </h3>
+<p id="section-12.1-1">Communication between PPD participants and the PPD service endpoint needs protection against unauthorized access and tampering.
+When the PPD service endpoint and policy authority are distinct, deployments also need to preserve policy authenticity and integrity across that boundary.
+Discovery mechanisms can identify candidate PPD service endpoints, but discovery alone is not sufficient to establish that an endpoint is authorized to present household policy.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines explicit participant-facing
+security profiles and the accountability properties they need to provide.
+Future deployment profiles still need to identify concrete cryptographic
+mechanisms, such as encryption and mutual authentication, so that legitimate
+participants can retrieve privacy policies and detect modification.
+Those deployment profiles also need to protect the binding between the authenticated participant-facing service endpoint and the policy state it presents.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="anonymity-and-metadata-protection">
+<section id="section-12.2">
+        <h3 id="name-anonymity-and-metadata-prot">
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-anonymity-and-metadata-prot" class="section-name selfRef">Anonymity and Metadata Protection</a>
+        </h3>
+<p id="section-12.2-1">Even when privacy policies themselves do not contain sensitive personal information, the act of retrieving or acknowledging a policy can reveal characteristics about the household, such as the types of devices in use, specific user preferences, or behavioral patterns over time.
+<span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> cautions against protocol designs that expose unnecessary metadata, treating the accumulation of such information as a legitimate technical threat.
+This framework takes that warning seriously: metadata exposure during policy retrieval and device onboarding needs to be minimized to avoid turning privacy infrastructure into a new source of privacy leakage.
+Concepts from <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> may help inform this effort. <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> introduces techniques for authorization without identification, enabling a client to prove it is authorized without revealing who it is.
+While <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> is optimized for pseudonymous web authentication over the public internet and assumes a centralized token issuer model, its core ideas, particularly around unlinkable token presentation, could be adapted to the PPD protocol to reduce metadata correlation and minimize household identifiability during policy exchanges.
+However, this needs careful analysis, as the assumptions of <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> do not fully align with the goals or context of a local, user-governed home network.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policy-integrity">
+<section id="section-12.3">
+        <h3 id="name-policy-integrity">
+<a href="#section-12.3" class="section-number selfRef">12.3. </a><a href="#name-policy-integrity" class="section-name selfRef">Policy Integrity</a>
+        </h3>
+<p id="section-12.3-1">Devices need assurance that the policy retrieved is authentic and unaltered.
+Integrity protections, such as digital signatures, are necessary to ensure that users' preferences cannot be tampered with in transit or at rest by other devices, malicious actors, or misconfigurations.
+If policy is obtained through a participant-facing service from a distinct policy authority, integrity protections also need to cover the policy-instance identifier and any freshness metadata presented through that service.<a href="#section-12.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="device-authentication">
+<section id="section-12.4">
+        <h3 id="name-device-authentication">
+<a href="#section-12.4" class="section-number selfRef">12.4. </a><a href="#name-device-authentication" class="section-name selfRef">Device Authentication</a>
+        </h3>
+<p id="section-12.4-1">Devices participating in the privacy framework need an authentication model before accessing the PPD service endpoint.
+This limits policy dissemination to known, authorized participants and helps users maintain trust in the integrity of their home network's privacy relationships.
+If the PPD service endpoint and policy authority are distinct, the deployment also needs a way to preserve the authenticity of policy state presented through the participant-facing service.
+By aligning with the concerns raised in <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span> and incorporating ideas from <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> where appropriate, this framework seeks to protect users not only from overt data collection, but also from silent inference and passive metadata surveillance.
+At the same time, it avoids treating anonymity as an end in itself.
+The goal is to support privacy with recordkeeping, where user-defined preferences are signaled consistently, devices are identifiable only as much as necessary for the exchange, and the user retains visibility into what occurs within their domain.<a href="#section-12.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policy-acknowledgment-and-recordkeeping">
+<section id="section-12.5">
+        <h3 id="name-policy-acknowledgment-and-r">
+<a href="#section-12.5" class="section-number selfRef">12.5. </a><a href="#name-policy-acknowledgment-and-r" class="section-name selfRef">Policy Acknowledgment and Recordkeeping</a>
+        </h3>
+<p id="section-12.5-1">PPD participants need a way to acknowledge receipt of the applicable privacy policy instance.
+This acknowledgment should be recorded and verifiable so that the household can determine which participants have seen the current policy.
+The record needs to bind the participant identity, the acknowledged policy instance, and the time or sequence context in which the acknowledgment was made.
+For devices that rely on a backend service, the record also needs to distinguish between acknowledgment by the local device and acknowledgment by the backend service acting on behalf of that device.
+This record is important because it creates a reciprocal acknowledgment path.
+In many current deployments, the household user is asked to acknowledge device or vendor policy terms, but there is no comparably strong household-controlled record that the participant was presented with the household's own privacy policy.
+An authenticated and integrity-protected acknowledgment record allows the household to show that presentation and acknowledgment occurred, which can support later accountability or review even when the architecture does not define automated enforcement.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines baseline acknowledgment
+semantics and the protection properties acknowledgment mechanisms need to
+provide. Future deployment profiles still need concrete mechanisms that remain
+practical for constrained home-network devices.
+At minimum, the selected mechanism needs to provide:<a href="#section-12.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-12.5-2.1">
+            <p id="section-12.5-2.1.1">participant authentication sufficient to bind the acknowledgment to the device or backend service that made it;<a href="#section-12.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-12.5-2.2">
+            <p id="section-12.5-2.2.1">policy-instance integrity so that the acknowledged policy can be identified unambiguously;<a href="#section-12.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-12.5-2.3">
+            <p id="section-12.5-2.3.1">freshness or sequencing so that an old acknowledgment cannot be replayed as evidence of current association;<a href="#section-12.5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-12.5-2.4">
+            <p id="section-12.5-2.4.1">verifiability sufficient for the acknowledgment record to function as a protected receipt of policy presentation and acknowledgment; and<a href="#section-12.5-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-12.5-2.5">
+            <p id="section-12.5-2.5.1">a way to retain or export the acknowledgment record without exposing more household metadata than necessary.<a href="#section-12.5-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-12.5-3">A policy acknowledgment is not, by itself, an assertion about subsequent device behavior.
+Any local response to non-participation or other local observations is outside the baseline signaling mechanism defined by this architecture.<a href="#section-12.5-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-13">
+      <h2 id="name-references">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-13.1">
+        <h3 id="name-normative-references">
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-13.2">
+        <h3 id="name-informative-references">
+<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.draft-dsmullen-ppd-protocol">[I-D.draft-dsmullen-ppd-protocol]</dt>
+        <dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-protocol-03</span>, <time datetime="2026-05-22" class="refDate">22 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-03">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.draft-dsmullen-ppd-taxonomy">[I-D.draft-dsmullen-ppd-taxonomy]</dt>
+        <dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Taxonomy"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-taxonomy-05</span>, <time datetime="2026-05-22" class="refDate">22 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-05">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6973">[RFC6973]</dt>
+        <dd>
+<span class="refAuthor">Cooper, A.</span>, <span class="refAuthor">Tschofenig, H.</span>, <span class="refAuthor">Aboba, B.</span>, <span class="refAuthor">Peterson, J.</span>, <span class="refAuthor">Morris, J.</span>, <span class="refAuthor">Hansen, M.</span>, and <span class="refAuthor">R. Smith</span>, <span class="refTitle">"Privacy Considerations for Internet Protocols"</span>, <span class="seriesInfo">RFC 6973</span>, <span class="seriesInfo">DOI 10.17487/RFC6973</span>, <time datetime="2013-07" class="refDate">July 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6973">https://www.rfc-editor.org/rfc/rfc6973</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7258">[RFC7258]</dt>
+        <dd>
+<span class="refAuthor">Farrell, S.</span> and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Pervasive Monitoring Is an Attack"</span>, <span class="seriesInfo">BCP 188</span>, <span class="seriesInfo">RFC 7258</span>, <span class="seriesInfo">DOI 10.17487/RFC7258</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7258">https://www.rfc-editor.org/rfc/rfc7258</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7564">[RFC7564]</dt>
+        <dd>
+<span class="refAuthor">Saint-Andre, P.</span> and <span class="refAuthor">M. Blanchet</span>, <span class="refTitle">"PRECIS Framework: Preparation, Enforcement, and Comparison of Internationalized Strings in Application Protocols"</span>, <span class="seriesInfo">RFC 7564</span>, <span class="seriesInfo">DOI 10.17487/RFC7564</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7564">https://www.rfc-editor.org/rfc/rfc7564</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8280">[RFC8280]</dt>
+        <dd>
+<span class="refAuthor">ten Oever, N.</span> and <span class="refAuthor">C. Cath</span>, <span class="refTitle">"Research into Human Rights Protocol Considerations"</span>, <span class="seriesInfo">RFC 8280</span>, <span class="seriesInfo">DOI 10.17487/RFC8280</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8280">https://www.rfc-editor.org/rfc/rfc8280</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8520">[RFC8520]</dt>
+        <dd>
+<span class="refAuthor">Lear, E.</span>, <span class="refAuthor">Droms, R.</span>, and <span class="refAuthor">D. Romascanu</span>, <span class="refTitle">"Manufacturer Usage Description Specification"</span>, <span class="seriesInfo">RFC 8520</span>, <span class="seriesInfo">DOI 10.17487/RFC8520</span>, <time datetime="2019-03" class="refDate">March 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8520">https://www.rfc-editor.org/rfc/rfc8520</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9577">[RFC9577]</dt>
+      <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass HTTP Authentication Scheme"</span>, <span class="seriesInfo">RFC 9577</span>, <span class="seriesInfo">DOI 10.17487/RFC9577</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9577">https://www.rfc-editor.org/rfc/rfc9577</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Daniel Smullen</span></div>
+<div dir="auto" class="left"><span class="org">CableLabs</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:d.smullen@cablelabs.com" class="email">d.smullen@cablelabs.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Brian Scriber</span></div>
+<div dir="auto" class="left"><span class="org">CableLabs</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:brian.scriber@computer.org" class="email">brian.scriber@computer.org</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
