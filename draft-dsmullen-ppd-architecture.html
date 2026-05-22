@@ -1535,10 +1535,10 @@ The two approaches may complement each other in a deployment, but MUD does not p
 <p id="section-3.3.3-1">Vocabulary and policy-expression efforts such as the Data Privacy Vocabulary (DPV) and ODRL are closer to the content layer than to the signaling layer.
 PPD does not attempt to replace such work with a new general-purpose ontology or rights language.
 Instead, PPD separates concerns: this architecture defines roles and
-lifecycle, the companion taxonomy work defines the core fields and shared
-computable floor that can map to richer vocabularies, and the companion
-protocol work defines the participant-facing signaling path by which an
-effective household policy is presented and acknowledged.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+lifecycle; <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> defines the core fields and
+shared computable floor that can map to richer vocabularies; and
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines the participant-facing signaling
+path by which an effective household policy is presented and acknowledged.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1706,8 +1706,7 @@ deployments, while enforcement depends on deployment-specific control points,
 trust models, and participant capabilities that cannot be assumed uniformly at
 the architectural layer.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">Specific message formats, transport details, and semantic field definitions
-are carried by the companion protocol and taxonomy specifications:
-<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> and
+are defined in <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> and
 <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1810,9 +1809,10 @@ needs to preserve at least:<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 policy authority on whose behalf it presents policy.<a href="#section-7.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.3-4">These are architectural invariants.
-The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines the participant-facing transport, metadata confirmation, and security-profile expectations,
-while deployment profiles still choose concrete mechanism details.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">These are architectural invariants. Participant-facing transport, metadata
+confirmation, and security-profile expectations are defined in
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, while deployment profiles still choose
+concrete mechanism details.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="key-components">
@@ -1883,8 +1883,7 @@ trusted. Reassociation re-establishes current association by retrieving and
 acknowledging the latest applicable effective policy instance, or by
 completing the applicable renewal procedure when the policy instance is
 unchanged.<a href="#section-7.5-6" class="pilcrow">¶</a></p>
-<p id="section-7.5-7">The companion protocol specification document,
-<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines the participant-facing message
+<p id="section-7.5-7"><span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines the participant-facing message
 formats, baseline machine-readable encoding, and the way association freshness
 is conveyed. This architecture remains limited to the signaling and
 recordkeeping meaning of those interactions. It does not define how device
@@ -1916,8 +1915,8 @@ Network observation does not create association, does not imply that the device 
 document. The policy vocabulary and taxonomy of privacy concepts and
 attributes are defined in <span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span>, including the
 compact identifier model, the shared computable semantic floor, extension
-namespaces, and the mapping expectations used by the companion protocol
-specification.<a href="#section-8-1" class="pilcrow">¶</a></p>
+namespaces, and the mapping expectations used by
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="language-requirements">
 <section id="section-8.1">
         <h3 id="name-language-requirements">
@@ -1948,10 +1947,11 @@ This is particularly important when identifiers or user-facing labels are create
       <h2 id="name-future-work">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-future-work" class="section-name selfRef">Future Work</a>
       </h2>
-<p id="section-9-1">This document defines the architectural layer for PPD. The companion protocol
-and taxonomy specifications define the participant-facing protocol and shared
-semantic model. The remaining future work is therefore in adjacent areas that
-this architecture intentionally leaves out of scope.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">This document defines the architectural layer for PPD.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> and
+<span>[<a href="#I-D.draft-dsmullen-ppd-taxonomy" class="cite xref">I-D.draft-dsmullen-ppd-taxonomy</a>]</span> define the participant-facing protocol
+and shared semantic model. The remaining future work is therefore in adjacent
+areas that this architecture intentionally leaves out of scope.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <div id="consent-request-workflows">
 <section id="section-9.1">
         <h3 id="name-consent-request-workflows">
@@ -2085,7 +2085,11 @@ This section outlines safeguards for confidentiality, authenticity, integrity, a
 <p id="section-12.1-1">Communication between PPD participants and the PPD service endpoint needs protection against unauthorized access and tampering.
 When the PPD service endpoint and policy authority are distinct, deployments also need to preserve policy authenticity and integrity across that boundary.
 Discovery mechanisms can identify candidate PPD service endpoints, but discovery alone is not sufficient to establish that an endpoint is authorized to present household policy.
-The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines explicit participant-facing security profiles and the accountability properties they need to provide. Future deployment profiles still need to identify concrete cryptographic mechanisms, such as encryption and mutual authentication, so that legitimate participants can retrieve privacy policies and detect modification.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines explicit participant-facing
+security profiles and the accountability properties they need to provide.
+Future deployment profiles still need to identify concrete cryptographic
+mechanisms, such as encryption and mutual authentication, so that legitimate
+participants can retrieve privacy policies and detect modification.
 Those deployment profiles also need to protect the binding between the authenticated participant-facing service endpoint and the policy state it presents.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2137,7 +2141,10 @@ For devices that rely on a backend service, the record also needs to distinguish
 This record is important because it creates a reciprocal acknowledgment path.
 In many current deployments, the household user is asked to acknowledge device or vendor policy terms, but there is no comparably strong household-controlled record that the participant was presented with the household's own privacy policy.
 An authenticated and integrity-protected acknowledgment record allows the household to show that presentation and acknowledgment occurred, which can support later accountability or review even when the architecture does not define automated enforcement.
-The companion protocol specification document, <span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span>, defines baseline acknowledgment semantics and the protection properties acknowledgment mechanisms need to provide. Future deployment profiles still need concrete mechanisms that remain practical for constrained home-network devices.
+<span>[<a href="#I-D.draft-dsmullen-ppd-protocol" class="cite xref">I-D.draft-dsmullen-ppd-protocol</a>]</span> defines baseline acknowledgment
+semantics and the protection properties acknowledgment mechanisms need to
+provide. Future deployment profiles still need concrete mechanisms that remain
+practical for constrained home-network devices.
 At minimum, the selected mechanism needs to provide:<a href="#section-12.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-12.5-2.1">
@@ -2192,11 +2199,11 @@ Any local response to non-participation or other local observations is outside t
 <dl class="references">
 <dt id="I-D.draft-dsmullen-ppd-protocol">[I-D.draft-dsmullen-ppd-protocol]</dt>
         <dd>
-<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-protocol-02</span>, <time datetime="2026-05-20" class="refDate">20 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-02">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-protocol-03</span>, <time datetime="2026-05-22" class="refDate">22 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-03">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-protocol-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.draft-dsmullen-ppd-taxonomy">[I-D.draft-dsmullen-ppd-taxonomy]</dt>
         <dd>
-<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Taxonomy"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-taxonomy-04</span>, <time datetime="2026-05-20" class="refDate">20 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-04">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-04</a>&gt;</span>. </dd>
+<span class="refAuthor">Smullen, D.</span> and <span class="refAuthor">B. Scriber</span>, <span class="refTitle">"Privacy Preference Declaration Taxonomy"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dsmullen-ppd-taxonomy-05</span>, <time datetime="2026-05-22" class="refDate">22 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-05">https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-taxonomy-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6973">[RFC6973]</dt>
         <dd>

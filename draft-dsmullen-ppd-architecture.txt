@@ -339,11 +339,12 @@ Table of Contents
    Vocabulary (DPV) and ODRL are closer to the content layer than to the
    signaling layer.  PPD does not attempt to replace such work with a
    new general-purpose ontology or rights language.  Instead, PPD
-   separates concerns: this architecture defines roles and lifecycle,
-   the companion taxonomy work defines the core fields and shared
-   computable floor that can map to richer vocabularies, and the
-   companion protocol work defines the participant-facing signaling path
-   by which an effective household policy is presented and acknowledged.
+   separates concerns: this architecture defines roles and lifecycle;
+   [I-D.draft-dsmullen-ppd-taxonomy] defines the core fields and shared
+   computable floor that can map to richer vocabularies; and
+   [I-D.draft-dsmullen-ppd-protocol] defines the participant-facing
+   signaling path by which an effective household policy is presented
+   and acknowledged.
 
 4.  Operational Scenarios
 
@@ -493,8 +494,7 @@ Table of Contents
    uniformly at the architectural layer.
 
    Specific message formats, transport details, and semantic field
-   definitions are carried by the companion protocol and taxonomy
-   specifications: [I-D.draft-dsmullen-ppd-protocol] and
+   definitions are defined in [I-D.draft-dsmullen-ppd-protocol] and
    [I-D.draft-dsmullen-ppd-taxonomy].
 
 7.  Architecture Overview
@@ -577,11 +577,10 @@ Table of Contents
    *  an unambiguous binding between the selected PPD service endpoint
       and the policy authority on whose behalf it presents policy.
 
-   These are architectural invariants.  The companion protocol
-   specification document, [I-D.draft-dsmullen-ppd-protocol], defines
-   the participant-facing transport, metadata confirmation, and
-   security-profile expectations, while deployment profiles still choose
-   concrete mechanism details.
+   These are architectural invariants.  Participant-facing transport,
+   metadata confirmation, and security-profile expectations are defined
+   in [I-D.draft-dsmullen-ppd-protocol], while deployment profiles still
+   choose concrete mechanism details.
 
 7.4.  Key Components
 
@@ -681,8 +680,7 @@ Table of Contents
    instance, or by completing the applicable renewal procedure when the
    policy instance is unchanged.
 
-   The companion protocol specification document,
-   [I-D.draft-dsmullen-ppd-protocol], defines the participant-facing
+   [I-D.draft-dsmullen-ppd-protocol] defines the participant-facing
    message formats, baseline machine-readable encoding, and the way
    association freshness is conveyed.  This architecture remains limited
    to the signaling and recordkeeping meaning of those interactions.  It
@@ -715,8 +713,8 @@ Table of Contents
    concepts and attributes are defined in
    [I-D.draft-dsmullen-ppd-taxonomy], including the compact identifier
    model, the shared computable semantic floor, extension namespaces,
-   and the mapping expectations used by the companion protocol
-   specification.
+   and the mapping expectations used by
+   [I-D.draft-dsmullen-ppd-protocol].
 
 8.1.  Language Requirements
 
@@ -741,8 +739,9 @@ Table of Contents
 
 9.  Future Work
 
-   This document defines the architectural layer for PPD.  The companion
-   protocol and taxonomy specifications define the participant-facing
+   This document defines the architectural layer for PPD.
+   [I-D.draft-dsmullen-ppd-protocol] and
+   [I-D.draft-dsmullen-ppd-taxonomy] define the participant-facing
    protocol and shared semantic model.  The remaining future work is
    therefore in adjacent areas that this architecture intentionally
    leaves out of scope.
@@ -844,16 +843,15 @@ Table of Contents
    also need to preserve policy authenticity and integrity across that
    boundary.  Discovery mechanisms can identify candidate PPD service
    endpoints, but discovery alone is not sufficient to establish that an
-   endpoint is authorized to present household policy.  The companion
-   protocol specification document, [I-D.draft-dsmullen-ppd-protocol],
-   defines explicit participant-facing security profiles and the
-   accountability properties they need to provide.  Future deployment
-   profiles still need to identify concrete cryptographic mechanisms,
-   such as encryption and mutual authentication, so that legitimate
-   participants can retrieve privacy policies and detect modification.
-   Those deployment profiles also need to protect the binding between
-   the authenticated participant-facing service endpoint and the policy
-   state it presents.
+   endpoint is authorized to present household policy.
+   [I-D.draft-dsmullen-ppd-protocol] defines explicit participant-facing
+   security profiles and the accountability properties they need to
+   provide.  Future deployment profiles still need to identify concrete
+   cryptographic mechanisms, such as encryption and mutual
+   authentication, so that legitimate participants can retrieve privacy
+   policies and detect modification.  Those deployment profiles also
+   need to protect the binding between the authenticated participant-
+   facing service endpoint and the policy state it presents.
 
 12.2.  Anonymity and Metadata Protection
 
@@ -928,13 +926,12 @@ Table of Contents
    authenticated and integrity-protected acknowledgment record allows
    the household to show that presentation and acknowledgment occurred,
    which can support later accountability or review even when the
-   architecture does not define automated enforcement.  The companion
-   protocol specification document, [I-D.draft-dsmullen-ppd-protocol],
-   defines baseline acknowledgment semantics and the protection
-   properties acknowledgment mechanisms need to provide.  Future
-   deployment profiles still need concrete mechanisms that remain
-   practical for constrained home-network devices.  At minimum, the
-   selected mechanism needs to provide:
+   architecture does not define automated enforcement.
+   [I-D.draft-dsmullen-ppd-protocol] defines baseline acknowledgment
+   semantics and the protection properties acknowledgment mechanisms
+   need to provide.  Future deployment profiles still need concrete
+   mechanisms that remain practical for constrained home-network
+   devices.  At minimum, the selected mechanism needs to provide:
 
    *  participant authentication sufficient to bind the acknowledgment
       to the device or backend service that made it;
@@ -975,16 +972,16 @@ Table of Contents
    [I-D.draft-dsmullen-ppd-protocol]
               Smullen, D. and B. Scriber, "Privacy Preference
               Declaration Protocol Specification", Work in Progress,
-              Internet-Draft, draft-dsmullen-ppd-protocol-02, 20 May
+              Internet-Draft, draft-dsmullen-ppd-protocol-03, 22 May
               2026, <https://datatracker.ietf.org/doc/html/draft-
-              dsmullen-ppd-protocol-02>.
+              dsmullen-ppd-protocol-03>.
 
    [I-D.draft-dsmullen-ppd-taxonomy]
               Smullen, D. and B. Scriber, "Privacy Preference
               Declaration Taxonomy", Work in Progress, Internet-Draft,
-              draft-dsmullen-ppd-taxonomy-04, 20 May 2026,
+              draft-dsmullen-ppd-taxonomy-05, 22 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-dsmullen-ppd-
-              taxonomy-04>.
+              taxonomy-05>.
 
    [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
               Morris, J., Hansen, M., and R. Smith, "Privacy
