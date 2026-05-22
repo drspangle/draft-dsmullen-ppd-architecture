@@ -163,3 +163,14 @@ contents. It is not part of the rendered Internet-Draft.
 - Current near-term status: no major architectural redesign remains pending;
   the next pass should only check for wording drift introduced by further
   taxonomy/protocol refinements.
+- Final pre-submission pass completed:
+  - the architecture draft was compressed for readability and reduced
+    redundancy in `Scope`, `Assumptions`, `Data Flows`, and `Future Work`;
+  - local validation passed for the submitted `-09` revision; and
+  - the draft was approved for submission.
+- Submission checkpoint:
+  - GitHub tag `draft-dsmullen-ppd-architecture-09` was pushed to trigger the
+    Datatracker submission workflow;
+  - end-of-day status is clean locally and pushed to GitHub; and
+  - next work should wait for submission confirmation unless new review
+    feedback arrives.
