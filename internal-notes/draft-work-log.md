@@ -3,6 +3,16 @@
 This file tracks draft-content work separately from the functional repository
 contents. It is not part of the rendered Internet-Draft.
 
+## 2026-05-29
+
+- Added `internal-notes/runtime-conflict-management-direction.md` to record the
+  intended architecture for participants that remain currently associated while
+  separately signaling runtime conflict against the acknowledged policy.
+- Recorded the follow-up that the architecture draft should say more
+  explicitly that runtime conflict is an informational or management signal and
+  does not, by itself, redefine baseline association or mandate one
+  remediation path.
+
 ## 2026-05-05
 
 - Added `internal-notes/` as the place for operational and draft-progress
