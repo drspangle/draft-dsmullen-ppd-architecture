@@ -468,11 +468,6 @@ Table of Contents
       with the current applicable policy instance, without implying
       enforcement of device behavior.
 
-   *  Leave room for deployments to surface separate runtime-conflict or
-      policy-divergence signals for participants that remain currently
-      associated, without implying that association must be revoked or
-      that remediation is uniform across deployments.
-
 6.  Scope
 
    This document defines a high-level architectural framework for
@@ -496,11 +491,7 @@ Table of Contents
    signaling and recordkeeping across heterogeneous home deployments,
    while enforcement depends on deployment-specific control points,
    trust models, and participant capabilities that cannot be assumed
-   uniformly at the architectural layer.  Accordingly, a deployment may
-   choose to present runtime-conflict information for a participant that
-   has already acknowledged the current household policy, while still
-   treating that participant as currently associated until some
-   deployment-local remediation decision is made.
+   uniformly at the architectural layer.
 
    Specific message formats, transport details, and semantic field
    definitions are defined in [I-D.draft-dsmullen-ppd-protocol] and
