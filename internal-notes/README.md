@@ -7,6 +7,12 @@ publication outputs.
 Use this README to decide where draft-adjacent local notes belong before adding
 another file here.
 
+Implementation-backed cross-draft implications should not start here. Capture
+them first in the gateway repository's standards-facing handoff note
+[draft-notes/ppd-internet-draft-notes.md](https://code.cablelabs.com/cablelabs/security-evolution/federated-identity-authentication-and-privacy/user-centric-privacy/habanero-ppd-gateway/-/blob/main/draft-notes/ppd-internet-draft-notes.md),
+then copy only the architecture-specific normalized work into this directory
+when draft-local editorial notes are still needed.
+
 ## Start Here
 
 Use these files as follows:

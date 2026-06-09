@@ -42,6 +42,18 @@ Validation steps for this repository are in [WORKSTATION-VALIDATION.md](WORKSTAT
 - protocol draft source: [draft-dsmullen-ppd-protocol](https://github.com/drspangle/draft-dsmullen-ppd-protocol)
 - protocol draft Datatracker page: [draft-dsmullen-ppd-protocol](https://datatracker.ietf.org/doc/draft-dsmullen-ppd-protocol/)
 
+## Note Placement
+
+Use this repository for normative architecture text, local render workflow, and
+local draft-only working notes for the architecture draft.
+
+If an idea comes from the Habanero prototype or client implementation, record
+the implementation-backed implication first in
+[the gateway repository draft notes](https://code.cablelabs.com/cablelabs/security-evolution/federated-identity-authentication-and-privacy/user-centric-privacy/habanero-ppd-gateway/-/blob/main/draft-notes/ppd-internet-draft-notes.md),
+then bring the normalized architecture edit here.
+
+Use `internal-notes/README.md` for note placement inside this draft repo.
+
 ## Start Here
 
 1. Bootstrap the local render workflow with `python3 scripts/setup_draft_workstation.py bootstrap`.
