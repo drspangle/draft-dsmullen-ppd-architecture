@@ -3,6 +3,17 @@
 This file tracks draft-content work separately from the functional repository
 contents. It is not part of the rendered Internet-Draft.
 
+## 2026-06-08
+
+- Tightened the architecture discovery language so the draft now says a
+  configured or provisioned PPD service endpoint is the minimum interoperable
+  floor.
+- Clarified that automatic local-network discovery mechanisms are optional
+  profiles layered on top of that floor rather than one universal required
+  automatic mechanism.
+- Clarified that the baseline discovery model remains link-neutral and does
+  not make Wi-Fi-specific onboarding mandatory for all participants.
+
 ## 2026-05-29
 
 - Added `internal-notes/runtime-conflict-management-direction.md` to record the

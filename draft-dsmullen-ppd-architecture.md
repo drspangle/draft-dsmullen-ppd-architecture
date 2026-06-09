@@ -192,7 +192,7 @@ The scenarios focus on discovery, association, reassociation, and mixed-particip
 
 ## Initial Discovery and Association
 
-A PPD participant joins the home network and obtains one or more candidate PPD service endpoints through configuration or local network discovery.
+A PPD participant joins the home network and obtains one or more candidate PPD service endpoints through configuration, provisioning, or an optional local-network discovery profile.
 In a common home deployment model, the PPD service endpoint is hosted by a residential gateway or equivalent home-network service.
 Discovery identifies reachability, not authority.
 The participant establishes a secure connection to a selected endpoint, confirms that endpoint through the applicable trust mechanism, retrieves the applicable effective policy instance, and acknowledges receipt of that policy instance.
@@ -293,11 +293,16 @@ This document makes the following assumptions:
 * Single User Policy: Each participant is assumed to be governed by one
   effective household policy at a time. Multi-user reconciliation may be
   relevant in some deployments, but it is outside the baseline architecture.
-* Endpoint Discovery and Trust: Configuration or local-network mechanisms can
-  identify candidate PPD service endpoints, but discovery alone does not
-  establish authority. The applicable protocol profile needs a separate way to
+* Endpoint Discovery and Trust: Every participant supports a configured or
+  provisioned PPD service endpoint as the minimum interoperable floor.
+  Deployments MAY layer optional local-network discovery profiles on top of
+  that floor. Configuration or local-network mechanisms can identify
+  candidate PPD service endpoints, but discovery alone does not establish
+  authority. The applicable protocol profile needs a separate way to
   authenticate the selected endpoint and confirm that the policy it presents
-  is authoritative for the participant's household context.
+  is authoritative for the participant's household context. This keeps the
+  baseline architecture link-neutral and does not make Wi-Fi-specific
+  onboarding mandatory for all participants.
 
 ## Association State and Freshness
 
@@ -333,6 +338,16 @@ from trust establishment.
 A participant may learn one or more candidate PPD service endpoints through
 configuration or local network mechanisms, but discovery alone does not make
 any candidate authoritative.
+Every participant supports a configured or provisioned participant-facing
+service endpoint as the minimum interoperable floor.
+Deployments MAY layer optional local-network discovery profiles on top of that
+floor.
+Such profiles may use local naming, default-gateway probing, multicast service
+discovery, DHCP-delivered hints, or technology-specific onboarding assistance.
+This architecture does not require one universal automatic mechanism, because
+deployments and participant capabilities vary.
+That keeps discovery link-neutral and avoids hard-coding one Wi-Fi-specific
+onboarding model into the baseline architecture.
 Before treating a policy instance as authoritative, the participant needs the
 applicable protocol profile to authenticate the selected endpoint and confirm
 that it is authorized to present policy for the household context.
