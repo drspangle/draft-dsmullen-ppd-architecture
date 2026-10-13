@@ -348,6 +348,14 @@ This architecture does not require one universal automatic mechanism, because
 deployments and participant capabilities vary.
 That keeps discovery link-neutral and avoids hard-coding one Wi-Fi-specific
 onboarding model into the baseline architecture.
+
+These mechanisms identify candidate service origins. The companion protocol
+uses the origin-level `/.well-known/ppd` resource to confirm PPD support and
+obtain a `service_base_uri`.
+Protocol operation references are resolved relative to that URI, allowing the
+API to use a deployment-selected path prefix. This keeps origin discovery
+separate from API path layout.
+
 Before treating a policy instance as authoritative, the participant needs the
 applicable protocol profile to authenticate the selected endpoint and confirm
 that it is authorized to present policy for the household context.

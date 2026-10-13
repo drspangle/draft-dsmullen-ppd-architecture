@@ -8,8 +8,12 @@ scheduled and implemented deliberately.
 
 ## Participant-Facing Service Model
 
-- Treat the current gateway API under `/ppd/v1` as the participant-facing `PPD
-  service endpoint` in demo materials and implementation notes.
+- The current gateway implementation uses `/ppd/v1` as its participant-facing
+  API path. Treat that as prototype deployment behavior, not as an architecture
+  or protocol requirement for a fixed origin-root path.
+- The protocol baseline obtains the API mount point from `service_base_uri` in
+  metadata retrieved at `GET /.well-known/ppd` on a candidate service origin.
+  Operation references are resolved relative to that advertised base URI.
 - Avoid presenting the internal repository surface as the baseline client-facing
   contract.
 - Keep repository topology and operator-facing APIs clearly separate from
@@ -18,22 +22,27 @@ scheduled and implemented deliberately.
 ## Discovery Automation
 
 - The current demo still relies on manually pointing the device at the gateway.
-- Prototype a lower-level bootstrap mechanism that can provide a PPD service
-  endpoint without requiring manual user configuration during association.
+- Prototype a lower-level discovery mechanism that can provide a candidate PPD
+  service origin without requiring manual user configuration during
+  association. The protocol's well-known metadata bootstrap then identifies the
+  API base URI on that origin.
 - Candidate classes to explore later:
   - configured endpoint plus persisted state
   - local DNS name
   - mDNS or DNS-SD
   - DHCP-delivered configuration
   - default-gateway probing
-- Preserve the principle that discovery yields candidate service endpoints, not
-  trust by itself.
+- Preserve the principle that discovery yields candidate origins, not trust by
+  itself.
 
 ## Metadata Confirmation
 
-- Keep or add a lightweight metadata confirmation surface, such as
-  `GET /ppd/v1/meta`, so clients can confirm they found a compatible PPD
-  service before deeper interaction.
+- Implement the protocol's lightweight metadata confirmation at
+  `GET /.well-known/ppd` on the candidate origin. The response advertises a
+  same-origin `service_base_uri`, which may include a deployment-selected path
+  prefix and version segment.
+- The prototype's existing `/ppd/v1/meta` route may remain during migration,
+  but should not be presented as the protocol's required discovery path.
 - Ensure this metadata stays small and avoids leaking household policy contents
   or device inventory.
 
