@@ -5,7 +5,7 @@
 Network Working Group                                         D. Smullen
 Internet-Draft                                                B. Scriber
 Intended status: Informational                                 CableLabs
-Expires: 23 November 2026                                    22 May 2026
+Expires: 16 April 2027                                   13 October 2026
 
 
             Privacy Preference Declaration for Home Networks
@@ -52,7 +52,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2026.
+   This Internet-Draft will expire on 16 April 2027.
 
 Copyright Notice
 
@@ -356,20 +356,20 @@ Table of Contents
 4.1.  Initial Discovery and Association
 
    A PPD participant joins the home network and obtains one or more
-   candidate PPD service endpoints through configuration or local
-   network discovery.  In a common home deployment model, the PPD
-   service endpoint is hosted by a residential gateway or equivalent
-   home-network service.  Discovery identifies reachability, not
-   authority.  The participant establishes a secure connection to a
-   selected endpoint, confirms that endpoint through the applicable
-   trust mechanism, retrieves the applicable effective policy instance,
-   and acknowledges receipt of that policy instance.  The PPD service
-   endpoint may present policy derived from a local or remote policy
-   authority without exposing that internal topology to the participant.
-   At the end of this process, the participant has established
-   association if the current applicable effective policy has been
-   delivered and acknowledged.  The PPD service endpoint also determines
-   the initial freshness state of that association.
+   candidate PPD service endpoints through configuration, provisioning,
+   or an optional local-network discovery profile.  In a common home
+   deployment model, the PPD service endpoint is hosted by a residential
+   gateway or equivalent home-network service.  Discovery identifies
+   reachability, not authority.  The participant establishes a secure
+   connection to a selected endpoint, confirms that endpoint through the
+   applicable trust mechanism, retrieves the applicable effective policy
+   instance, and acknowledges receipt of that policy instance.  The PPD
+   service endpoint may present policy derived from a local or remote
+   policy authority without exposing that internal topology to the
+   participant.  At the end of this process, the participant has
+   established association if the current applicable effective policy
+   has been delivered and acknowledged.  The PPD service endpoint also
+   determines the initial freshness state of that association.
 
 4.2.  Policy Update and Reassociation
 
@@ -516,12 +516,17 @@ Table of Contents
       reconciliation may be relevant in some deployments, but it is
       outside the baseline architecture.
 
-   *  Endpoint Discovery and Trust: Configuration or local-network
-      mechanisms can identify candidate PPD service endpoints, but
-      discovery alone does not establish authority.  The applicable
+   *  Endpoint Discovery and Trust: Every participant supports a
+      configured or provisioned PPD service endpoint as the minimum
+      interoperable floor.  Deployments MAY layer optional local-network
+      discovery profiles on top of that floor.  Configuration or local-
+      network mechanisms can identify candidate PPD service endpoints,
+      but discovery alone does not establish authority.  The applicable
       protocol profile needs a separate way to authenticate the selected
       endpoint and confirm that the policy it presents is authoritative
-      for the participant's household context.
+      for the participant's household context.  This keeps the baseline
+      architecture link-neutral and does not make Wi-Fi-specific
+      onboarding mandatory for all participants.
 
 7.2.  Association State and Freshness
 
@@ -557,10 +562,28 @@ Table of Contents
    endpoint from trust establishment.  A participant may learn one or
    more candidate PPD service endpoints through configuration or local
    network mechanisms, but discovery alone does not make any candidate
-   authoritative.  Before treating a policy instance as authoritative,
-   the participant needs the applicable protocol profile to authenticate
-   the selected endpoint and confirm that it is authorized to present
-   policy for the household context.
+   authoritative.  Every participant supports a configured or
+   provisioned participant-facing service endpoint as the minimum
+   interoperable floor.  Deployments MAY layer optional local-network
+   discovery profiles on top of that floor.  Such profiles may use local
+   naming, default-gateway probing, multicast service discovery, DHCP-
+   delivered hints, or technology-specific onboarding assistance.  This
+   architecture does not require one universal automatic mechanism,
+   because deployments and participant capabilities vary.  That keeps
+   discovery link-neutral and avoids hard-coding one Wi-Fi-specific
+   onboarding model into the baseline architecture.
+
+   These mechanisms identify candidate service origins.  The companion
+   protocol uses the origin-level /.well-known/ppd resource to confirm
+   PPD support and obtain a service_base_uri.  Protocol operation
+   references are resolved relative to that URI, allowing the API to use
+   a deployment-selected path prefix.  This keeps origin discovery
+   separate from API path layout.
+
+   Before treating a policy instance as authoritative, the participant
+   needs the applicable protocol profile to authenticate the selected
+   endpoint and confirm that it is authorized to present policy for the
+   household context.
 
    The participant-facing contract is the PPD service endpoint, not
    direct access to the policy authority.  A deployment may place
@@ -972,9 +995,9 @@ Table of Contents
    [I-D.draft-dsmullen-ppd-protocol]
               Smullen, D. and B. Scriber, "Privacy Preference
               Declaration Protocol Specification", Work in Progress,
-              Internet-Draft, draft-dsmullen-ppd-protocol-03, 22 May
+              Internet-Draft, draft-dsmullen-ppd-protocol-04, 13 October
               2026, <https://datatracker.ietf.org/doc/html/draft-
-              dsmullen-ppd-protocol-03>.
+              dsmullen-ppd-protocol-04>.
 
    [I-D.draft-dsmullen-ppd-taxonomy]
               Smullen, D. and B. Scriber, "Privacy Preference
